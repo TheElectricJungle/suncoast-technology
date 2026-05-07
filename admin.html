@@ -567,8 +567,8 @@
             <div class="action-btns">
               <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation(); openEditClient('${c.client_id}')">Edit</button>
               ${c.stripe_subscription_id ? 
-                '<button class="btn btn-sm" style="background:rgba(239,68,68,0.15);color:#EF4444;border:1px solid rgba(239,68,68,0.2);" onclick="event.stopPropagation(); openCancelSubscription('' + c.client_id + '')">Cancel sub</button>' :
-                '<button class="btn btn-sm" style="background:rgba(34,197,94,0.12);color:#22C55E;border:1px solid rgba(34,197,94,0.2);" onclick="event.stopPropagation(); openCreateSubscription('' + c.client_id + '')">+ Subscribe</button>'
+                `<button class="btn btn-sm" style="background:rgba(239,68,68,0.15);color:#EF4444;border:1px solid rgba(239,68,68,0.2);" onclick="event.stopPropagation(); openCancelSubscription('${c.client_id}')">Cancel sub</button>` :
+                `<button class="btn btn-sm" style="background:rgba(34,197,94,0.12);color:#22C55E;border:1px solid rgba(34,197,94,0.2);" onclick="event.stopPropagation(); openCreateSubscription('${c.client_id}')">+ Subscribe</button>`
               }
             </div>
           </td>
@@ -781,7 +781,7 @@
 
 </script>
 
-<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.35);">Suncoast Technology · admin.html · v2.0</div>
+<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.35);">Suncoast Technology · admin.html · v2.1</div>
 
 <!-- CREATE SUBSCRIPTION MODAL -->
 <div class="modal-overlay" id="subModal">
