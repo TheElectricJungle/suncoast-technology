@@ -203,7 +203,7 @@
       const c = res.client;
       setUser(c.client_name||'');
       document.getElementById('fullName').value  = c.client_name||'';
-      document.getElementById('emailAddr').value = c.contact_email||'';
+      document.getElementById('email').value = c.contact_email||'';
       document.getElementById('phone').value     = c.phone||'';
       const planEl = document.getElementById('planDetails');
       if(planEl) planEl.innerHTML = `
@@ -224,9 +224,8 @@
     try {
       const res = await api('updateClient',{
         client_name:   document.getElementById('fullName').value.trim(),
-        contact_email: document.getElementById('emailAddr').value.trim(),
+        contact_email: document.getElementById('email').value.trim(),
         phone:         document.getElementById('phone').value.trim(),
-        business_name: document.getElementById('bizName').value.trim(),
       });
       document.getElementById(res.ok?'profileSuccess':'profileError').classList.add('show');
       if(res.ok) setUser(document.getElementById('fullName').value.trim());
