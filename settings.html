@@ -4,63 +4,77 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Settings — Suncoast Technology</title>
+  <!-- Suncoast Technology | settings.html | v2.0 -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet" />
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root { --orange: #F97316; --gold: #FBBF24; --navy: #0F1923; --slate: #1E2D3D; --muted: #94A3B8; --light: #F8FAFC; --border: rgba(255,255,255,0.07); --green: #22C55E; --red: #EF4444; --blue: #60A5FA; }
-    html, body { min-height: 100%; font-family: 'DM Sans', sans-serif; background: var(--navy); color: var(--light); }
-    .shell { display: grid; grid-template-columns: 220px 1fr; min-height: 100vh; }
-    .sidebar { background: var(--slate); border-right: 1px solid var(--border); display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; }
-    .sidebar-brand { padding: 24px 20px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
-    .brand-mark { width: 36px; height: 36px; flex-shrink: 0; }
-    .brand-name { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 500; color: #fff; line-height: 1.1; }
-    .brand-name span { color: var(--orange); }
-    .brand-sub { font-size: 10px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-top: 2px; }
-    .nav { padding: 16px 12px; flex: 1; display: flex; flex-direction: column; gap: 2px; }
-    .nav-label { font-size: 10px; font-weight: 500; color: rgba(148,163,184,0.4); letter-spacing: 0.1em; text-transform: uppercase; padding: 10px 10px 6px; margin-top: 8px; }
-    .nav-label:first-child { margin-top: 0; }
-    .nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 8px; font-size: 13px; color: var(--muted); text-decoration: none; transition: background 0.15s, color 0.15s; }
-    .nav-item:hover { background: rgba(255,255,255,0.05); color: #fff; }
-    .nav-item.active { background: rgba(249,115,22,0.12); color: var(--orange); }
-    .nav-item svg { width: 16px; height: 16px; flex-shrink: 0; }
-    .sidebar-footer { padding: 16px 20px; border-top: 1px solid var(--border); }
-    .user-row { display: flex; align-items: center; gap: 10px; }
-    .user-avatar { width: 32px; height: 32px; border-radius: 50%; background: rgba(249,115,22,0.2); border: 1px solid rgba(249,115,22,0.3); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; color: var(--orange); flex-shrink: 0; }
-    .user-name { font-size: 13px; color: #fff; font-weight: 500; }
-    .user-plan { font-size: 11px; color: var(--muted); margin-top: 1px; }
-    .logout-btn { margin-left: auto; background: none; border: none; color: var(--muted); cursor: pointer; padding: 4px; border-radius: 4px; transition: color 0.15s; display: flex; }
-    .logout-btn:hover { color: #fff; }
-
-    .main { padding: 32px 36px; display: flex; flex-direction: column; gap: 20px; max-width: 640px; }
-    .page-label { font-size: 12px; color: var(--muted); margin-bottom: 4px; letter-spacing: 0.04em; text-transform: uppercase; }
-    .page-title { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 400; color: #fff; }
-    .page-title span { color: var(--orange); }
-
-    .section-title { font-size: 13px; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px; }
-    .card { background: var(--slate); border: 1px solid var(--border); border-radius: 16px; padding: 24px 28px; animation: fadeUp 0.4s ease both; }
-    .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
-    .field:last-of-type { margin-bottom: 0; }
-    .field label { font-size: 11px; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
-    .field input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 11px 14px; font-size: 13px; font-family: 'DM Sans', sans-serif; color: #fff; outline: none; transition: border-color 0.2s; }
-    .field input:focus { border-color: rgba(249,115,22,0.4); }
-    .field input:disabled { opacity: 0.5; cursor: not-allowed; }
-    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-    .btn { display: inline-flex; align-items: center; gap: 7px; padding: 11px 22px; border-radius: 8px; font-size: 13px; font-weight: 500; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: background 0.15s, transform 0.1s; border: none; margin-top: 18px; }
-    .btn:active { transform: scale(0.98); }
-    .btn-primary { background: var(--orange); color: #fff; }
-    .btn-primary:hover { background: #ea6c0a; }
-    .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
-    .alert { padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-top: 14px; display: none; }
-    .alert.show { display: block; }
-    .alert-success { background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.2); color: #86EFAC; }
-    .alert-error   { background: rgba(239,68,68,0.1);  border: 1px solid rgba(239,68,68,0.2);  color: #FCA5A5; }
-    .divider { height: 1px; background: var(--border); margin: 20px 0; }
-    .pass-note { font-size: 12px; color: var(--muted); margin-top: 6px; }
-
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-    @media (max-width: 768px) { .shell { grid-template-columns: 1fr; } .sidebar { display: none; } .main { padding: 20px 16px; } .field-row { grid-template-columns: 1fr; } }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{--orange:#F97316;--gold:#FBBF24;--navy:#0F1923;--slate:#1E2D3D;--muted:#94A3B8;--light:#F8FAFC;--border:rgba(255,255,255,0.07);--green:#22C55E;--red:#EF4444;--blue:#60A5FA;}
+    html,body{min-height:100%;font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--light);}
+    .shell{display:grid;grid-template-columns:220px 1fr;min-height:100vh;}
+    .sidebar{background:var(--slate);border-right:1px solid var(--border);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;}
+    .sidebar-brand{padding:24px 20px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;}
+    .brand-mark{width:36px;height:36px;flex-shrink:0;}
+    .brand-name{font-family:'Playfair Display',serif;font-size:15px;font-weight:500;color:#fff;line-height:1.1;}
+    .brand-name span{color:var(--orange);}
+    .brand-sub{font-size:10px;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase;margin-top:2px;}
+    .nav{padding:16px 12px;flex:1;display:flex;flex-direction:column;gap:2px;}
+    .nav-label{font-size:10px;font-weight:500;color:rgba(148,163,184,0.4);letter-spacing:0.1em;text-transform:uppercase;padding:10px 10px 6px;margin-top:8px;}
+    .nav-label:first-child{margin-top:0;}
+    .nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;font-size:13px;color:var(--muted);text-decoration:none;transition:background 0.15s,color 0.15s;}
+    .nav-item:hover{background:rgba(255,255,255,0.05);color:#fff;}
+    .nav-item.active{background:rgba(249,115,22,0.12);color:var(--orange);}
+    .nav-item svg{width:16px;height:16px;flex-shrink:0;}
+    .sidebar-footer{padding:16px 20px;border-top:1px solid var(--border);}
+    .user-row{display:flex;align-items:center;gap:10px;}
+    .user-avatar{width:32px;height:32px;border-radius:50%;background:rgba(249,115,22,0.2);border:1px solid rgba(249,115,22,0.3);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:var(--orange);flex-shrink:0;}
+    .user-name{font-size:13px;color:#fff;font-weight:500;}
+    .user-plan{font-size:11px;color:var(--muted);margin-top:1px;}
+    .logout-btn{margin-left:auto;background:none;border:none;color:var(--muted);cursor:pointer;padding:4px;border-radius:4px;transition:color 0.15s;display:flex;}
+    .logout-btn:hover{color:#fff;}
+    .main{padding:32px 36px;display:flex;flex-direction:column;gap:20px;max-width:640px;}
+    .page-label{font-size:12px;color:var(--muted);margin-bottom:4px;letter-spacing:0.04em;text-transform:uppercase;}
+    .page-title{font-family:'Playfair Display',serif;font-size:28px;font-weight:400;color:#fff;}
+    .page-title span{color:var(--orange);}
+    .section-title{font-size:13px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:12px;}
+    .card{background:var(--slate);border:1px solid var(--border);border-radius:16px;padding:24px 28px;animation:fadeUp 0.4s ease both;}
+    .field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;}
+    .field label{font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.04em;}
+    .field input{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:11px 14px;font-size:13px;font-family:'DM Sans',sans-serif;color:#fff;outline:none;transition:border-color 0.2s;}
+    .field input:focus{border-color:rgba(249,115,22,0.4);}
+    .field input:disabled{opacity:0.5;cursor:not-allowed;}
+    .field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+    .btn{display:inline-flex;align-items:center;gap:7px;padding:11px 22px;border-radius:8px;font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;transition:background 0.15s,transform 0.1s;border:none;margin-top:18px;}
+    .btn:active{transform:scale(0.98);}
+    .btn-primary{background:var(--orange);color:#fff;}
+    .btn-primary:hover{background:#ea6c0a;}
+    .btn-primary:disabled{opacity:0.6;cursor:not-allowed;}
+    .alert{padding:10px 14px;border-radius:8px;font-size:13px;margin-top:14px;display:none;}
+    .alert.show{display:block;}
+    .alert-success{background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);color:#86EFAC;}
+    .alert-error{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#FCA5A5;}
+    .pw-strength{height:4px;border-radius:2px;margin-top:6px;background:rgba(255,255,255,0.08);overflow:hidden;}
+    .pw-strength-bar{height:100%;border-radius:2px;width:0%;transition:width 0.3s,background 0.3s;}
+    .pw-hint{font-size:11px;color:var(--muted);margin-top:4px;}
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(6px);z-index:100;display:none;align-items:center;justify-content:center;padding:1rem;min-height:600px;}
+    .modal-overlay.show{display:flex;}
+    .modal{background:var(--slate);border:2px solid rgba(249,115,22,0.4);border-radius:20px;padding:36px 40px;width:100%;max-width:420px;}
+    .modal-title{font-family:'Playfair Display',serif;font-size:24px;color:#fff;margin-bottom:6px;}
+    .modal-sub{font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.6;}
+    .modal-field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;}
+    .modal-field label{font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.04em;}
+    .modal-field input{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:12px 14px;font-size:14px;font-family:'DM Sans',sans-serif;color:#fff;outline:none;transition:border-color 0.2s;}
+    .modal-field input:focus{border-color:rgba(249,115,22,0.5);}
+    .modal-btn{width:100%;padding:13px;background:var(--orange);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;margin-top:8px;transition:background 0.2s;}
+    .modal-btn:hover{background:#ea6c0a;}
+    .modal-btn:disabled{opacity:0.6;cursor:not-allowed;}
+    .modal-alert{padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:14px;display:none;}
+    .modal-alert.show{display:block;}
+    .modal-alert-error{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#FCA5A5;}
+    .modal-alert-success{background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);color:#86EFAC;}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+    @media(max-width:768px){.shell{grid-template-columns:1fr}.sidebar{display:none}.main{padding:20px 16px}.field-row{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
@@ -102,7 +116,6 @@
       <div class="page-title">Account <span>settings</span></div>
     </div>
 
-    <!-- Contact info -->
     <div>
       <div class="section-title">Contact information</div>
       <div class="card">
@@ -115,57 +128,173 @@
           <div class="field"><label>Phone</label><input type="text" id="settingPhone" placeholder="Your phone number" /></div>
         </div>
         <div class="alert alert-success" id="profileSuccess">Changes saved.</div>
-        <div class="alert alert-error"   id="profileError">Something went wrong.</div>
+        <div class="alert alert-error" id="profileError">Something went wrong.</div>
         <button class="btn btn-primary" id="saveProfileBtn" onclick="handleSaveProfile()">Save changes</button>
       </div>
     </div>
 
-    <!-- Change password -->
     <div>
       <div class="section-title">Change password</div>
       <div class="card">
-        <div class="field"><label>New password</label><input type="password" id="newPassword" placeholder="Enter new password" /></div>
-        <div class="field"><label>Confirm new password</label><input type="password" id="confirmPassword" placeholder="Re-enter new password" /></div>
-        <div class="pass-note">Password must be at least 8 characters.</div>
+        <div class="field">
+          <label>New password</label>
+          <input type="password" id="newPassword" placeholder="Enter new password" oninput="checkStrength(this.value,'strengthBar','strengthHint')" />
+          <div class="pw-strength"><div class="pw-strength-bar" id="strengthBar"></div></div>
+          <div class="pw-hint" id="strengthHint">At least 8 characters</div>
+        </div>
+        <div class="field" style="margin-top:8px;">
+          <label>Confirm new password</label>
+          <input type="password" id="confirmPassword" placeholder="Re-enter new password" />
+        </div>
         <div class="alert alert-success" id="passSuccess">Password updated successfully.</div>
-        <div class="alert alert-error"   id="passError"><span id="passErrorMsg">Passwords do not match.</span></div>
+        <div class="alert alert-error" id="passError"><span id="passErrorMsg"></span></div>
         <button class="btn btn-primary" id="savePassBtn" onclick="handleChangePassword()">Update password</button>
       </div>
     </div>
   </main>
 </div>
 
+<!-- FIRST LOGIN MODAL — shown when client uses temp password -->
+<div class="modal-overlay" id="firstLoginModal">
+  <div class="modal">
+    <div class="modal-title">One last step</div>
+    <div class="modal-sub">You logged in with a temporary password. Please set a permanent password to secure your account.</div>
+    <div class="modal-alert modal-alert-error" id="firstLoginError"></div>
+    <div class="modal-alert modal-alert-success" id="firstLoginSuccess"></div>
+    <div class="modal-field">
+      <label>New password</label>
+      <input type="password" id="firstNewPw" placeholder="Create a strong password" oninput="checkStrength(this.value,'firstStrBar','firstStrHint')" />
+      <div class="pw-strength"><div class="pw-strength-bar" id="firstStrBar"></div></div>
+      <div class="pw-hint" id="firstStrHint">At least 8 characters</div>
+    </div>
+    <div class="modal-field">
+      <label>Confirm password</label>
+      <input type="password" id="firstConfirmPw" placeholder="Re-enter your new password" />
+    </div>
+    <button class="modal-btn" id="firstLoginBtn" onclick="handleFirstLogin()">Set password &amp; continue</button>
+  </div>
+</div>
+
 <script>
-  const API      = 'https://script.google.com/macros/s/AKfycbyynJ0wNQLUCY3e4O-z0sJ4xH_g841qrJkbwLMstMV4Mi2U99TZCRr0XHsmTA3IYpcisg/exec';
+  const API      = 'https://script.google.com/macros/s/AKfycbyxg5LlS9eUx6VSiD_VSzE0RD94STkBAK4Hc-h14T_YU5ikqXGE3dz-Fvt1kCAE-9XRLw/exec';
   const token    = localStorage.getItem('sc_token');
   const clientId = localStorage.getItem('sc_client_id');
+
   if (!token) window.location.href = 'login.html';
 
   async function api(action, extra = {}) {
-    const res = await fetch(API, { method: 'POST', body: JSON.stringify({ action, token, client_id: clientId, ...extra }) });
+    const res = await fetch(API, {
+      method: 'POST',
+      body: JSON.stringify({ action, token, client_id: clientId, ...extra })
+    });
     return res.json();
   }
 
+  // ---- LOAD CLIENT DATA ----
   async function loadData() {
     try {
       const res = await api('getClient');
       if (!res.ok) { window.location.href = 'login.html'; return; }
       const c = res.client;
-      const initials = (c.client_name||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
-      document.getElementById('userAvatar').textContent  = initials;
-      document.getElementById('userName').textContent    = c.client_name || '—';
-      document.getElementById('userPlan').textContent    = c.plan_name   || '—';
-      document.getElementById('settingName').value       = c.client_name    || '';
-      document.getElementById('settingBiz').value        = c.business_name  || '';
-      document.getElementById('settingEmail').value      = c.contact_email  || '';
-      document.getElementById('settingPhone').value      = c.phone          || '';
-    } catch(e) { console.error(e); }
+
+      const initials = (c.client_name || '?').split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
+      document.getElementById('userAvatar').textContent = initials;
+      document.getElementById('userName').textContent   = c.client_name    || '—';
+      document.getElementById('userPlan').textContent   = c.plan_name      || '—';
+      document.getElementById('settingName').value      = c.client_name    || '';
+      document.getElementById('settingBiz').value       = c.business_name  || '';
+      document.getElementById('settingEmail').value     = c.contact_email  || '';
+      document.getElementById('settingPhone').value     = c.phone          || '';
+
+      // Show first login modal if flag is set
+      if (localStorage.getItem('sc_first_login') === 'true') {
+        document.getElementById('firstLoginModal').classList.add('show');
+      }
+    } catch(e) {
+      console.error('loadData error:', e);
+    }
   }
 
+  // ---- PASSWORD STRENGTH ----
+  function checkStrength(val, barId, hintId) {
+    const bar  = document.getElementById(barId);
+    const hint = document.getElementById(hintId);
+    if (!bar || !hint) return;
+    let score = 0;
+    if (val.length >= 8)           score++;
+    if (val.length >= 12)          score++;
+    if (/[A-Z]/.test(val))         score++;
+    if (/[0-9]/.test(val))         score++;
+    if (/[^A-Za-z0-9]/.test(val))  score++;
+    const levels = [
+      { w:'0%',   c:'transparent', t:'At least 8 characters' },
+      { w:'25%',  c:'#EF4444',     t:'Weak — add more characters' },
+      { w:'50%',  c:'#FBBF24',     t:'Fair — try adding numbers' },
+      { w:'75%',  c:'#60A5FA',     t:'Good' },
+      { w:'100%', c:'#22C55E',     t:'Strong' },
+    ];
+    const lvl = val.length === 0 ? levels[0] : levels[Math.min(score, 4)];
+    bar.style.width      = lvl.w;
+    bar.style.background = lvl.c;
+    hint.textContent     = lvl.t;
+    hint.style.color     = lvl.c === 'transparent' ? 'var(--muted)' : lvl.c;
+  }
+
+  // ---- FIRST LOGIN PASSWORD SET ----
+  async function handleFirstLogin() {
+    const newPw   = document.getElementById('firstNewPw').value;
+    const confirm = document.getElementById('firstConfirmPw').value;
+    const btn     = document.getElementById('firstLoginBtn');
+    const errEl   = document.getElementById('firstLoginError');
+    const sucEl   = document.getElementById('firstLoginSuccess');
+
+    errEl.classList.remove('show');
+    sucEl.classList.remove('show');
+
+    if (newPw.length < 8) {
+      errEl.textContent = 'Password must be at least 8 characters.';
+      errEl.classList.add('show');
+      return;
+    }
+    if (newPw !== confirm) {
+      errEl.textContent = 'Passwords do not match.';
+      errEl.classList.add('show');
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Saving...';
+
+    try {
+      const res = await api('changePassword', { new_password: newPw });
+      if (res.ok) {
+        localStorage.removeItem('sc_first_login');
+        sucEl.textContent = 'Password set! You are all set.';
+        sucEl.classList.add('show');
+        setTimeout(() => {
+          document.getElementById('firstLoginModal').classList.remove('show');
+        }, 1500);
+      } else {
+        errEl.textContent = res.error || 'Error setting password. Try again.';
+        errEl.classList.add('show');
+      }
+    } catch(e) {
+      errEl.textContent = 'Connection error. Please try again.';
+      errEl.classList.add('show');
+    }
+
+    btn.disabled = false;
+    btn.textContent = 'Set password & continue';
+  }
+
+  // ---- SAVE PROFILE ----
   async function handleSaveProfile() {
     const btn = document.getElementById('saveProfileBtn');
-    ['profileSuccess','profileError'].forEach(id => document.getElementById(id).classList.remove('show'));
-    btn.disabled = true; btn.textContent = 'Saving...';
+    document.getElementById('profileSuccess').classList.remove('show');
+    document.getElementById('profileError').classList.remove('show');
+    btn.disabled = true;
+    btn.textContent = 'Saving...';
+
     try {
       const res = await api('updateClient', {
         fields: {
@@ -180,45 +309,69 @@
       } else {
         document.getElementById('profileError').classList.add('show');
       }
-    } catch(e) { document.getElementById('profileError').classList.add('show'); }
-    btn.disabled = false; btn.textContent = 'Save changes';
+    } catch(e) {
+      document.getElementById('profileError').classList.add('show');
+    }
+    btn.disabled = false;
+    btn.textContent = 'Save changes';
   }
 
+  // ---- CHANGE PASSWORD (logged in users) ----
   async function handleChangePassword() {
-    const newPass  = document.getElementById('newPassword').value;
-    const confirm  = document.getElementById('confirmPassword').value;
-    const btn      = document.getElementById('savePassBtn');
-    ['passSuccess','passError'].forEach(id => document.getElementById(id).classList.remove('show'));
+    const newPw   = document.getElementById('newPassword').value;
+    const confirm = document.getElementById('confirmPassword').value;
+    const btn     = document.getElementById('savePassBtn');
+    const errEl   = document.getElementById('passError');
+    const errMsg  = document.getElementById('passErrorMsg');
+    const sucEl   = document.getElementById('passSuccess');
 
-    if (newPass.length < 8) {
-      document.getElementById('passErrorMsg').textContent = 'Password must be at least 8 characters.';
-      document.getElementById('passError').classList.add('show'); return;
+    errEl.classList.remove('show');
+    sucEl.classList.remove('show');
+
+    if (newPw.length < 8) {
+      errMsg.textContent = 'Password must be at least 8 characters.';
+      errEl.classList.add('show');
+      return;
     }
-    if (newPass !== confirm) {
-      document.getElementById('passErrorMsg').textContent = 'Passwords do not match.';
-      document.getElementById('passError').classList.add('show'); return;
+    if (newPw !== confirm) {
+      errMsg.textContent = 'Passwords do not match.';
+      errEl.classList.add('show');
+      return;
     }
 
-    btn.disabled = true; btn.textContent = 'Updating...';
+    btn.disabled = true;
+    btn.textContent = 'Updating...';
 
     try {
-      // Use the reset token flow — generate a temp token, then resetPassword
-      const res = await api('resetPassword', { token: localStorage.getItem('sc_token'), password: newPass });
+      const res = await api('changePassword', { new_password: newPw });
       if (res.ok) {
-        document.getElementById('passSuccess').classList.add('show');
-        document.getElementById('newPassword').value    = '';
+        sucEl.classList.add('show');
+        document.getElementById('newPassword').value     = '';
         document.getElementById('confirmPassword').value = '';
+        document.getElementById('strengthBar').style.width = '0%';
+        document.getElementById('strengthHint').textContent = 'At least 8 characters';
+        document.getElementById('strengthHint').style.color = 'var(--muted)';
       } else {
-        document.getElementById('passErrorMsg').textContent = res.error || 'Error updating password.';
-        document.getElementById('passError').classList.add('show');
+        errMsg.textContent = res.error || 'Error updating password.';
+        errEl.classList.add('show');
       }
-    } catch(e) { document.getElementById('passError').classList.add('show'); }
-    btn.disabled = false; btn.textContent = 'Update password';
+    } catch(e) {
+      errMsg.textContent = 'Connection error. Please try again.';
+      errEl.classList.add('show');
+    }
+    btn.disabled = false;
+    btn.textContent = 'Update password';
   }
 
-  function handleLogout() { fetch(API, { method: 'POST', body: JSON.stringify({ action: 'logout', token }) }); localStorage.clear(); window.location.href = 'login.html'; }
+  function handleLogout() {
+    fetch(API, { method: 'POST', body: JSON.stringify({ action: 'logout', token }) });
+    localStorage.clear();
+    window.location.href = 'login.html';
+  }
+
   loadData();
 </script>
-<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.35);">Suncoast Technology · settings.html · v1.0</div>
+
+<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.35);">Suncoast Technology · settings.html · v2.0</div>
 </body>
 </html>
