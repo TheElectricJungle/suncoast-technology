@@ -313,8 +313,12 @@
       document.getElementById('allClear').classList.add('hidden');
       document.getElementById('heroDue').style.color = '';
 
+      // Debug — log all invoice statuses
+      console.log('All invoices:', invoices.map(i => i.invoice_id + ' = ' + i.status));
+
       // Find first unpaid invoice
       currentInvoice = invoices.find(i => i.status === 'Unpaid' || i.status === 'Overdue');
+      console.log('Current unpaid invoice:', currentInvoice ? currentInvoice.invoice_id : 'none');
 
       if (currentInvoice) {
         document.getElementById('invoiceHero').classList.remove('hidden');
@@ -443,6 +447,6 @@
   loadBilling();
 </script>
 
-<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.35);">Suncoast Technology · billing.html · v2.9</div>
+<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.35);">Suncoast Technology · billing.html · v2.9b</div>
 </body>
 </html>
