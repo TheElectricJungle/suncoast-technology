@@ -1,449 +1,228 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Post Update — Suncoast Technology</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+  <title>Updates — Suncoast Technology</title>
+  <!-- Suncoast Technology | updates.html | v2.0 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet"/>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --orange: #F97316; --gold: #FBBF24; --navy: #0F1923; --slate: #1E2D3D;
-      --muted: #94A3B8; --light: #F8FAFC; --border: rgba(255,255,255,0.07);
-      --green: #22C55E; --red: #EF4444; --blue: #60A5FA;
-    }
-    html, body { min-height: 100%; font-family: 'DM Sans', sans-serif; background: var(--navy); color: var(--light); }
-    .shell { display: grid; grid-template-columns: 220px 1fr; min-height: 100vh; }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{--navy:#04080F;--border:rgba(255,255,255,0.07);--muted:rgba(148,163,184,0.7);--light:#E8F0FF;--orange:#F97316;--gold:#FBBF24;--green:#22C55E;--red:#EF4444;--blue:#4FC3F7;--purple:#A78BFA;--teal:#2DD4BF;}
+    html,body{height:100%;font-family:'DM Sans',sans-serif;background:#04080F;color:var(--light);overflow-x:hidden;}
+    canvas#aurora{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;}
+    .grid{position:fixed;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none;background-image:linear-gradient(rgba(79,195,247,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(79,195,247,0.02) 1px,transparent 1px);background-size:80px 80px;}
+    .shell{position:relative;z-index:10;display:grid;grid-template-columns:220px 1fr;min-height:100vh;}
+    .sidebar{background:rgba(4,8,15,0.82);backdrop-filter:blur(24px);border-right:1px solid rgba(255,255,255,0.07);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;}
+    .sidebar-brand{padding:22px 20px 18px;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:10px;}
+    .brand-mark{width:34px;height:34px;flex-shrink:0;}
+    .brand-name{font-family:'Playfair Display',serif;font-size:14px;color:#fff;line-height:1.2;}
+    .brand-name em{color:var(--orange);font-style:normal;}
+    .brand-sub{font-size:9px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-top:2px;}
+    .nav{padding:14px 10px;flex:1;display:flex;flex-direction:column;gap:2px;overflow-y:auto;}
+    .nav-label{font-size:9px;font-weight:500;color:rgba(148,163,184,0.35);letter-spacing:0.12em;text-transform:uppercase;padding:10px 10px 5px;}
+    .nav-item{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:8px;font-size:13px;color:var(--muted);text-decoration:none;transition:background 0.15s,color 0.15s;}
+    .nav-item:hover{background:rgba(255,255,255,0.05);color:#fff;}
+    .nav-item.active{background:rgba(249,115,22,0.1);color:var(--orange);}
+    .nav-item svg{width:15px;height:15px;flex-shrink:0;}
+    .sidebar-footer{padding:14px 16px;border-top:1px solid rgba(255,255,255,0.06);}
+    .user-row{display:flex;align-items:center;gap:10px;}
+    .user-avatar{width:30px;height:30px;border-radius:50%;background:rgba(249,115,22,0.15);border:1px solid rgba(249,115,22,0.25);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--orange);flex-shrink:0;}
+    .user-name{font-size:12px;color:#fff;font-weight:500;flex:1;}
+    .logout-btn{background:none;border:none;color:var(--muted);cursor:pointer;padding:4px;display:flex;border-radius:4px;transition:color 0.15s;}
+    .logout-btn:hover{color:#fff;}
+    .main{padding:32px 36px;display:flex;flex-direction:column;gap:20px;min-width:0;}
+    .page-label{font-size:11px;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:4px;}
+    .page-title{font-family:'Playfair Display',serif;font-size:28px;font-weight:400;color:#fff;line-height:1.1;margin-bottom:4px;}
+    .page-title em{color:var(--orange);font-style:normal;}
+    .card{background:rgba(8,16,28,0.8);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:24px;position:relative;}
+    .card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.07),transparent);border-radius:16px 16px 0 0;pointer-events:none;}
+    .card-title{font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin:0 0 16px;}
+    .card-value{font-size:28px;font-weight:600;color:#fff;line-height:1.1;}
+    .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;}
+    .stat{background:rgba(8,16,28,0.8);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:18px 20px;}
+    .stat-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin:0 0 8px;}
+    .stat-value{font-size:22px;font-weight:600;color:#fff;}
+    .badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:500;}
+    .badge-green{background:rgba(34,197,94,0.12);color:#86EFAC;border:1px solid rgba(34,197,94,0.2);}
+    .badge-gold{background:rgba(251,191,36,0.1);color:var(--gold);border:1px solid rgba(251,191,36,0.2);}
+    .badge-red{background:rgba(239,68,68,0.1);color:#FCA5A5;border:1px solid rgba(239,68,68,0.2);}
+    .badge-blue{background:rgba(79,195,247,0.1);color:var(--blue);border:1px solid rgba(79,195,247,0.2);}
+    .badge-muted{background:rgba(148,163,184,0.08);color:var(--muted);border:1px solid rgba(148,163,184,0.15);}
+    .badge-purple{background:rgba(167,139,250,0.1);color:var(--purple);border:1px solid rgba(167,139,250,0.2);}
+    .btn{display:inline-flex;align-items:center;gap:7px;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;border:none;transition:opacity 0.2s,transform 0.1s;text-decoration:none;}
+    .btn:active{transform:scale(0.98);}
+    .btn-primary{background:linear-gradient(135deg,var(--orange),#ea580c);color:#fff;}
+    .btn-primary:hover{opacity:0.9;}
+    .btn-primary:disabled{opacity:0.6;cursor:not-allowed;}
+    .btn-ghost{background:rgba(255,255,255,0.05);color:var(--muted);border:1px solid rgba(255,255,255,0.09);}
+    .btn-ghost:hover{background:rgba(255,255,255,0.09);color:#fff;}
+    .btn-green{background:rgba(34,197,94,0.1);color:#86EFAC;border:1px solid rgba(34,197,94,0.2);}
+    .btn-sm{padding:6px 12px;font-size:12px;}
+    .field{display:flex;flex-direction:column;gap:5px;margin:0 0 14px;}
+    .field label{font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;}
+    .field input,.field textarea,.field select{width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:10px 13px;font-size:13px;font-family:'DM Sans',sans-serif;color:#fff;outline:none;transition:border-color 0.2s;}
+    .field input:focus,.field textarea:focus,.field select:focus{border-color:rgba(249,115,22,0.4);background:rgba(249,115,22,0.02);}
+    .field textarea{resize:vertical;min-height:80px;}
+    .field select option{background:#0D1B2A;}
+    .alert{display:none;padding:10px 14px;border-radius:8px;font-size:13px;margin:0 0 14px;align-items:center;gap:8px;}
+    .alert.show{display:flex;}
+    .alert-success{background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);color:#86EFAC;}
+    .alert-error{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#FCA5A5;}
+    .alert-info{background:rgba(79,195,247,0.08);border:1px solid rgba(79,195,247,0.2);color:var(--blue);}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+    .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+    table{width:100%;border-collapse:collapse;font-size:13px;}
+    thead th{padding:8px 12px;text-align:left;font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;border-bottom:1px solid rgba(255,255,255,0.06);background:transparent;}
+    tbody td{padding:11px 12px;border-bottom:1px solid rgba(255,255,255,0.04);color:rgba(255,255,255,0.85);background:transparent;}
+    tbody tr:last-child td{border-bottom:none;}
+    tbody tr:hover td{background:rgba(255,255,255,0.02);}
+    .empty{padding:40px;text-align:center;color:var(--muted);font-size:13px;}
+    .drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);z-index:50;display:none;}
+    .drawer-overlay.show{display:block;}
+    .drawer{position:fixed;top:0;right:0;bottom:0;width:520px;background:rgba(6,12,20,0.97);backdrop-filter:blur(30px);border-left:1px solid rgba(255,255,255,0.1);z-index:51;display:flex;flex-direction:column;transform:translateX(100%);transition:transform 0.3s ease;}
+    .drawer.show{transform:translateX(0);}
+    .drawer-head{padding:20px 24px;border-bottom:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+    .drawer-title{font-family:'Playfair Display',serif;font-size:20px;color:#fff;}
+    .drawer-close{background:none;border:none;color:var(--muted);cursor:pointer;padding:6px;border-radius:6px;display:flex;transition:color 0.15s;}
+    .drawer-close:hover{color:#fff;}
+    .drawer-tabs{display:flex;border-bottom:1px solid rgba(255,255,255,0.07);flex-shrink:0;}
+    .drawer-tab{padding:11px 18px;font-size:13px;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:color 0.15s,border-color 0.15s;background:none;border-top:none;border-left:none;border-right:none;font-family:'DM Sans',sans-serif;}
+    .drawer-tab.active{color:var(--orange);border-bottom-color:var(--orange);}
+    .drawer-body{flex:1;overflow-y:auto;padding:24px;}
+    .drawer-footer{padding:16px 24px;border-top:1px solid rgba(255,255,255,0.07);display:flex;gap:10px;flex-shrink:0;}
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);z-index:100;display:none;align-items:center;justify-content:center;padding:20px;}
+    .modal-overlay.show{display:flex;}
+    .modal{background:rgba(6,12,20,0.97);backdrop-filter:blur(30px);border:1px solid rgba(255,255,255,0.1);border-radius:20px;width:100%;max-width:500px;max-height:90vh;overflow-y:auto;position:relative;}
+    .modal::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(79,195,247,0.3),rgba(167,139,250,0.3),transparent);border-radius:20px 20px 0 0;}
+    .modal-head{padding:24px 28px 0;display:flex;align-items:center;justify-content:space-between;}
+    .modal-title{font-family:'Playfair Display',serif;font-size:20px;color:#fff;}
+    .modal-close{background:none;border:none;color:var(--muted);cursor:pointer;padding:4px;border-radius:6px;display:flex;}
+    .modal-close:hover{color:#fff;}
+    .modal-body{padding:20px 28px 28px;}
+    .search-bar{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:9px 14px;width:260px;}
+    .search-bar input{background:none;border:none;outline:none;font-size:13px;color:#fff;font-family:'DM Sans',sans-serif;width:100%;}
+    .search-bar input::placeholder{color:var(--muted);}
+    .client-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+    .client-card{background:rgba(8,16,28,0.8);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:20px;cursor:pointer;transition:border-color 0.15s,transform 0.15s;}
+    .client-card:hover{border-color:rgba(249,115,22,0.3);transform:translateY(-2px);}
+    .client-avatar{width:38px;height:38px;border-radius:10px;background:rgba(249,115,22,0.15);border:1px solid rgba(249,115,22,0.2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--orange);flex-shrink:0;}
+    @media(max-width:768px){.shell{grid-template-columns:1fr}.sidebar{display:none}.main{padding:20px 16px}.grid2,.grid3{grid-template-columns:1fr}.drawer{width:100%}}
 
-    /* SIDEBAR */
-    .sidebar { background: var(--slate); border-right: 1px solid var(--border); display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; }
-    .sidebar-brand { padding: 24px 20px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
-    .brand-mark { width: 36px; height: 36px; flex-shrink: 0; }
-    .brand-name { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 500; color: #fff; line-height: 1.1; }
-    .brand-name span { color: var(--orange); }
-    .brand-sub { font-size: 10px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-top: 2px; }
-    .admin-badge { font-size: 9px; background: rgba(249,115,22,0.15); color: var(--orange); border: 1px solid rgba(249,115,22,0.25); padding: 2px 7px; border-radius: 10px; margin-top: 4px; display: inline-block; letter-spacing: 0.06em; text-transform: uppercase; }
-    .nav { padding: 16px 12px; flex: 1; display: flex; flex-direction: column; gap: 2px; }
-    .nav-label { font-size: 10px; font-weight: 500; color: rgba(148,163,184,0.4); letter-spacing: 0.1em; text-transform: uppercase; padding: 10px 10px 6px; margin-top: 8px; }
-    .nav-label:first-child { margin-top: 0; }
-    .nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 8px; font-size: 13px; color: var(--muted); text-decoration: none; transition: background 0.15s, color 0.15s; }
-    .nav-item:hover { background: rgba(255,255,255,0.05); color: #fff; }
-    .nav-item.active { background: rgba(249,115,22,0.12); color: var(--orange); }
-    .nav-item svg { width: 16px; height: 16px; flex-shrink: 0; }
-    .sidebar-footer { padding: 16px 20px; border-top: 1px solid var(--border); }
-    .user-row { display: flex; align-items: center; gap: 10px; }
-    .user-avatar { width: 32px; height: 32px; border-radius: 50%; background: rgba(249,115,22,0.2); border: 1px solid rgba(249,115,22,0.3); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; color: var(--orange); flex-shrink: 0; }
-    .user-name { font-size: 13px; color: #fff; font-weight: 500; }
-    .user-role { font-size: 11px; color: var(--orange); margin-top: 1px; }
-    .logout-btn { margin-left: auto; background: none; border: none; color: var(--muted); cursor: pointer; padding: 4px; border-radius: 4px; transition: color 0.15s; display: flex; }
-    .logout-btn:hover { color: #fff; }
-
-    /* MAIN */
-    .main { padding: 32px 36px; display: flex; flex-direction: column; gap: 28px; max-width: 800px; }
-    .page-label { font-size: 12px; color: var(--muted); margin-bottom: 4px; letter-spacing: 0.04em; text-transform: uppercase; }
-    .page-title { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 400; color: #fff; }
-    .page-title span { color: var(--orange); }
-    .page-sub { font-size: 13px; color: var(--muted); margin-top: 6px; line-height: 1.5; }
-
-    /* FORM CARD */
-    .card { background: var(--slate); border: 1px solid var(--border); border-radius: 16px; padding: 28px; animation: fadeUp 0.4s ease both; }
-    .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
-    .field label { font-size: 11px; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
-    .field input, .field select, .field textarea {
-      width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 8px; padding: 11px 14px; font-size: 13px; font-family: 'DM Sans', sans-serif;
-      color: #fff; outline: none; transition: border-color 0.2s, background 0.2s;
-    }
-    .field input:focus, .field select:focus, .field textarea:focus { border-color: rgba(249,115,22,0.4); background: rgba(249,115,22,0.03); }
-    .field select option { background: var(--slate); }
-    .field textarea { resize: vertical; min-height: 100px; }
-    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-
-    .notify-row { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: rgba(249,115,22,0.05); border: 1px solid rgba(249,115,22,0.15); border-radius: 10px; margin-bottom: 20px; }
-    .notify-row input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--orange); cursor: pointer; flex-shrink: 0; }
-    .notify-label { font-size: 13px; color: var(--light); }
-    .notify-sub { font-size: 11px; color: var(--muted); margin-top: 1px; }
-
-    .btn { display: inline-flex; align-items: center; gap: 7px; padding: 11px 22px; border-radius: 8px; font-size: 13px; font-weight: 500; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: background 0.15s, transform 0.1s; border: none; }
-    .btn:active { transform: scale(0.98); }
-    .btn-primary { background: var(--orange); color: #fff; }
-    .btn-primary:hover { background: #ea6c0a; }
-    .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
-    .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); }
-    .btn-ghost:hover { color: #fff; border-color: rgba(255,255,255,0.2); }
-    .form-actions { display: flex; gap: 10px; align-items: center; margin-top: 4px; }
-
-    .alert { padding: 12px 16px; border-radius: 10px; font-size: 13px; margin-bottom: 16px; display: none; align-items: center; gap: 10px; }
-    .alert.show { display: flex; }
-    .alert-success { background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.2); color: #86EFAC; }
-    .alert-error { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: #FCA5A5; }
-
-    /* RECENT UPDATES */
-    .recent-card { background: var(--slate); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; animation: fadeUp 0.4s ease 0.1s both; }
-    .recent-head { padding: 16px 20px; border-bottom: 1px solid var(--border); font-size: 13px; font-weight: 500; color: #fff; display: flex; align-items: center; gap: 8px; }
-    .recent-head svg { color: var(--orange); width: 15px; height: 15px; }
-    .update-row { display: flex; align-items: flex-start; gap: 14px; padding: 14px 20px; border-bottom: 1px solid var(--border); transition: background 0.12s; }
-    .update-row:last-child { border-bottom: none; }
-    .update-row:hover { background: rgba(255,255,255,0.02); }
-    .update-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--orange); flex-shrink: 0; margin-top: 4px; }
-    .update-title { font-size: 13px; color: #fff; margin-bottom: 3px; }
-    .update-meta { font-size: 11px; color: var(--muted); display: flex; gap: 10px; align-items: center; }
-    .update-tag { background: rgba(249,115,22,0.1); color: var(--orange); padding: 1px 7px; border-radius: 10px; font-size: 10px; }
-    .update-client { color: var(--blue); }
-    .empty { padding: 32px 20px; text-align: center; color: var(--muted); font-size: 13px; }
-
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-    @media (max-width: 768px) { .shell { grid-template-columns: 1fr; } .sidebar { display: none; } .main { padding: 20px 16px; } .field-row { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
+<canvas id="aurora"></canvas>
+<script>
+  (function(){
+    const canvas = document.getElementById('aurora');
+    const ctx = canvas.getContext('2d');
+    let W, H, t = 0;
+    function resize(){ W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+    resize(); window.addEventListener('resize', resize);
+    const blobs = [
+      {x:0.2,y:0.3,r:0.55,color:[79,195,247],speed:0.00005},
+      {x:0.8,y:0.2,r:0.5,color:[167,139,250],speed:0.00004},
+      {x:0.5,y:0.7,r:0.45,color:[244,114,182],speed:0.00006},
+      {x:0.1,y:0.8,r:0.4,color:[45,212,191],speed:0.000045},
+      {x:0.9,y:0.5,r:0.35,color:[249,115,22],speed:0.000055},
+    ];
+    function draw(){
+      ctx.clearRect(0,0,W,H); t++;
+      blobs.forEach((b,i)=>{
+        const ox=Math.sin(t*b.speed*500+i*1.2)*0.15;
+        const oy=Math.cos(t*b.speed*400+i*0.9)*0.12;
+        const cx=(b.x+ox)*W, cy=(b.y+oy)*H, rad=b.r*Math.min(W,H);
+        const g=ctx.createRadialGradient(cx,cy,0,cx,cy,rad);
+        const [r,g2,bl]=b.color;
+        g.addColorStop(0,`rgba(${r},${g2},${bl},0.22)`);
+        g.addColorStop(0.4,`rgba(${r},${g2},${bl},0.09)`);
+        g.addColorStop(1,`rgba(${r},${g2},${bl},0)`);
+        ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+      });
+      requestAnimationFrame(draw);
+    }
+    draw();
+  })();
+</script>
+<div class="grid"></div>
 <div class="shell">
-
-  <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="sidebar-brand">
       <svg class="brand-mark" viewBox="0 0 36 36" fill="none">
-        <circle cx="18" cy="18" r="17" fill="#243447" stroke="rgba(249,115,22,0.3)" stroke-width="1"/>
+        <circle cx="18" cy="18" r="17" fill="#0D1B2A" stroke="rgba(249,115,22,0.3)" stroke-width="1"/>
         <path d="M7 22 Q18 10 29 22" stroke="#F97316" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-        <path d="M5 25 Q18 7 31 25" stroke="#FBBF24" stroke-width="1" stroke-linecap="round" fill="none" opacity="0.5"/>
+        <path d="M5 25 Q18 7 31 25" stroke="#FBBF24" stroke-width="1.2" stroke-linecap="round" fill="none" opacity="0.5"/>
         <circle cx="18" cy="27" r="3" fill="#F97316"/>
-        <line x1="7" y1="29" x2="29" y2="29" stroke="rgba(249,115,22,0.3)" stroke-width="1" stroke-linecap="round"/>
       </svg>
       <div>
-        <div class="brand-name">Suncoast <span>Technology</span></div>
+        <div class="brand-name">Suncoast <em>Technology</em></div>
         <div class="brand-sub">Admin Panel</div>
-        <div class="admin-badge">Administrator</div>
       </div>
     </div>
     <nav class="nav">
-      <div class="nav-label">Admin</div>
-      <a href="admin.html" class="nav-item">
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="1" width="6" height="6" rx="1.5"/><rect x="9" y="1" width="6" height="6" rx="1.5"/><rect x="1" y="9" width="6" height="6" rx="1.5"/><rect x="9" y="9" width="6" height="6" rx="1.5"/></svg>
-        Dashboard
-      </a>
-      <a href="clients.html" class="nav-item">
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
-        Clients
-      </a>
-      <a href="updates.html" class="nav-item active">
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12V4a1 1 0 011-1h10a1 1 0 011 1v8"/><path d="M1 12h14"/><path d="M5 7h6M5 9.5h4"/></svg>
-        Post update
-      </a>
-      <a href="invoices.html" class="nav-item">
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 1h10a1 1 0 011 1v12l-2-1.5L10 14l-2-1.5L6 14l-2-1.5L2 14V2a1 1 0 011-1z"/><path d="M5 5h6M5 8h6M5 11h3"/></svg>
-        Invoices
-      </a>
-      <a href="admin-support.html" class="nav-item">
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 10.5a2 2 0 01-2 2H4.5L1.5 15V3.5a2 2 0 012-2h8.5a2 2 0 012 2v7z"/></svg>
-        Support queue
-      </a>
+      <a href="admin.html" class="nav-item"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="9" y="1" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="1" y="9" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="9" y="9" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.3"/></svg>Dashboard</a>
+      <a href="clients.html" class="nav-item"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="6" cy="5" r="2.5" stroke="currentColor" stroke-width="1.3"/><path d="M1 13c0-2.76 2.24-5 5-5" stroke="currentColor" stroke-width="1.3"/><circle cx="12" cy="8" r="2" stroke="currentColor" stroke-width="1.3"/><path d="M9.5 13c0-1.93 1.12-3 2.5-3s2.5 1.07 2.5 3" stroke="currentColor" stroke-width="1.3"/></svg>Clients</a>
+      <a href="invoices.html" class="nav-item"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 1h10a1 1 0 011 1v12l-2-1.5L10 14l-2-1.5L6 14l-2-1.5L2 14V2a1 1 0 011-1z" stroke="currentColor" stroke-width="1.3"/><path d="M5 5h6M5 8h6M5 11h3" stroke="currentColor" stroke-width="1.3"/></svg>Invoices</a>
+      <a href="updates.html" class="nav-item active"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.3"/><path d="M8 4.5v4l2.5 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>Updates</a>
+      <a href="admin-support.html" class="nav-item"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M14 10.5a2 2 0 01-2 2H4.5L1.5 15V3.5a2 2 0 012-2h8.5a2 2 0 012 2v7z" stroke="currentColor" stroke-width="1.3"/></svg>Support</a>
     </nav>
     <div class="sidebar-footer">
       <div class="user-row">
-        <div class="user-avatar" id="adminAvatar">JR</div>
-        <div>
-          <div class="user-name" id="adminName">Admin</div>
-          <div class="user-role">Administrator</div>
-        </div>
-        <button class="logout-btn" onclick="handleLogout()" title="Sign out">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3"/><path d="M11 11l3-3-3-3"/><path d="M14 8H6"/></svg>
+        <div class="user-avatar">JR</div>
+        <div class="user-name">Justin R.</div>
+        <button class="logout-btn" onclick="handleLogout()">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3"/><path d="M11 11l3-3-3-3M14 8H6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
       </div>
     </div>
   </aside>
-
-  <!-- MAIN -->
   <main class="main">
-    <div>
-      <div class="page-label">Admin</div>
-      <div class="page-title">Post <span>update</span></div>
-      <div class="page-sub">Log work you've done on a client's site. They'll see it instantly on their dashboard and my website page.</div>
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+      <div>
+        <div class="page-label">Admin</div>
+        <div class="page-title">Site <em>updates</em></div>
+      </div>
+      <button class="btn btn-primary" onclick="openNewUpdate()">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2v12M2 8h12" stroke-linecap="round"/></svg>
+        Post update
+      </button>
     </div>
-
-    <!-- Form -->
-    <div class="card">
-      <div class="alert alert-success" id="successAlert">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#86EFAC" stroke-width="1.5"/><path d="M5 8l2 2 4-4" stroke="#86EFAC" stroke-width="1.5" stroke-linecap="round"/></svg>
-        Update posted successfully!
+    <div class="grid2">
+      <div class="card">
+        <div class="card-title">Post new update</div>
+        <div class="alert alert-success" id="updateSuccess">Update posted and client notified.</div>
+        <div class="alert alert-error" id="updateError">Error posting update.</div>
+        <div class="field"><label>Client</label><select id="updateClient"><option value="">Select client...</option></select></div>
+        <div class="field"><label>Title</label><input type="text" id="updateTitle" placeholder="e.g. Homepage redesign complete" /></div>
+        <div class="field"><label>Category</label><select id="updateCategory"><option>General</option><option>Design</option><option>Content</option><option>Performance</option><option>Bug fix</option><option>New feature</option></select></div>
+        <div class="field"><label>Details</label><textarea id="updateContent" placeholder="Describe what was done..."></textarea></div>
+        <button class="btn btn-primary" onclick="handlePostUpdate()" id="postBtn" style="width:100%;justify-content:center;">Post update &amp; notify client</button>
       </div>
-      <div class="alert alert-error" id="errorAlert">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#FCA5A5" stroke-width="1.5"/><path d="M8 5v3M8 10h.01" stroke="#FCA5A5" stroke-width="1.5" stroke-linecap="round"/></svg>
-        <span id="errorMsg">Something went wrong.</span>
-      </div>
-
-      <div class="field">
-        <label>Client</label>
-        <select id="clientSelect">
-          <option value="">Loading clients...</option>
-        </select>
-      </div>
-
-      <div class="field">
-        <label>Update title</label>
-        <input type="text" id="updateTitle" placeholder="e.g. Updated homepage hero image" />
-      </div>
-
-      <div class="field-row">
-        <div class="field">
-          <label>Category</label>
-          <select id="updateCategory">
-            <option>Design</option>
-            <option>Content</option>
-            <option>Bug fix</option>
-            <option>Performance</option>
-            <option>Security</option>
-            <option>SEO</option>
-            <option>General</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Date</label>
-          <input type="date" id="updateDate" />
-        </div>
-      </div>
-
-      <div class="field">
-        <label>Details (optional)</label>
-        <textarea id="updateContent" placeholder="Describe what was done in more detail..."></textarea>
-      </div>
-
-      <div class="notify-row">
-        <input type="checkbox" id="notifyClient" checked />
-        <div>
-          <div class="notify-label">Notify client by email</div>
-          <div class="notify-sub">Client will receive an email with this update summary</div>
-        </div>
-      </div>
-
-      <div class="notify-row" style="margin-top:8px;">
-        <input type="checkbox" id="createInvoice" />
-        <div>
-          <div class="notify-label">Create an invoice for this update</div>
-          <div class="notify-sub">Opens the invoice form pre-filled with this update's details</div>
-        </div>
-      </div>
-
-      <div id="invoiceFields" style="display:none;background:rgba(249,115,22,0.06);border:1px solid rgba(249,115,22,0.2);border-radius:10px;padding:14px 16px;margin-top:8px;">
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
-          <div class="field" style="margin-bottom:0;">
-            <label>Invoice amount ($)</label>
-            <input type="number" id="invAmount" placeholder="150" />
-          </div>
-          <div class="field" style="margin-bottom:0;">
-            <label>Created date</label>
-            <input type="date" id="invCreated" />
-          </div>
-          <div class="field" style="margin-bottom:0;">
-            <label>Due date</label>
-            <input type="date" id="invDue" />
-          </div>
-        </div>
-      </div>
-
-      <div class="form-actions">
-        <button class="btn btn-primary" id="submitBtn" onclick="handleSubmit()">
-          Post update
-        </button>
-        <button class="btn btn-ghost" onclick="clearForm()">Clear</button>
-      </div>
-    </div>
-
-    <!-- Recent updates -->
-    <div class="recent-card">
-      <div class="recent-head">
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6.5"/><path d="M8 5v3.5l2 2"/></svg>
-        Recent updates
-      </div>
-      <div id="recentPanel">
-        <div class="empty">Loading...</div>
+      <div class="card">
+        <div class="card-title">Recent updates</div>
+        <div id="updatesList"><div class="empty">Loading...</div></div>
       </div>
     </div>
   </main>
 </div>
-
 <script>
-  const API     = 'https://script.google.com/macros/s/AKfycbyxg5LlS9eUx6VSiD_VSzE0RD94STkBAK4Hc-h14T_YU5ikqXGE3dz-Fvt1kCAE-9XRLw/exec';
-  const token   = localStorage.getItem('sc_token');
-  if (!token) window.location.href = 'login.html';
-
-  let allClients  = [];
-  let allUpdates  = [];
-
-  // Set today's date as default
-  document.getElementById('updateDate').value = new Date().toISOString().split('T')[0];
-
-  async function api(action, extra = {}) {
-    const res = await fetch(API, { method: 'POST', body: JSON.stringify({ action, token, ...extra }) });
+  const API='https://script.google.com/macros/s/AKfycbyxg5LlS9eUx6VSiD_VSzE0RD94STkBAK4Hc-h14T_YU5ikqXGE3dz-Fvt1kCAE-9XRLw/exec';
+  const token=localStorage.getItem('sc_token');
+  const clientId=localStorage.getItem('sc_client_id');
+  if(!token) window.location.href='login.html';
+  async function api(action,extra={}){
+    const res=await fetch(API,{method:'POST',body:JSON.stringify({action,token,client_id:clientId,...extra})});
     return res.json();
   }
-
-  async function loadData() {
-    try {
-      const clientsRes = await api('adminGetClients');
-      if (!clientsRes.ok) { window.location.href = 'login.html'; return; }
-
-      allClients = (clientsRes.clients || []).filter(c => c.is_admin !== true && c.is_admin !== 'TRUE');
-
-      // Admin name
-      const admin = clientsRes.clients.find(c => c.is_admin === true || c.is_admin === 'TRUE');
-      if (admin) {
-        document.getElementById('adminName').textContent = admin.client_name || 'Admin';
-        document.getElementById('adminAvatar').textContent = (admin.client_name || 'A').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
-      }
-
-      // Populate client dropdown
-      const select = document.getElementById('clientSelect');
-      if (!allClients.length) {
-        select.innerHTML = '<option value="">No clients yet</option>';
-      } else {
-        select.innerHTML = '<option value="">Select a client...</option>' +
-          allClients.map(c => `<option value="${c.client_id}">${c.business_name || c.client_name} — ${c.domain || 'no domain'}</option>`).join('');
-      }
-
-      // Load recent updates for all clients
-      if (allClients.length) {
-        const results = await Promise.all(
-          allClients.map(c => api('getUpdates', { client_id: c.client_id }).catch(() => ({ updates: [] })))
-        );
-        allUpdates = results.flatMap(r => r.updates || [])
-          .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-          .slice(0, 10);
-        renderRecent();
-      } else {
-        document.getElementById('recentPanel').innerHTML = '<div class="empty">No updates yet.</div>';
-      }
-
-    } catch(e) { console.error(e); }
-  }
-
-  function renderRecent() {
-    const panel = document.getElementById('recentPanel');
-    if (!allUpdates.length) {
-      panel.innerHTML = '<div class="empty">No updates posted yet.</div>';
-      return;
-    }
-
-    const clientMap = {};
-    allClients.forEach(c => clientMap[c.client_id] = c.business_name || c.client_name);
-
-    panel.innerHTML = allUpdates.map(u => `
-      <div class="update-row">
-        <div class="update-dot"></div>
-        <div>
-          <div class="update-title">${u.title || '—'}</div>
-          <div class="update-meta">
-            <span class="update-client">${clientMap[u.client_id] || u.client_id}</span>
-            <span>${formatDate(u.created_at)}</span>
-            ${u.category ? `<span class="update-tag">${u.category}</span>` : ''}
-          </div>
-        </div>
-      </div>
-    `).join('');
-  }
-
-  async function handleSubmit() {
-    const client_id     = document.getElementById('clientSelect').value;
-    const title         = document.getElementById('updateTitle').value.trim();
-    const category      = document.getElementById('updateCategory').value;
-    const content       = document.getElementById('updateContent').value.trim();
-    const notify_client = document.getElementById('notifyClient').checked;
-    const btn           = document.getElementById('submitBtn');
-
-    document.getElementById('successAlert').classList.remove('show');
-    document.getElementById('errorAlert').classList.remove('show');
-
-    if (!client_id) { showError('Please select a client.'); return; }
-    if (!title)     { showError('Please enter an update title.'); return; }
-
-    btn.disabled = true;
-    btn.textContent = 'Posting...';
-
-    try {
-      const res = await api('adminPostUpdate', { client_id, title, content, category, notify_client });
-      if (res.ok) {
-        // Also create invoice if checked
-        const shouldInvoice = document.getElementById('createInvoice').checked;
-        if (shouldInvoice) {
-          const invAmount  = document.getElementById('invAmount').value;
-          const invDue     = document.getElementById('invDue').value;
-          const invCreated = document.getElementById('invCreated').value;
-          if (invAmount) {
-            await api('adminSaveInvoice', {
-              invoice: {
-                client_id,
-                amount:      invAmount,
-                due_date:    invDue,
-                period:      new Date().toLocaleString('en-US', { month: 'long', year: 'numeric' }),
-                description: title
-              }
-            });
-          }
-        }
-        document.getElementById('successAlert').classList.add('show');
-        clearForm();
-        loadData();
-      } else {
-        showError(res.error || 'Failed to post update.');
-      }
-    } catch(e) {
-      showError('Connection error. Please try again.');
-    }
-
-    btn.disabled = false;
-    btn.textContent = 'Post update';
-  }
-
-  function showError(msg) {
-    document.getElementById('errorMsg').textContent = msg;
-    document.getElementById('errorAlert').classList.add('show');
-  }
-
-  function clearForm() {
-    document.getElementById('clientSelect').value    = '';
-    document.getElementById('updateTitle').value     = '';
-    document.getElementById('updateContent').value   = '';
-    document.getElementById('updateCategory').value  = 'General';
-    document.getElementById('updateDate').value      = new Date().toISOString().split('T')[0];
-    document.getElementById('notifyClient').checked  = true;
-    document.getElementById('createInvoice').checked = false;
-    document.getElementById('invoiceFields').style.display = 'none';
-    if (document.getElementById('invAmount')) document.getElementById('invAmount').value = '';
-  }
-
-  // Toggle invoice fields
-  document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('createInvoice').addEventListener('change', function() {
-      const fields = document.getElementById('invoiceFields');
-      fields.style.display = this.checked ? 'block' : 'none';
-      if (this.checked) {
-        const today = new Date();
-        const due = new Date();
-        due.setMonth(due.getMonth() + 1);
-        due.setDate(1);
-        document.getElementById('invCreated').value = today.toISOString().split('T')[0];
-        document.getElementById('invDue').value = due.toISOString().split('T')[0];
-      }
-    });
-  });
-
-  function formatDate(val) {
-    if (!val) return '—';
-    const d = new Date(val);
-    if (isNaN(d)) return val;
-    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-  }
-
-  function handleLogout() {
-    fetch(API, { method: 'POST', body: JSON.stringify({ action: 'logout', token }) });
+  function handleLogout(){
+    fetch(API,{method:'POST',body:JSON.stringify({action:'logout',token})});
     localStorage.clear();
-    window.location.href = 'login.html';
+    window.location.href='login.html';
   }
-
-  loadData();
+load();
 </script>
-
-<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.35);">Suncoast Technology · updates.html · v2.0</div>
 </body>
 </html>
