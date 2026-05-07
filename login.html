@@ -493,13 +493,14 @@
         localStorage.setItem('sc_token', data.token);
         localStorage.setItem('sc_client_id', data.client_id);
         localStorage.setItem('sc_is_admin', data.is_admin);
-        // Set first login flag — cleared after password is changed in settings
+        // Set first login flag — force password change before entering portal
         if (data.first_login) {
           localStorage.setItem('sc_first_login', 'true');
+          window.location.href = 'settings.html';
         } else {
           localStorage.removeItem('sc_first_login');
+          redirect(data.is_admin);
         }
-        redirect(data.is_admin);
       } else {
         showError(data.error || 'Invalid email or password.');
         btn.classList.remove('loading');
@@ -560,6 +561,6 @@
   }
 </script>
 
-<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.35);">Suncoast Technology · login.html · v1.5</div>
+<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.35);">Suncoast Technology · login.html · v1.6</div>
 </body>
 </html>
