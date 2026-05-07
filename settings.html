@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Settings — Suncoast Technology</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --orange: #F97316; --gold: #FBBF24; --navy: #0F1923; --slate: #1E2D3D; --muted: #94A3B8; --light: #F8FAFC; --border: rgba(255,255,255,0.07); --green: #22C55E; --red: #EF4444; --blue: #60A5FA; }
+    html, body { min-height: 100%; font-family: 'DM Sans', sans-serif; background: var(--navy); color: var(--light); }
+    .shell { display: grid; grid-template-columns: 220px 1fr; min-height: 100vh; }
+    .sidebar { background: var(--slate); border-right: 1px solid var(--border); display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; }
+    .sidebar-brand { padding: 24px 20px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
+    .brand-mark { width: 36px; height: 36px; flex-shrink: 0; }
+    .brand-name { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 500; color: #fff; line-height: 1.1; }
+    .brand-name span { color: var(--orange); }
+    .brand-sub { font-size: 10px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-top: 2px; }
+    .nav { padding: 16px 12px; flex: 1; display: flex; flex-direction: column; gap: 2px; }
+    .nav-label { font-size: 10px; font-weight: 500; color: rgba(148,163,184,0.4); letter-spacing: 0.1em; text-transform: uppercase; padding: 10px 10px 6px; margin-top: 8px; }
+    .nav-label:first-child { margin-top: 0; }
+    .nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 8px; font-size: 13px; color: var(--muted); text-decoration: none; transition: background 0.15s, color 0.15s; }
+    .nav-item:hover { background: rgba(255,255,255,0.05); color: #fff; }
+    .nav-item.active { background: rgba(249,115,22,0.12); color: var(--orange); }
+    .nav-item svg { width: 16px; height: 16px; flex-shrink: 0; }
+    .sidebar-footer { padding: 16px 20px; border-top: 1px solid var(--border); }
+    .user-row { display: flex; align-items: center; gap: 10px; }
+    .user-avatar { width: 32px; height: 32px; border-radius: 50%; background: rgba(249,115,22,0.2); border: 1px solid rgba(249,115,22,0.3); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; color: var(--orange); flex-shrink: 0; }
+    .user-name { font-size: 13px; color: #fff; font-weight: 500; }
+    .user-plan { font-size: 11px; color: var(--muted); margin-top: 1px; }
+    .logout-btn { margin-left: auto; background: none; border: none; color: var(--muted); cursor: pointer; padding: 4px; border-radius: 4px; transition: color 0.15s; display: flex; }
+    .logout-btn:hover { color: #fff; }
+
+    .main { padding: 32px 36px; display: flex; flex-direction: column; gap: 20px; max-width: 640px; }
+    .page-label { font-size: 12px; color: var(--muted); margin-bottom: 4px; letter-spacing: 0.04em; text-transform: uppercase; }
+    .page-title { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 400; color: #fff; }
+    .page-title span { color: var(--orange); }
+
+    .section-title { font-size: 13px; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px; }
+    .card { background: var(--slate); border: 1px solid var(--border); border-radius: 16px; padding: 24px 28px; animation: fadeUp 0.4s ease both; }
+    .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+    .field:last-of-type { margin-bottom: 0; }
+    .field label { font-size: 11px; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+    .field input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 11px 14px; font-size: 13px; font-family: 'DM Sans', sans-serif; color: #fff; outline: none; transition: border-color 0.2s; }
+    .field input:focus { border-color: rgba(249,115,22,0.4); }
+    .field input:disabled { opacity: 0.5; cursor: not-allowed; }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .btn { display: inline-flex; align-items: center; gap: 7px; padding: 11px 22px; border-radius: 8px; font-size: 13px; font-weight: 500; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: background 0.15s, transform 0.1s; border: none; margin-top: 18px; }
+    .btn:active { transform: scale(0.98); }
+    .btn-primary { background: var(--orange); color: #fff; }
+    .btn-primary:hover { background: #ea6c0a; }
+    .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+    .alert { padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-top: 14px; display: none; }
+    .alert.show { display: block; }
+    .alert-success { background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.2); color: #86EFAC; }
+    .alert-error   { background: rgba(239,68,68,0.1);  border: 1px solid rgba(239,68,68,0.2);  color: #FCA5A5; }
+    .divider { height: 1px; background: var(--border); margin: 20px 0; }
+    .pass-note { font-size: 12px; color: var(--muted); margin-top: 6px; }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    @media (max-width: 768px) { .shell { grid-template-columns: 1fr; } .sidebar { display: none; } .main { padding: 20px 16px; } .field-row { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <svg class="brand-mark" viewBox="0 0 36 36" fill="none">
+        <circle cx="18" cy="18" r="17" fill="#243447" stroke="rgba(249,115,22,0.3)" stroke-width="1"/>
+        <path d="M7 22 Q18 10 29 22" stroke="#F97316" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+        <path d="M5 25 Q18 7 31 25" stroke="#FBBF24" stroke-width="1" stroke-linecap="round" fill="none" opacity="0.5"/>
+        <circle cx="18" cy="27" r="3" fill="#F97316"/>
+        <line x1="7" y1="29" x2="29" y2="29" stroke="rgba(249,115,22,0.3)" stroke-width="1" stroke-linecap="round"/>
+      </svg>
+      <div>
+        <div class="brand-name">Suncoast <span>Technology</span></div>
+        <div class="brand-sub">Client Portal</div>
+      </div>
+    </div>
+    <nav class="nav">
+      <div class="nav-label">Menu</div>
+      <a href="dashboard.html" class="nav-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="1" width="6" height="6" rx="1.5"/><rect x="9" y="1" width="6" height="6" rx="1.5"/><rect x="1" y="9" width="6" height="6" rx="1.5"/><rect x="9" y="9" width="6" height="6" rx="1.5"/></svg>Dashboard</a>
+      <a href="billing.html" class="nav-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="3" width="14" height="10" rx="2"/><path d="M1 6h14"/><path d="M4 10h2"/><path d="M8 10h2"/></svg>Billing</a>
+      <a href="my-site.html" class="nav-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6.5"/><path d="M8 1.5C8 1.5 5.5 4 5.5 8s2.5 6.5 2.5 6.5M8 1.5C8 1.5 10.5 4 10.5 8s-2.5 6.5-2.5 6.5M1.5 8h13"/></svg>My website</a>
+      <a href="support.html" class="nav-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 10.5a2 2 0 01-2 2H4.5L1.5 15V3.5a2 2 0 012-2h8.5a2 2 0 012 2v7z"/></svg>Support</a>
+      <a href="settings.html" class="nav-item active"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="2.5"/><path d="M8 1.5v1M8 13.5v1M1.5 8h1M13.5 8h1M3.2 3.2l.7.7M12.1 12.1l.7.7M12.1 3.9l-.7.7M4.6 12.1l-.7.7"/></svg>Settings</a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-row">
+        <div class="user-avatar" id="userAvatar">?</div>
+        <div><div class="user-name" id="userName">Loading...</div><div class="user-plan" id="userPlan">—</div></div>
+        <button class="logout-btn" onclick="handleLogout()"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3"/><path d="M11 11l3-3-3-3"/><path d="M14 8H6"/></svg></button>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div>
+      <div class="page-label">Account</div>
+      <div class="page-title">Account <span>settings</span></div>
+    </div>
+
+    <!-- Contact info -->
+    <div>
+      <div class="section-title">Contact information</div>
+      <div class="card">
+        <div class="field-row">
+          <div class="field"><label>Full name</label><input type="text" id="settingName" placeholder="Your name" /></div>
+          <div class="field"><label>Business name</label><input type="text" id="settingBiz" placeholder="Your business" /></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>Email</label><input type="email" id="settingEmail" disabled /></div>
+          <div class="field"><label>Phone</label><input type="text" id="settingPhone" placeholder="Your phone number" /></div>
+        </div>
+        <div class="alert alert-success" id="profileSuccess">Changes saved.</div>
+        <div class="alert alert-error"   id="profileError">Something went wrong.</div>
+        <button class="btn btn-primary" id="saveProfileBtn" onclick="handleSaveProfile()">Save changes</button>
+      </div>
+    </div>
+
+    <!-- Change password -->
+    <div>
+      <div class="section-title">Change password</div>
+      <div class="card">
+        <div class="field"><label>New password</label><input type="password" id="newPassword" placeholder="Enter new password" /></div>
+        <div class="field"><label>Confirm new password</label><input type="password" id="confirmPassword" placeholder="Re-enter new password" /></div>
+        <div class="pass-note">Password must be at least 8 characters.</div>
+        <div class="alert alert-success" id="passSuccess">Password updated successfully.</div>
+        <div class="alert alert-error"   id="passError"><span id="passErrorMsg">Passwords do not match.</span></div>
+        <button class="btn btn-primary" id="savePassBtn" onclick="handleChangePassword()">Update password</button>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+  const API      = 'https://script.google.com/macros/s/AKfycbyynJ0wNQLUCY3e4O-z0sJ4xH_g841qrJkbwLMstMV4Mi2U99TZCRr0XHsmTA3IYpcisg/exec';
+  const token    = localStorage.getItem('sc_token');
+  const clientId = localStorage.getItem('sc_client_id');
+  if (!token) window.location.href = 'login.html';
+
+  async function api(action, extra = {}) {
+    const res = await fetch(API, { method: 'POST', body: JSON.stringify({ action, token, client_id: clientId, ...extra }) });
+    return res.json();
+  }
+
+  async function loadData() {
+    try {
+      const res = await api('getClient');
+      if (!res.ok) { window.location.href = 'login.html'; return; }
+      const c = res.client;
+      const initials = (c.client_name||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+      document.getElementById('userAvatar').textContent  = initials;
+      document.getElementById('userName').textContent    = c.client_name || '—';
+      document.getElementById('userPlan').textContent    = c.plan_name   || '—';
+      document.getElementById('settingName').value       = c.client_name    || '';
+      document.getElementById('settingBiz').value        = c.business_name  || '';
+      document.getElementById('settingEmail').value      = c.contact_email  || '';
+      document.getElementById('settingPhone').value      = c.phone          || '';
+    } catch(e) { console.error(e); }
+  }
+
+  async function handleSaveProfile() {
+    const btn = document.getElementById('saveProfileBtn');
+    ['profileSuccess','profileError'].forEach(id => document.getElementById(id).classList.remove('show'));
+    btn.disabled = true; btn.textContent = 'Saving...';
+    try {
+      const res = await api('updateClient', {
+        fields: {
+          client_name:   document.getElementById('settingName').value.trim(),
+          business_name: document.getElementById('settingBiz').value.trim(),
+          phone:         document.getElementById('settingPhone').value.trim(),
+        }
+      });
+      if (res.ok) {
+        document.getElementById('profileSuccess').classList.add('show');
+        document.getElementById('userName').textContent = document.getElementById('settingName').value.trim();
+      } else {
+        document.getElementById('profileError').classList.add('show');
+      }
+    } catch(e) { document.getElementById('profileError').classList.add('show'); }
+    btn.disabled = false; btn.textContent = 'Save changes';
+  }
+
+  async function handleChangePassword() {
+    const newPass  = document.getElementById('newPassword').value;
+    const confirm  = document.getElementById('confirmPassword').value;
+    const btn      = document.getElementById('savePassBtn');
+    ['passSuccess','passError'].forEach(id => document.getElementById(id).classList.remove('show'));
+
+    if (newPass.length < 8) {
+      document.getElementById('passErrorMsg').textContent = 'Password must be at least 8 characters.';
+      document.getElementById('passError').classList.add('show'); return;
+    }
+    if (newPass !== confirm) {
+      document.getElementById('passErrorMsg').textContent = 'Passwords do not match.';
+      document.getElementById('passError').classList.add('show'); return;
+    }
+
+    btn.disabled = true; btn.textContent = 'Updating...';
+
+    try {
+      // Use the reset token flow — generate a temp token, then resetPassword
+      const res = await api('resetPassword', { token: localStorage.getItem('sc_token'), password: newPass });
+      if (res.ok) {
+        document.getElementById('passSuccess').classList.add('show');
+        document.getElementById('newPassword').value    = '';
+        document.getElementById('confirmPassword').value = '';
+      } else {
+        document.getElementById('passErrorMsg').textContent = res.error || 'Error updating password.';
+        document.getElementById('passError').classList.add('show');
+      }
+    } catch(e) { document.getElementById('passError').classList.add('show'); }
+    btn.disabled = false; btn.textContent = 'Update password';
+  }
+
+  function handleLogout() { fetch(API, { method: 'POST', body: JSON.stringify({ action: 'logout', token }) }); localStorage.clear(); window.location.href = 'login.html'; }
+  loadData();
+</script>
+<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.35);">Suncoast Technology · settings.html · v1.0</div>
+</body>
+</html>
