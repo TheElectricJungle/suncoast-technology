@@ -376,8 +376,8 @@
     </div>
   </div>
 
-  <!-- Login Card -->
-  <div class="card">
+  <!-- Step 1: Login -->
+  <div class="card" id="loginCard">
     <div class="card-title">Welcome back</div>
     <div class="card-sub">Sign in to manage your website and billing.</div>
 
@@ -402,6 +402,39 @@
 
     <button class="btn" id="loginBtn" onclick="handleLogin()">
       <span class="btn-label">Sign in</span>
+      <div class="btn-spinner"></div>
+    </button>
+  </div>
+
+  <!-- Step 2: First login — set new password -->
+  <div class="card" id="newPasswordCard" style="display:none;">
+    <div class="card-title">Set your password</div>
+    <div class="card-sub">You logged in with a temporary password. Create a permanent password to continue.</div>
+
+    <div class="alert error" id="newPwError">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#FCA5A5" stroke-width="1.5"/><path d="M8 5v3.5M8 11h.01" stroke="#FCA5A5" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <span id="newPwErrorMsg">Passwords do not match.</span>
+    </div>
+
+    <div class="alert success" id="newPwSuccess">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#86EFAC" stroke-width="1.5"/><path d="M5 8l2 2 4-4" stroke="#86EFAC" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Password set! Taking you to your dashboard...</span>
+    </div>
+
+    <div class="field">
+      <label for="newPw">New password</label>
+      <input type="password" id="newPw" placeholder="Create a strong password" oninput="checkStrength(this.value)" />
+      <div class="pw-strength"><div class="pw-bar" id="pwBar"></div></div>
+      <div class="pw-hint" id="pwHint">At least 8 characters</div>
+    </div>
+
+    <div class="field">
+      <label for="confirmPw">Confirm password</label>
+      <input type="password" id="confirmPw" placeholder="Re-enter your password" />
+    </div>
+
+    <button class="btn" id="newPwBtn" onclick="handleSetPassword()">
+      <span class="btn-label">Set password &amp; continue</span>
       <div class="btn-spinner"></div>
     </button>
   </div>
@@ -495,8 +528,10 @@
         localStorage.setItem('sc_is_admin', data.is_admin);
         // Set first login flag — force password change before entering portal
         if (data.first_login) {
+          // Store session but don't redirect yet — show password change step
           localStorage.setItem('sc_first_login', 'true');
-          window.location.href = 'settings.html';
+          document.getElementById('loginCard').style.display = 'none';
+          document.getElementById('newPasswordCard').style.display = 'block';
         } else {
           localStorage.removeItem('sc_first_login');
           redirect(data.is_admin);
@@ -561,6 +596,6 @@
   }
 </script>
 
-<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.35);">Suncoast Technology · login.html · v1.6</div>
+<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.35);">Suncoast Technology · login.html · v1.7</div>
 </body>
 </html>
