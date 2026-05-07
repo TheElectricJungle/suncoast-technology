@@ -535,9 +535,7 @@
     <div class="cta-row">
       <button class="btn-glow" onclick="openInquiry()">
         Click here to get in touch
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
-      <a href="mailto:info@suncoast.technology" class="cta-email">info@suncoast.technology</a>
     </div>
   </div>
 </section>
@@ -745,7 +743,7 @@ function switchInquiryTab(tab) {
   document.getElementById('consultForm').style.display = tab === 'consult' ? 'block' : 'none';
   document.getElementById('modalTitle').textContent = tab === 'quote' ? 'Site inquiry' : 'Book a consultation';
   document.getElementById('modalSub').textContent   = tab === 'quote'
-    ? 'Tell us about your project and we'll get back to you within 24 hours.'
+    ? 'Tell us about your project and we\'ll get back to you within 24 hours.'
     : 'Schedule a free call to talk through your vision.';
   ['formSuccess','formError'].forEach(id => document.getElementById(id).classList.remove('show'));
 }
@@ -813,6 +811,6 @@ async function handleConsultSubmit() {
 }
 </script>
 
-<div style="text-align:center;padding:12px;font-size:11px;color:rgba(148,163,184,0.15);">Suncoast Technology · index.html · v2.3+modal</div>
+<div style="text-align:center;padding:12px;font-size:11px;color:rgba(148,163,184,0.15);">Suncoast Technology · index.html · v2.4modalmodal</div>
 </body>
 </html>
