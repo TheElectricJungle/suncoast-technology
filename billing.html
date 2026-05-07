@@ -376,12 +376,14 @@
     setTimeout(() => banner.remove(), 5000);
   }
 
-  const _params = new URLSearchParams(window.location.search);
-  const _paidInvoiceId = _params.get('invoice_id');
-  const _wasPaid = _params.get('paid') === 'true';
+  // Read from hash — Stripe redirects preserve hashes unlike query params on GitHub Pages
+  const _hash = window.location.hash; // e.g. #paid=INV-003
+  const _wasPaid = _hash.startsWith('#paid=');
+  const _paidInvoiceId = _wasPaid ? _hash.replace('#paid=', '') : null;
   if (_wasPaid) {
     history.replaceState({}, '', 'billing.html');
   }
+  console.log('Hash:', _hash, '| wasPaid:', _wasPaid, '| invoiceId:', _paidInvoiceId);
 
   function formatDate(val) {
     if (!val) return '—';
@@ -399,6 +401,6 @@
   loadBilling();
 </script>
 
-<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.35);">Suncoast Technology · billing.html · v2.6</div>
+<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.35);">Suncoast Technology · billing.html · v2.7</div>
 </body>
 </html>
