@@ -85,6 +85,38 @@
 </head>
 <body>
 <canvas id="aurora"></canvas>
+<script>
+  (function(){
+    const canvas = document.getElementById('aurora');
+    const ctx = canvas.getContext('2d');
+    let W, H, t = 0;
+    function resize(){ W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+    resize(); window.addEventListener('resize', resize);
+    const blobs = [
+      {x:0.2,y:0.3,r:0.55,color:[79,195,247],speed:0.00005},
+      {x:0.8,y:0.2,r:0.5,color:[167,139,250],speed:0.00004},
+      {x:0.5,y:0.7,r:0.45,color:[244,114,182],speed:0.00006},
+      {x:0.1,y:0.8,r:0.4,color:[45,212,191],speed:0.000045},
+      {x:0.9,y:0.5,r:0.35,color:[249,115,22],speed:0.000055},
+    ];
+    function draw(){
+      ctx.clearRect(0,0,W,H); t++;
+      blobs.forEach((b,i)=>{
+        const ox=Math.sin(t*b.speed*500+i*1.2)*0.15;
+        const oy=Math.cos(t*b.speed*400+i*0.9)*0.12;
+        const cx=(b.x+ox)*W, cy=(b.y+oy)*H, rad=b.r*Math.min(W,H);
+        const g=ctx.createRadialGradient(cx,cy,0,cx,cy,rad);
+        const [r,g2,bl]=b.color;
+        g.addColorStop(0,`rgba(${r},${g2},${bl},0.22)`);
+        g.addColorStop(0.4,`rgba(${r},${g2},${bl},0.09)`);
+        g.addColorStop(1,`rgba(${r},${g2},${bl},0)`);
+        ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+      });
+      requestAnimationFrame(draw);
+    }
+    draw();
+  })();
+</script>
 <div class="grid"></div>
 <div class="shell">
   <aside class="sidebar">
@@ -161,39 +193,6 @@
         
   
   load();
-
-
-
-  (function(){
-    const canvas = document.getElementById('aurora');
-    const ctx = canvas.getContext('2d');
-    let W, H, t = 0;
-    function resize(){ W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
-    resize(); window.addEventListener('resize', resize);
-    const blobs = [
-      {x:0.2,y:0.3,r:0.55,color:[79,195,247],speed:0.00005},
-      {x:0.8,y:0.2,r:0.5,color:[167,139,250],speed:0.00004},
-      {x:0.5,y:0.7,r:0.45,color:[244,114,182],speed:0.00006},
-      {x:0.1,y:0.8,r:0.4,color:[45,212,191],speed:0.000045},
-      {x:0.9,y:0.5,r:0.35,color:[249,115,22],speed:0.000055},
-    ];
-    function draw(){
-      ctx.clearRect(0,0,W,H); t++;
-      blobs.forEach((b,i)=>{
-        const ox=Math.sin(t*b.speed*500+i*1.2)*0.15;
-        const oy=Math.cos(t*b.speed*400+i*0.9)*0.12;
-        const cx=(b.x+ox)*W, cy=(b.y+oy)*H, rad=b.r*Math.min(W,H);
-        const g=ctx.createRadialGradient(cx,cy,0,cx,cy,rad);
-        const [r,g2,bl]=b.color;
-        g.addColorStop(0,`rgba(${r},${g2},${bl},0.22)`);
-        g.addColorStop(0.4,`rgba(${r},${g2},${bl},0.09)`);
-        g.addColorStop(1,`rgba(${r},${g2},${bl},0)`);
-        ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
-      });
-      requestAnimationFrame(draw);
-    }
-    draw();
-  })();
 </script>
 </body>
 </html>
