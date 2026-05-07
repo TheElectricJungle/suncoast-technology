@@ -257,9 +257,15 @@
     try {
       // If returning from Stripe, mark the invoice paid first
       if (_wasPaid && _paidInvoiceId) {
+        console.log('Attempting clientMarkPaid for invoice:', _paidInvoiceId);
+        console.log('Token:', token ? token.slice(0,8) + '...' : 'MISSING');
+        console.log('ClientId:', clientId);
         try {
-          await api('clientMarkPaid', { invoice_id: _paidInvoiceId });
+          const markRes = await api('clientMarkPaid', { invoice_id: _paidInvoiceId });
+          console.log('clientMarkPaid response:', JSON.stringify(markRes));
         } catch(e) { console.warn('clientMarkPaid error:', e); }
+      } else {
+        console.log('_wasPaid:', _wasPaid, '_paidInvoiceId:', _paidInvoiceId);
       }
 
       const [clientRes, invoicesRes] = await Promise.all([
@@ -393,6 +399,6 @@
   loadBilling();
 </script>
 
-<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.35);">Suncoast Technology · billing.html · v2.5</div>
+<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.35);">Suncoast Technology · billing.html · v2.6</div>
 </body>
 </html>
