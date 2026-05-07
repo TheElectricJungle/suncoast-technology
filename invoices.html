@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Post Update — Suncoast Technology</title>
+  <title>Invoices — Suncoast Technology</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet" />
@@ -17,7 +17,7 @@
     html, body { min-height: 100%; font-family: 'DM Sans', sans-serif; background: var(--navy); color: var(--light); }
     .shell { display: grid; grid-template-columns: 220px 1fr; min-height: 100vh; }
 
-    /* SIDEBAR */
+    /* SIDEBAR — same as other pages */
     .sidebar { background: var(--slate); border-right: 1px solid var(--border); display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; }
     .sidebar-brand { padding: 24px 20px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
     .brand-mark { width: 36px; height: 36px; flex-shrink: 0; }
@@ -41,61 +41,87 @@
     .logout-btn:hover { color: #fff; }
 
     /* MAIN */
-    .main { padding: 32px 36px; display: flex; flex-direction: column; gap: 28px; max-width: 800px; }
+    .main { padding: 32px 36px; display: flex; flex-direction: column; gap: 24px; }
+    .topbar { display: flex; align-items: flex-end; justify-content: space-between; }
     .page-label { font-size: 12px; color: var(--muted); margin-bottom: 4px; letter-spacing: 0.04em; text-transform: uppercase; }
     .page-title { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 400; color: #fff; }
     .page-title span { color: var(--orange); }
-    .page-sub { font-size: 13px; color: var(--muted); margin-top: 6px; line-height: 1.5; }
 
-    /* FORM CARD */
-    .card { background: var(--slate); border: 1px solid var(--border); border-radius: 16px; padding: 28px; animation: fadeUp 0.4s ease both; }
-    .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
-    .field label { font-size: 11px; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
-    .field input, .field select, .field textarea {
-      width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 8px; padding: 11px 14px; font-size: 13px; font-family: 'DM Sans', sans-serif;
-      color: #fff; outline: none; transition: border-color 0.2s, background 0.2s;
-    }
-    .field input:focus, .field select:focus, .field textarea:focus { border-color: rgba(249,115,22,0.4); background: rgba(249,115,22,0.03); }
-    .field select option { background: var(--slate); }
-    .field textarea { resize: vertical; min-height: 100px; }
-    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-
-    .notify-row { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: rgba(249,115,22,0.05); border: 1px solid rgba(249,115,22,0.15); border-radius: 10px; margin-bottom: 20px; }
-    .notify-row input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--orange); cursor: pointer; flex-shrink: 0; }
-    .notify-label { font-size: 13px; color: var(--light); }
-    .notify-sub { font-size: 11px; color: var(--muted); margin-top: 1px; }
-
-    .btn { display: inline-flex; align-items: center; gap: 7px; padding: 11px 22px; border-radius: 8px; font-size: 13px; font-weight: 500; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: background 0.15s, transform 0.1s; border: none; }
+    .btn { display: inline-flex; align-items: center; gap: 7px; padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 500; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: background 0.15s, transform 0.1s; border: none; text-decoration: none; }
     .btn:active { transform: scale(0.98); }
     .btn-primary { background: var(--orange); color: #fff; }
     .btn-primary:hover { background: #ea6c0a; }
     .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
     .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); }
     .btn-ghost:hover { color: #fff; border-color: rgba(255,255,255,0.2); }
-    .form-actions { display: flex; gap: 10px; align-items: center; margin-top: 4px; }
+    .btn-green { background: rgba(34,197,94,0.15); color: var(--green); border: 1px solid rgba(34,197,94,0.2); }
+    .btn-green:hover { background: rgba(34,197,94,0.25); }
+    .btn-sm { padding: 6px 12px; font-size: 12px; border-radius: 6px; }
+    .btn svg { width: 14px; height: 14px; }
 
-    .alert { padding: 12px 16px; border-radius: 10px; font-size: 13px; margin-bottom: 16px; display: none; align-items: center; gap: 10px; }
-    .alert.show { display: flex; }
+    /* FILTER ROW */
+    .filter-row { display: flex; gap: 10px; align-items: center; }
+    .filter-select { background: var(--slate); border: 1px solid var(--border); border-radius: 8px; padding: 8px 14px; font-size: 13px; font-family: 'DM Sans', sans-serif; color: var(--light); outline: none; cursor: pointer; }
+    .filter-select:focus { border-color: rgba(249,115,22,0.4); }
+    .filter-select option { background: var(--slate); }
+    .search-input { background: var(--slate); border: 1px solid var(--border); border-radius: 8px; padding: 8px 14px; font-size: 13px; font-family: 'DM Sans', sans-serif; color: var(--light); outline: none; width: 200px; }
+    .search-input:focus { border-color: rgba(249,115,22,0.4); }
+    .search-input::placeholder { color: var(--muted); }
+
+    /* TABLE */
+    .panel { background: var(--slate); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; animation: fadeUp 0.4s ease both; }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    thead th { font-size: 10px; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border); background: rgba(255,255,255,0.02); white-space: nowrap; }
+    tbody tr { border-bottom: 1px solid var(--border); transition: background 0.12s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: rgba(255,255,255,0.02); }
+    tbody td { padding: 13px 16px; color: var(--light); vertical-align: middle; }
+    .td-muted { color: var(--muted); font-size: 12px; }
+
+    .badge { font-size: 10px; font-weight: 500; padding: 3px 9px; border-radius: 20px; white-space: nowrap; }
+    .badge-paid    { background: rgba(34,197,94,0.12);  color: var(--green); }
+    .badge-unpaid  { background: rgba(251,191,36,0.12); color: var(--gold); }
+    .badge-overdue { background: rgba(239,68,68,0.12);  color: var(--red); }
+
+    .client-name { font-weight: 500; color: #fff; }
+    .client-domain { font-size: 11px; color: var(--muted); margin-top: 1px; }
+    .amount { font-weight: 500; color: #fff; }
+
+    .action-cell { display: flex; gap: 6px; }
+
+    .empty { padding: 48px 20px; text-align: center; color: var(--muted); font-size: 13px; }
+
+    /* MODAL */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); z-index: 100; display: none; align-items: center; justify-content: center; padding: 1rem; }
+    .modal-overlay.show { display: flex; }
+    .modal { background: var(--slate); border: 1px solid var(--border); border-radius: 18px; padding: 28px; width: 100%; max-width: 460px; }
+    .modal-title { font-family: 'Playfair Display', serif; font-size: 22px; color: #fff; margin-bottom: 4px; }
+    .modal-sub { font-size: 13px; color: var(--muted); margin-bottom: 24px; line-height: 1.5; }
+    .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+    .field label { font-size: 11px; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+    .field input, .field select { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 10px 14px; font-size: 13px; font-family: 'DM Sans', sans-serif; color: #fff; outline: none; transition: border-color 0.2s; }
+    .field input:focus, .field select:focus { border-color: rgba(249,115,22,0.4); }
+    .field select option { background: var(--slate); }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
+    .modal-actions .btn { flex: 1; justify-content: center; }
+    .alert { padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-bottom: 14px; display: none; }
+    .alert.show { display: block; }
     .alert-success { background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.2); color: #86EFAC; }
-    .alert-error { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: #FCA5A5; }
+    .alert-error   { background: rgba(239,68,68,0.1);  border: 1px solid rgba(239,68,68,0.2);  color: #FCA5A5; }
 
-    /* RECENT UPDATES */
-    .recent-card { background: var(--slate); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; animation: fadeUp 0.4s ease 0.1s both; }
-    .recent-head { padding: 16px 20px; border-bottom: 1px solid var(--border); font-size: 13px; font-weight: 500; color: #fff; display: flex; align-items: center; gap: 8px; }
-    .recent-head svg { color: var(--orange); width: 15px; height: 15px; }
-    .update-row { display: flex; align-items: flex-start; gap: 14px; padding: 14px 20px; border-bottom: 1px solid var(--border); transition: background 0.12s; }
-    .update-row:last-child { border-bottom: none; }
-    .update-row:hover { background: rgba(255,255,255,0.02); }
-    .update-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--orange); flex-shrink: 0; margin-top: 4px; }
-    .update-title { font-size: 13px; color: #fff; margin-bottom: 3px; }
-    .update-meta { font-size: 11px; color: var(--muted); display: flex; gap: 10px; align-items: center; }
-    .update-tag { background: rgba(249,115,22,0.1); color: var(--orange); padding: 1px 7px; border-radius: 10px; font-size: 10px; }
-    .update-client { color: var(--blue); }
-    .empty { padding: 32px 20px; text-align: center; color: var(--muted); font-size: 13px; }
+    /* SUMMARY CARDS */
+    .stat-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
+    .stat-card { background: var(--slate); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; animation: fadeUp 0.4s ease both; }
+    .stat-label { font-size: 11px; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
+    .stat-value { font-size: 24px; font-weight: 500; color: #fff; }
+    .stat-value.green { color: var(--green); }
+    .stat-value.amber { color: var(--gold); }
+    .stat-value.red   { color: var(--red); }
 
     @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-    @media (max-width: 768px) { .shell { grid-template-columns: 1fr; } .sidebar { display: none; } .main { padding: 20px 16px; } .field-row { grid-template-columns: 1fr; } }
+    @media (max-width: 768px) { .shell { grid-template-columns: 1fr; } .sidebar { display: none; } .main { padding: 20px 16px; } .stat-row { grid-template-columns: 1fr 1fr; } }
   </style>
 </head>
 <body>
@@ -127,11 +153,11 @@
         <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
         Clients
       </a>
-      <a href="updates.html" class="nav-item active">
+      <a href="updates.html" class="nav-item">
         <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12V4a1 1 0 011-1h10a1 1 0 011 1v8"/><path d="M1 12h14"/><path d="M5 7h6M5 9.5h4"/></svg>
         Post update
       </a>
-      <a href="invoices.html" class="nav-item">
+      <a href="invoices.html" class="nav-item active">
         <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 1h10a1 1 0 011 1v12l-2-1.5L10 14l-2-1.5L6 14l-2-1.5L2 14V2a1 1 0 011-1z"/><path d="M5 5h6M5 8h6M5 11h3"/></svg>
         Invoices
       </a>
@@ -156,98 +182,130 @@
 
   <!-- MAIN -->
   <main class="main">
-    <div>
-      <div class="page-label">Admin</div>
-      <div class="page-title">Post <span>update</span></div>
-      <div class="page-sub">Log work you've done on a client's site. They'll see it instantly on their dashboard and my website page.</div>
+    <div class="topbar">
+      <div>
+        <div class="page-label">Admin</div>
+        <div class="page-title">Invoice <span>manager</span></div>
+      </div>
+      <button class="btn btn-primary" onclick="openNewInvoice()">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3v10M3 8h10"/></svg>
+        New invoice
+      </button>
     </div>
 
-    <!-- Form -->
-    <div class="card">
-      <div class="alert alert-success" id="successAlert">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#86EFAC" stroke-width="1.5"/><path d="M5 8l2 2 4-4" stroke="#86EFAC" stroke-width="1.5" stroke-linecap="round"/></svg>
-        Update posted successfully!
+    <!-- Summary cards -->
+    <div class="stat-row">
+      <div class="stat-card">
+        <div class="stat-label">Total invoiced</div>
+        <div class="stat-value" id="statTotal">—</div>
       </div>
-      <div class="alert alert-error" id="errorAlert">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#FCA5A5" stroke-width="1.5"/><path d="M8 5v3M8 10h.01" stroke="#FCA5A5" stroke-width="1.5" stroke-linecap="round"/></svg>
-        <span id="errorMsg">Something went wrong.</span>
+      <div class="stat-card">
+        <div class="stat-label">Collected</div>
+        <div class="stat-value green" id="statPaid">—</div>
       </div>
-
-      <div class="field">
-        <label>Client</label>
-        <select id="clientSelect">
-          <option value="">Loading clients...</option>
-        </select>
-      </div>
-
-      <div class="field">
-        <label>Update title</label>
-        <input type="text" id="updateTitle" placeholder="e.g. Updated homepage hero image" />
-      </div>
-
-      <div class="field-row">
-        <div class="field">
-          <label>Category</label>
-          <select id="updateCategory">
-            <option>Design</option>
-            <option>Content</option>
-            <option>Bug fix</option>
-            <option>Performance</option>
-            <option>Security</option>
-            <option>SEO</option>
-            <option>General</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Date</label>
-          <input type="date" id="updateDate" />
-        </div>
-      </div>
-
-      <div class="field">
-        <label>Details (optional)</label>
-        <textarea id="updateContent" placeholder="Describe what was done in more detail..."></textarea>
-      </div>
-
-      <div class="notify-row">
-        <input type="checkbox" id="notifyClient" checked />
-        <div>
-          <div class="notify-label">Notify client by email</div>
-          <div class="notify-sub">Client will receive an email with this update summary</div>
-        </div>
-      </div>
-
-      <div class="form-actions">
-        <button class="btn btn-primary" id="submitBtn" onclick="handleSubmit()">
-          Post update
-        </button>
-        <button class="btn btn-ghost" onclick="clearForm()">Clear</button>
+      <div class="stat-card">
+        <div class="stat-label">Outstanding</div>
+        <div class="stat-value amber" id="statUnpaid">—</div>
       </div>
     </div>
 
-    <!-- Recent updates -->
-    <div class="recent-card">
-      <div class="recent-head">
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6.5"/><path d="M8 5v3.5l2 2"/></svg>
-        Recent updates
-      </div>
-      <div id="recentPanel">
-        <div class="empty">Loading...</div>
+    <!-- Filters -->
+    <div class="filter-row">
+      <select class="filter-select" id="statusFilter" onchange="applyFilters()">
+        <option value="">All statuses</option>
+        <option value="Unpaid">Unpaid</option>
+        <option value="Paid">Paid</option>
+        <option value="Overdue">Overdue</option>
+      </select>
+      <select class="filter-select" id="clientFilter" onchange="applyFilters()">
+        <option value="">All clients</option>
+      </select>
+      <input class="search-input" type="text" id="searchInput" placeholder="Search..." oninput="applyFilters()" />
+    </div>
+
+    <!-- Invoice table -->
+    <div class="panel">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Invoice</th>
+              <th>Client</th>
+              <th>Period</th>
+              <th>Amount</th>
+              <th>Due date</th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="invoiceTableBody">
+            <tr><td colspan="7"><div class="empty">Loading...</div></td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </main>
 </div>
 
+<!-- NEW INVOICE MODAL -->
+<div class="modal-overlay" id="newInvoiceModal">
+  <div class="modal">
+    <div class="modal-title">New invoice</div>
+    <div class="modal-sub">Invoice will be created and emailed to the client automatically.</div>
+    <div class="alert alert-success" id="invSuccess">Invoice created and sent!</div>
+    <div class="alert alert-error"   id="invError">Something went wrong.</div>
+    <div class="field">
+      <label>Client</label>
+      <select id="invClient"></select>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Amount ($)</label><input type="number" id="invAmount" placeholder="120" /></div>
+      <div class="field"><label>Due date</label><input type="date" id="invDue" /></div>
+    </div>
+    <div class="field"><label>Period (e.g. June 2026)</label><input type="text" id="invPeriod" placeholder="June 2026" /></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('newInvoiceModal')">Cancel</button>
+      <button class="btn btn-primary" id="invSubmitBtn" onclick="handleNewInvoice()">Create &amp; send</button>
+    </div>
+  </div>
+</div>
+
+<!-- MARK PAID MODAL -->
+<div class="modal-overlay" id="markPaidModal">
+  <div class="modal">
+    <div class="modal-title">Mark as paid</div>
+    <div class="modal-sub">Record a manual payment for this invoice.</div>
+    <div class="alert alert-success" id="paidSuccess">Invoice marked as paid!</div>
+    <div class="alert alert-error"   id="paidError">Something went wrong.</div>
+    <input type="hidden" id="paidInvoiceId" />
+    <div class="field">
+      <label>Payment method</label>
+      <select id="paidMethod">
+        <option>Cash</option>
+        <option>Check</option>
+        <option>Stripe</option>
+        <option>PayPal</option>
+        <option>Venmo</option>
+        <option>Zelle</option>
+        <option>Other</option>
+      </select>
+    </div>
+    <div class="field"><label>Transaction ID (optional)</label><input type="text" id="paidTxn" placeholder="Reference number..." /></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('markPaidModal')">Cancel</button>
+      <button class="btn btn-green" onclick="handleMarkPaid()">Mark as paid</button>
+    </div>
+  </div>
+</div>
+
 <script>
-  const API     = 'https://script.google.com/macros/s/AKfycbyxg5LlS9eUx6VSiD_VSzE0RD94STkBAK4Hc-h14T_YU5ikqXGE3dz-Fvt1kCAE-9XRLw/exec';
-  const token   = localStorage.getItem('sc_token');
+  const API    = 'https://script.google.com/macros/s/AKfycbyxg5LlS9eUx6VSiD_VSzE0RD94STkBAK4Hc-h14T_YU5ikqXGE3dz-Fvt1kCAE-9XRLw/exec';
+  const token  = localStorage.getItem('sc_token');
   if (!token) window.location.href = 'login.html';
 
   let allClients  = [];
-  let allUpdates  = [];
-
-  // Set today's date as default
-  document.getElementById('updateDate').value = new Date().toISOString().split('T')[0];
+  let allInvoices = [];
+  let filtered    = [];
 
   async function api(action, extra = {}) {
     const res = await fetch(API, { method: 'POST', body: JSON.stringify({ action, token, ...extra }) });
@@ -261,110 +319,172 @@
 
       allClients = (clientsRes.clients || []).filter(c => c.is_admin !== true && c.is_admin !== 'TRUE');
 
-      // Admin name
       const admin = clientsRes.clients.find(c => c.is_admin === true || c.is_admin === 'TRUE');
       if (admin) {
         document.getElementById('adminName').textContent = admin.client_name || 'Admin';
-        document.getElementById('adminAvatar').textContent = (admin.client_name || 'A').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+        document.getElementById('adminAvatar').textContent = (admin.client_name||'A').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
       }
 
-      // Populate client dropdown
-      const select = document.getElementById('clientSelect');
-      if (!allClients.length) {
-        select.innerHTML = '<option value="">No clients yet</option>';
-      } else {
-        select.innerHTML = '<option value="">Select a client...</option>' +
-          allClients.map(c => `<option value="${c.client_id}">${c.business_name || c.client_name} — ${c.domain || 'no domain'}</option>`).join('');
-      }
+      // Populate filters and dropdowns
+      const clientFilter = document.getElementById('clientFilter');
+      const invClient    = document.getElementById('invClient');
+      allClients.forEach(c => {
+        const label = c.business_name || c.client_name;
+        clientFilter.innerHTML += `<option value="${c.client_id}">${label}</option>`;
+        invClient.innerHTML    += `<option value="${c.client_id}">${label}</option>`;
+      });
 
-      // Load recent updates for all clients
+      // Fetch all invoices
       if (allClients.length) {
         const results = await Promise.all(
-          allClients.map(c => api('getUpdates', { client_id: c.client_id }).catch(() => ({ updates: [] })))
+          allClients.map(c => api('getInvoices', { client_id: c.client_id }).catch(() => ({ invoices: [] })))
         );
-        allUpdates = results.flatMap(r => r.updates || [])
-          .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-          .slice(0, 10);
-        renderRecent();
-      } else {
-        document.getElementById('recentPanel').innerHTML = '<div class="empty">No updates yet.</div>';
+        allInvoices = results.flatMap(r => r.invoices || [])
+          .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
       }
+
+      renderStats();
+      applyFilters();
 
     } catch(e) { console.error(e); }
   }
 
-  function renderRecent() {
-    const panel = document.getElementById('recentPanel');
-    if (!allUpdates.length) {
-      panel.innerHTML = '<div class="empty">No updates posted yet.</div>';
+  function renderStats() {
+    const total  = allInvoices.reduce((s, i) => s + (parseFloat(i.amount) || 0), 0);
+    const paid   = allInvoices.filter(i => i.status === 'Paid').reduce((s, i) => s + (parseFloat(i.amount) || 0), 0);
+    const unpaid = allInvoices.filter(i => i.status !== 'Paid').reduce((s, i) => s + (parseFloat(i.amount) || 0), 0);
+    document.getElementById('statTotal').textContent  = '$' + total.toLocaleString();
+    document.getElementById('statPaid').textContent   = '$' + paid.toLocaleString();
+    document.getElementById('statUnpaid').textContent = '$' + unpaid.toLocaleString();
+  }
+
+  function applyFilters() {
+    const status = document.getElementById('statusFilter').value;
+    const client = document.getElementById('clientFilter').value;
+    const search = document.getElementById('searchInput').value.toLowerCase();
+
+    filtered = allInvoices.filter(i => {
+      if (status && i.status !== status) return false;
+      if (client && i.client_id !== client) return false;
+      if (search) {
+        const clientName = getClientName(i.client_id).toLowerCase();
+        if (!clientName.includes(search) && !(i.invoice_id||'').toLowerCase().includes(search) && !(i.period||'').toLowerCase().includes(search)) return false;
+      }
+      return true;
+    });
+
+    renderTable();
+  }
+
+  function getClientName(client_id) {
+    const c = allClients.find(x => x.client_id === client_id);
+    return c ? (c.business_name || c.client_name) : client_id;
+  }
+
+  function renderTable() {
+    const tbody = document.getElementById('invoiceTableBody');
+    if (!filtered.length) {
+      tbody.innerHTML = '<tr><td colspan="7"><div class="empty">No invoices found.</div></td></tr>';
       return;
     }
 
-    const clientMap = {};
-    allClients.forEach(c => clientMap[c.client_id] = c.business_name || c.client_name);
-
-    panel.innerHTML = allUpdates.map(u => `
-      <div class="update-row">
-        <div class="update-dot"></div>
-        <div>
-          <div class="update-title">${u.title || '—'}</div>
-          <div class="update-meta">
-            <span class="update-client">${clientMap[u.client_id] || u.client_id}</span>
-            <span>${formatDate(u.created_at)}</span>
-            ${u.category ? `<span class="update-tag">${u.category}</span>` : ''}
+    tbody.innerHTML = filtered.map(inv => `
+      <tr>
+        <td class="td-muted">${inv.invoice_id || '—'}</td>
+        <td>
+          <div class="client-name">${getClientName(inv.client_id)}</div>
+        </td>
+        <td class="td-muted">${inv.period || '—'}</td>
+        <td><span class="amount">$${parseFloat(inv.amount || 0).toFixed(2)}</span></td>
+        <td class="td-muted">${formatDate(inv.due_date)}</td>
+        <td><span class="badge badge-${(inv.status||'unpaid').toLowerCase()}">${inv.status || 'Unpaid'}</span></td>
+        <td>
+          <div class="action-cell">
+            ${inv.status !== 'Paid' ? `<button class="btn btn-green btn-sm" onclick="openMarkPaid('${inv.invoice_id}')">Mark paid</button>` : ''}
           </div>
-        </div>
-      </div>
+        </td>
+      </tr>
     `).join('');
   }
 
-  async function handleSubmit() {
-    const client_id     = document.getElementById('clientSelect').value;
-    const title         = document.getElementById('updateTitle').value.trim();
-    const category      = document.getElementById('updateCategory').value;
-    const content       = document.getElementById('updateContent').value.trim();
-    const notify_client = document.getElementById('notifyClient').checked;
-    const btn           = document.getElementById('submitBtn');
+  // NEW INVOICE
+  function openNewInvoice() {
+    ['invSuccess','invError'].forEach(id => document.getElementById(id).classList.remove('show'));
+    // Default due date to 1st of next month
+    const d = new Date();
+    d.setMonth(d.getMonth() + 1);
+    d.setDate(1);
+    document.getElementById('invDue').value    = d.toISOString().split('T')[0];
+    document.getElementById('invPeriod').value = d.toLocaleString('en-US', { month: 'long', year: 'numeric' });
+    document.getElementById('newInvoiceModal').classList.add('show');
+  }
 
-    document.getElementById('successAlert').classList.remove('show');
-    document.getElementById('errorAlert').classList.remove('show');
+  async function handleNewInvoice() {
+    const btn = document.getElementById('invSubmitBtn');
+    ['invSuccess','invError'].forEach(id => document.getElementById(id).classList.remove('show'));
 
-    if (!client_id) { showError('Please select a client.'); return; }
-    if (!title)     { showError('Please enter an update title.'); return; }
+    const invoice = {
+      client_id: document.getElementById('invClient').value,
+      amount:    document.getElementById('invAmount').value,
+      due_date:  document.getElementById('invDue').value,
+      period:    document.getElementById('invPeriod').value,
+    };
 
-    btn.disabled = true;
-    btn.textContent = 'Posting...';
-
-    try {
-      const res = await api('adminPostUpdate', { client_id, title, content, category, notify_client });
-      if (res.ok) {
-        document.getElementById('successAlert').classList.add('show');
-        clearForm();
-        loadData();
-      } else {
-        showError(res.error || 'Failed to post update.');
-      }
-    } catch(e) {
-      showError('Connection error. Please try again.');
+    if (!invoice.client_id || !invoice.amount) {
+      document.getElementById('invError').textContent = 'Client and amount are required.';
+      document.getElementById('invError').classList.add('show');
+      return;
     }
 
-    btn.disabled = false;
-    btn.textContent = 'Post update';
+    btn.disabled = true; btn.textContent = 'Creating...';
+
+    try {
+      const res = await api('adminSaveInvoice', { invoice });
+      if (res.ok) {
+        document.getElementById('invSuccess').classList.add('show');
+        setTimeout(() => { closeModal('newInvoiceModal'); loadData(); }, 1500);
+      } else {
+        document.getElementById('invError').textContent = res.error || 'Error creating invoice.';
+        document.getElementById('invError').classList.add('show');
+      }
+    } catch(e) {
+      document.getElementById('invError').classList.add('show');
+    }
+    btn.disabled = false; btn.textContent = 'Create & send';
   }
 
-  function showError(msg) {
-    document.getElementById('errorMsg').textContent = msg;
-    document.getElementById('errorAlert').classList.add('show');
+  // MARK PAID
+  function openMarkPaid(invoiceId) {
+    ['paidSuccess','paidError'].forEach(id => document.getElementById(id).classList.remove('show'));
+    document.getElementById('paidInvoiceId').value = invoiceId;
+    document.getElementById('paidTxn').value = '';
+    document.getElementById('markPaidModal').classList.add('show');
   }
 
-  function clearForm() {
-    document.getElementById('clientSelect').value   = '';
-    document.getElementById('updateTitle').value    = '';
-    document.getElementById('updateContent').value  = '';
-    document.getElementById('updateCategory').value = 'General';
-    document.getElementById('updateDate').value     = new Date().toISOString().split('T')[0];
-    document.getElementById('notifyClient').checked = true;
+  async function handleMarkPaid() {
+    const invoice_id      = document.getElementById('paidInvoiceId').value;
+    const payment_method  = document.getElementById('paidMethod').value;
+    const transaction_id  = document.getElementById('paidTxn').value.trim();
+    ['paidSuccess','paidError'].forEach(id => document.getElementById(id).classList.remove('show'));
+
+    try {
+      const res = await api('adminMarkPaid', { invoice_id, payment_method, transaction_id });
+      if (res.ok) {
+        document.getElementById('paidSuccess').classList.add('show');
+        setTimeout(() => { closeModal('markPaidModal'); loadData(); }, 1200);
+      } else {
+        document.getElementById('paidError').textContent = res.error || 'Error updating invoice.';
+        document.getElementById('paidError').classList.add('show');
+      }
+    } catch(e) {
+      document.getElementById('paidError').classList.add('show');
+    }
   }
+
+  function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+  document.querySelectorAll('.modal-overlay').forEach(el => {
+    el.addEventListener('click', e => { if (e.target === el) el.classList.remove('show'); });
+  });
 
   function formatDate(val) {
     if (!val) return '—';
@@ -382,6 +502,6 @@
   loadData();
 </script>
 
-<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.35);">Suncoast Technology · updates.html · v1.0</div>
+<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.35);">Suncoast Technology · invoices.html · v1.0</div>
 </body>
 </html>
