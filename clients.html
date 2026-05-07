@@ -289,7 +289,7 @@
     currentDetails = {};
   }
 
-  function switchTab(tab) {
+  async function switchTab(tab) {
     currentTab = tab;
     document.querySelectorAll('.drawer-tab').forEach((t, i) => {
       t.classList.toggle('active', ['profile','invoices','domain','hosting','credentials','document'][i] === tab);
@@ -638,6 +638,6 @@
 
   loadClients();
 </script>
-<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.35);">Suncoast Technology · clients.html · v1.1</div>
+<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.35);">Suncoast Technology · clients.html · v1.2</div>
 </body>
 </html>
