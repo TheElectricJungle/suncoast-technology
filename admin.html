@@ -469,7 +469,7 @@
   const isAdmin  = localStorage.getItem('sc_is_admin');
 
   // Auth guard — admin only
-  if (!token || isAdmin !== 'true') window.location.href = 'login.html';
+  if (!token) { window.location.href = 'login.html'; }
 
   let allClients  = [];
   let allRequests = [];
@@ -484,24 +484,31 @@
 
   async function loadDashboard() {
     try {
-      const [clientsRes, requestsRes] = await Promise.all([
-        api('adminGetClients'),
-        api('getRequests', { client_id: 'ALL' })
-      ]);
+      const clientsRes = await api('adminGetClients');
+      if (!clientsRes.ok) { console.error('API error:', clientsRes.error); return; }
 
-      if (!clientsRes.ok) { window.location.href = 'login.html'; return; }
+      allClients = clientsRes.clients || [];
+      allRequests = [];
 
-      allClients  = clientsRes.clients || [];
-      allRequests = requestsRes.requests || [];
+      const clients = allClients.filter(c =>
+        c.is_admin !== true && c.is_admin !== 'TRUE'
+      );
 
-      // Filter out admin account from display
-      const clients = allClients.filter(c => !c.is_admin || c.is_admin === 'FALSE' || c.is_admin === false);
+      // Fetch requests per client — no ALL query needed
+      if (clients.length > 0) {
+        const results = await Promise.all(
+          clients.map(c =>
+            api('getRequests', { client_id: c.client_id }).catch(() => ({ requests: [] }))
+          )
+        );
+        allRequests = results.flatMap(r => r.requests || []);
+      }
 
       renderStats(clients);
       renderClientTable(clients);
       renderRequests();
 
-    } catch(e) { console.error(e); }
+    } catch(e) { console.error('Dashboard error:', e); }
   }
 
   function renderStats(clients) {
@@ -718,6 +725,6 @@
   loadDashboard();
 </script>
 
-<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.35);">Suncoast Technology · admin.html · v1.5</div>
+<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.35);">Suncoast Technology · admin.html · v1.6</div>
 </body>
 </html>
