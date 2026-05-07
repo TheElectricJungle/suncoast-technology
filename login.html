@@ -2,621 +2,308 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Suncoast Technology — Client Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Login — Suncoast Technology</title>
+  <!-- Suncoast Technology | login.html | v2.0 -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet" />
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{--navy:#04080F;--border:rgba(255,255,255,0.07);--muted:rgba(148,163,184,0.7);--light:#E8F0FF;--orange:#F97316;--gold:#FBBF24;--green:#22C55E;--red:#EF4444;}
+    html{height:100%;}
+    body{min-height:100vh;font-family:'DM Sans',sans-serif;background:#04080F;color:var(--light);display:flex;align-items:center;justify-content:center;padding:20px;}
 
-    :root {
-      --orange: #F97316;
-      --gold: #FBBF24;
-      --navy: #0F1923;
-      --slate: #1E2D3D;
-      --muted: #94A3B8;
-      --light: #F8FAFC;
-      --border: rgba(255,255,255,0.08);
-      --card-bg: rgba(255,255,255,0.04);
-    }
+    /* Aurora */
+    canvas#aurora{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;}
+    .grid{position:fixed;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none;background-image:linear-gradient(rgba(79,195,247,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(79,195,247,0.02) 1px,transparent 1px);background-size:80px 80px;}
 
-    html, body {
-      height: 100%;
-      font-family: 'DM Sans', sans-serif;
-      background: var(--navy);
-      color: var(--light);
-      overflow-x: hidden;
-    }
+    /* Page wrapper */
+    .page{position:relative;z-index:10;width:100%;max-width:400px;display:flex;flex-direction:column;align-items:center;gap:24px;}
 
-    /* ---- BACKGROUND ---- */
-    .bg {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      overflow: hidden;
-    }
-    .bg-horizon {
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      height: 55%;
-      background: linear-gradient(to top, rgba(249,115,22,0.07) 0%, transparent 100%);
-    }
-    .bg-sun {
-      position: absolute;
-      bottom: 30%;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 600px;
-      height: 600px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(251,191,36,0.06) 0%, rgba(249,115,22,0.04) 40%, transparent 70%);
-      animation: pulse 8s ease-in-out infinite;
-    }
-    .bg-arc {
-      position: absolute;
-      bottom: 28%;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 900px;
-      height: 450px;
-      border-top: 1px solid rgba(249,115,22,0.12);
-      border-radius: 50% 50% 0 0;
-    }
-    .bg-arc2 {
-      position: absolute;
-      bottom: 28%;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 700px;
-      height: 350px;
-      border-top: 1px solid rgba(251,191,36,0.08);
-      border-radius: 50% 50% 0 0;
-    }
-    .bg-arc3 {
-      position: absolute;
-      bottom: 28%;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 500px;
-      height: 250px;
-      border-top: 1px solid rgba(249,115,22,0.06);
-      border-radius: 50% 50% 0 0;
-    }
-    .bg-line {
-      position: absolute;
-      bottom: 28%;
-      left: 0; right: 0;
-      height: 1px;
-      background: linear-gradient(to right, transparent, rgba(249,115,22,0.2), transparent);
-    }
-    .bg-grid {
-      position: absolute;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
-      background-size: 60px 60px;
-    }
-    @keyframes pulse {
-      0%, 100% { transform: translateX(-50%) scale(1); opacity: 1; }
-      50% { transform: translateX(-50%) scale(1.05); opacity: 0.8; }
-    }
+    /* Logo */
+    .logo{display:flex;align-items:center;gap:10px;}
+    .logo-mark{width:40px;height:40px;}
+    .logo-name{font-family:'Playfair Display',serif;font-size:17px;color:#fff;}
+    .logo-name em{color:var(--orange);font-style:normal;}
+    .logo-sub{font-size:10px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-top:2px;}
 
-    /* ---- LAYOUT ---- */
-    .page {
-      position: relative;
-      z-index: 1;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem 1rem;
-    }
+    /* Card */
+    .card{width:100%;background:rgba(8,16,28,0.85);backdrop-filter:blur(30px);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:32px;position:relative;}
+    .card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(79,195,247,0.3),rgba(167,139,250,0.3),transparent);border-radius:20px 20px 0 0;}
+    .card-title{font-family:'Playfair Display',serif;font-size:22px;color:#fff;margin:0 0 4px;}
+    .card-sub{font-size:13px;color:var(--muted);margin:0 0 24px;line-height:1.5;}
 
-    /* ---- LOGO ---- */
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 3rem;
-      animation: fadeUp 0.6s ease both;
-    }
-    .logo-mark {
-      width: 52px;
-      height: 52px;
-      flex-shrink: 0;
-    }
-    .logo-text {}
-    .logo-name {
-      font-family: 'Playfair Display', serif;
-      font-size: 22px;
-      font-weight: 500;
-      color: #fff;
-      line-height: 1.1;
-    }
-    .logo-name span { color: var(--orange); }
-    .logo-sub {
-      font-size: 11px;
-      color: var(--muted);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-top: 3px;
-    }
+    /* Fields */
+    .field{display:flex;flex-direction:column;gap:5px;margin:0 0 14px;}
+    .field label{font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;}
+    .field input{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:11px 14px;font-size:14px;font-family:'DM Sans',sans-serif;color:#fff;outline:none;transition:border-color 0.2s;}
+    .field input:focus{border-color:rgba(249,115,22,0.5);background:rgba(249,115,22,0.03);}
 
-    /* ---- CARD ---- */
-    .card {
-      width: 100%;
-      max-width: 420px;
-      background: rgba(30, 45, 61, 0.7);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 2.5rem;
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      animation: fadeUp 0.6s ease 0.1s both;
-    }
+    /* Password strength */
+    .pw-strength{height:3px;background:rgba(255,255,255,0.08);border-radius:2px;margin-top:6px;overflow:hidden;}
+    .pw-bar{height:100%;border-radius:2px;width:0%;transition:width 0.3s,background 0.3s;}
+    .pw-hint{font-size:11px;color:var(--muted);margin-top:4px;}
 
-    .card-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 26px;
-      font-weight: 400;
-      color: #fff;
-      margin-bottom: 6px;
-    }
-    .card-sub {
-      font-size: 13px;
-      color: var(--muted);
-      margin-bottom: 2rem;
-      line-height: 1.5;
-    }
+    /* Forgot */
+    .forgot{text-align:right;margin:-8px 0 16px;}
+    .forgot a{font-size:12px;color:var(--muted);text-decoration:none;transition:color 0.2s;}
+    .forgot a:hover{color:var(--orange);}
 
-    /* ---- FORM ---- */
-    .field {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      margin-bottom: 1rem;
-    }
-    .field label {
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--muted);
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-    }
-    .field input {
-      width: 100%;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 10px;
-      padding: 12px 16px;
-      font-size: 14px;
-      font-family: 'DM Sans', sans-serif;
-      color: #fff;
-      outline: none;
-      transition: border-color 0.2s, background 0.2s;
-    }
-    .field input::placeholder { color: rgba(148,163,184,0.5); }
-    .field input:focus {
-      border-color: rgba(249,115,22,0.5);
-      background: rgba(249,115,22,0.05);
-    }
+    /* Button */
+    .btn{width:100%;padding:13px;background:linear-gradient(135deg,var(--orange),#ea580c);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;transition:opacity 0.2s,transform 0.1s;display:flex;align-items:center;justify-content:center;gap:8px;}
+    .btn:hover{opacity:0.9;}
+    .btn:active{transform:scale(0.99);}
+    .btn:disabled{opacity:0.6;cursor:not-allowed;}
+    .btn.loading .btn-label{display:none;}
+    .btn-spinner{display:none;width:16px;height:16px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;}
+    .btn.loading .btn-spinner{display:block;}
+    @keyframes spin{to{transform:rotate(360deg);}}
+    .btn-ghost{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);}
+    .btn-ghost:hover{background:rgba(255,255,255,0.09);}
 
-    .forgot {
-      text-align: right;
-      margin-top: -6px;
-      margin-bottom: 1.5rem;
-    }
-    .forgot a {
-      font-size: 12px;
-      color: var(--muted);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-    .forgot a:hover { color: var(--orange); }
+    /* Alerts */
+    .alert{display:none;padding:10px 14px;border-radius:8px;font-size:13px;margin:0 0 14px;align-items:center;gap:8px;}
+    .alert.show{display:flex;}
+    .alert-error{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#FCA5A5;}
+    .alert-success{background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);color:#86EFAC;}
 
-    .btn {
-      width: 100%;
-      padding: 13px;
-      background: var(--orange);
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      font-size: 14px;
-      font-weight: 500;
-      font-family: 'DM Sans', sans-serif;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.1s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      position: relative;
-      overflow: hidden;
-    }
-    .btn:hover { background: #ea6c0a; }
-    .btn:active { transform: scale(0.99); }
-    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    /* Reset form */
+    .reset-form{display:none;}
+    .back-link{font-size:12px;color:var(--muted);cursor:pointer;margin-top:12px;text-align:center;display:block;text-decoration:none;}
+    .back-link:hover{color:#fff;}
 
-    .btn-spinner {
-      width: 16px;
-      height: 16px;
-      border: 2px solid rgba(255,255,255,0.3);
-      border-top-color: #fff;
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-      display: none;
-    }
-    .btn.loading .btn-spinner { display: block; }
-    .btn.loading .btn-label { opacity: 0.7; }
+    /* New password card */
+    .new-pw-card{display:none;}
 
-    /* ---- ERROR / SUCCESS ---- */
-    .alert {
-      padding: 10px 14px;
-      border-radius: 8px;
-      font-size: 13px;
-      margin-bottom: 1rem;
-      display: none;
-      align-items: center;
-      gap: 8px;
-    }
-    .alert.error {
-      background: rgba(220,38,38,0.1);
-      border: 1px solid rgba(220,38,38,0.25);
-      color: #FCA5A5;
-    }
-    .alert.success {
-      background: rgba(22,163,74,0.1);
-      border: 1px solid rgba(22,163,74,0.25);
-      color: #86EFAC;
-    }
-    .alert.show { display: flex; }
-
-    /* ---- FOOTER ---- */
-    .footer {
-      margin-top: 2rem;
-      font-size: 12px;
-      color: rgba(148,163,184,0.4);
-      text-align: center;
-      animation: fadeUp 0.6s ease 0.2s both;
-    }
-
-    /* ---- RESET MODAL ---- */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.6);
-      backdrop-filter: blur(4px);
-      z-index: 100;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
-    }
-    .modal-overlay.show { display: flex; }
-    .modal {
-      background: var(--slate);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 2rem;
-      width: 100%;
-      max-width: 380px;
-    }
-    .modal-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 20px;
-      color: #fff;
-      margin-bottom: 6px;
-    }
-    .modal-sub {
-      font-size: 13px;
-      color: var(--muted);
-      margin-bottom: 1.5rem;
-      line-height: 1.5;
-    }
-    .modal-actions {
-      display: flex;
-      gap: 8px;
-      margin-top: 1rem;
-    }
-    .btn-ghost {
-      flex: 1;
-      padding: 11px;
-      background: transparent;
-      color: var(--muted);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 10px;
-      font-size: 13px;
-      font-family: 'DM Sans', sans-serif;
-      cursor: pointer;
-      transition: border-color 0.2s, color 0.2s;
-    }
-    .btn-ghost:hover { border-color: rgba(255,255,255,0.2); color: #fff; }
-
-    /* ---- ANIMATIONS ---- */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(16px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
+    .footer{font-size:11px;color:rgba(148,163,184,0.25);text-align:center;}
   </style>
 </head>
 <body>
 
-<!-- Background -->
-<div class="bg">
-  <div class="bg-grid"></div>
-  <div class="bg-sun"></div>
-  <div class="bg-arc"></div>
-  <div class="bg-arc2"></div>
-  <div class="bg-arc3"></div>
-  <div class="bg-line"></div>
-  <div class="bg-horizon"></div>
-</div>
+<canvas id="aurora"></canvas>
+<div class="grid"></div>
 
-<!-- Page -->
 <div class="page">
-
-  <!-- Logo -->
   <div class="logo">
-    <svg class="logo-mark" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="26" cy="26" r="25" fill="#1E2D3D" stroke="rgba(249,115,22,0.3)" stroke-width="1"/>
-      <path d="M10 32 Q26 14 42 32" stroke="#F97316" stroke-width="3" stroke-linecap="round" fill="none"/>
-      <path d="M7 36 Q26 10 45 36" stroke="#FBBF24" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.5"/>
-      <circle cx="26" cy="38" r="4" fill="#F97316"/>
-      <line x1="10" y1="40" x2="42" y2="40" stroke="rgba(249,115,22,0.3)" stroke-width="1.5" stroke-linecap="round"/>
+    <svg class="logo-mark" viewBox="0 0 40 40" fill="none">
+      <circle cx="20" cy="20" r="19" fill="#0D1B2A" stroke="rgba(249,115,22,0.35)" stroke-width="1"/>
+      <path d="M8 25 Q20 12 32 25" stroke="#F97316" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+      <path d="M6 28 Q20 9 34 28" stroke="#FBBF24" stroke-width="1.2" stroke-linecap="round" fill="none" opacity="0.5"/>
+      <circle cx="20" cy="30" r="3" fill="#F97316"/>
     </svg>
-    <div class="logo-text">
-      <div class="logo-name">Suncoast <span>Technology</span></div>
+    <div>
+      <div class="logo-name">Suncoast <em>Technology</em></div>
       <div class="logo-sub">Client Portal</div>
     </div>
   </div>
 
-  <!-- Step 1: Login -->
+  <!-- LOGIN FORM -->
   <div class="card" id="loginCard">
     <div class="card-title">Welcome back</div>
     <div class="card-sub">Sign in to manage your website and billing.</div>
 
-    <div class="alert error" id="errorAlert">
+    <div class="alert alert-error" id="loginError">
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#FCA5A5" stroke-width="1.5"/><path d="M8 5v3.5M8 11h.01" stroke="#FCA5A5" stroke-width="1.5" stroke-linecap="round"/></svg>
-      <span id="errorMsg">Invalid email or password.</span>
+      <span id="loginErrorMsg">Invalid email or password.</span>
     </div>
 
-    <div class="field">
-      <label for="email">Email address</label>
-      <input type="email" id="email" placeholder="you@yourbusiness.com" autocomplete="email" />
-    </div>
-
-    <div class="field">
-      <label for="password">Password</label>
-      <input type="password" id="password" placeholder="••••••••" autocomplete="current-password" />
-    </div>
-
-    <div class="forgot">
-      <a href="#" id="forgotLink">Forgot password?</a>
-    </div>
-
+    <div class="field"><label>Email</label><input type="email" id="email" placeholder="you@yourbusiness.com" autocomplete="email" /></div>
+    <div class="field"><label>Password</label><input type="password" id="password" placeholder="••••••••" autocomplete="current-password" /></div>
+    <div class="forgot"><a href="#" id="forgotLink">Forgot password?</a></div>
     <button class="btn" id="loginBtn" onclick="handleLogin()">
       <span class="btn-label">Sign in</span>
       <div class="btn-spinner"></div>
     </button>
   </div>
 
-  <!-- Step 2: First login — set new password -->
-  <div class="card" id="newPasswordCard" style="display:none;">
-    <div class="card-title">Set your password</div>
-    <div class="card-sub">You logged in with a temporary password. Create a permanent password to continue.</div>
+  <!-- FORGOT PASSWORD FORM -->
+  <div class="card" id="resetCard" style="display:none;">
+    <div class="card-title">Reset password</div>
+    <div class="card-sub">Enter your email and we will send you a reset link.</div>
 
-    <div class="alert error" id="newPwError">
+    <div class="alert alert-error" id="resetError">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#FCA5A5" stroke-width="1.5"/><path d="M8 5v3.5M8 11h.01" stroke="#FCA5A5" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <span>Something went wrong. Try again.</span>
+    </div>
+    <div class="alert alert-success" id="resetSuccess">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#86EFAC" stroke-width="1.5"/><path d="M5 8l2 2 4-4" stroke="#86EFAC" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Check your email for a reset link.</span>
+    </div>
+
+    <div class="field"><label>Email</label><input type="email" id="resetEmail" placeholder="you@yourbusiness.com" /></div>
+    <button class="btn" id="resetBtn" onclick="handleReset()">
+      <span class="btn-label">Send reset link</span>
+      <div class="btn-spinner"></div>
+    </button>
+    <a class="back-link" onclick="showLogin()">← Back to login</a>
+  </div>
+
+  <!-- FIRST LOGIN — SET NEW PASSWORD -->
+  <div class="card" id="newPwCard" style="display:none;">
+    <div class="card-title">Set your password</div>
+    <div class="card-sub">You logged in with a temporary password. Create a permanent one to continue.</div>
+
+    <div class="alert alert-error" id="newPwError">
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#FCA5A5" stroke-width="1.5"/><path d="M8 5v3.5M8 11h.01" stroke="#FCA5A5" stroke-width="1.5" stroke-linecap="round"/></svg>
       <span id="newPwErrorMsg">Passwords do not match.</span>
     </div>
-
-    <div class="alert success" id="newPwSuccess">
+    <div class="alert alert-success" id="newPwSuccess">
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#86EFAC" stroke-width="1.5"/><path d="M5 8l2 2 4-4" stroke="#86EFAC" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <span>Password set! Taking you to your dashboard...</span>
+      <span>Password set! Taking you in...</span>
     </div>
 
     <div class="field">
-      <label for="newPw">New password</label>
+      <label>New password</label>
       <input type="password" id="newPw" placeholder="Create a strong password" oninput="checkStrength(this.value)" />
       <div class="pw-strength"><div class="pw-bar" id="pwBar"></div></div>
       <div class="pw-hint" id="pwHint">At least 8 characters</div>
     </div>
-
-    <div class="field">
-      <label for="confirmPw">Confirm password</label>
-      <input type="password" id="confirmPw" placeholder="Re-enter your password" />
-    </div>
-
+    <div class="field"><label>Confirm password</label><input type="password" id="confirmPw" placeholder="Re-enter your password" /></div>
     <button class="btn" id="newPwBtn" onclick="handleSetPassword()">
       <span class="btn-label">Set password &amp; continue</span>
       <div class="btn-spinner"></div>
     </button>
   </div>
 
-  <div class="footer">
-    &copy; 2026 Suncoast Technology &nbsp;&middot;&nbsp; suncoast.technology
-  </div>
-
-</div>
-
-<!-- Password Reset Modal -->
-<div class="modal-overlay" id="resetModal">
-  <div class="modal">
-    <div class="modal-title">Reset password</div>
-    <div class="modal-sub">Enter your email and we'll send you a link to reset your password.</div>
-
-    <div class="alert error" id="resetError"></div>
-    <div class="alert success" id="resetSuccess">Check your email for a reset link.</div>
-
-    <div class="field">
-      <label for="resetEmail">Email address</label>
-      <input type="email" id="resetEmail" placeholder="you@yourbusiness.com" />
-    </div>
-
-    <div class="modal-actions">
-      <button class="btn-ghost" onclick="closeReset()">Cancel</button>
-      <button class="btn" style="flex:2;" id="resetBtn" onclick="handleReset()">
-        <span class="btn-label">Send reset link</span>
-        <div class="btn-spinner"></div>
-      </button>
-    </div>
-  </div>
+  <div class="footer">© 2026 Suncoast Technology</div>
 </div>
 
 <script>
   const API = 'https://script.google.com/macros/s/AKfycbyxg5LlS9eUx6VSiD_VSzE0RD94STkBAK4Hc-h14T_YU5ikqXGE3dz-Fvt1kCAE-9XRLw/exec';
 
-  // Auto-redirect if already logged in
-  window.addEventListener('DOMContentLoaded', () => {
-    const token = localStorage.getItem('sc_token');
-    if (token) {
-      fetch(API, {
-        method: 'POST',
-        body: JSON.stringify({ action: 'validateSession', token })
-      })
-      .then(r => r.json())
-      .then(data => {
-        if (data.ok) redirect(data.is_admin);
-      })
-      .catch(() => {});
+  // Aurora
+  (function(){
+    const canvas = document.getElementById('aurora');
+    const ctx = canvas.getContext('2d');
+    let W, H, t = 0;
+    function resize(){ W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+    resize(); window.addEventListener('resize', resize);
+    const blobs = [
+      {x:0.2,y:0.3,r:0.55,color:[79,195,247],speed:0.00005},
+      {x:0.8,y:0.2,r:0.5,color:[167,139,250],speed:0.00004},
+      {x:0.5,y:0.7,r:0.45,color:[244,114,182],speed:0.00006},
+      {x:0.1,y:0.8,r:0.4,color:[45,212,191],speed:0.000045},
+      {x:0.9,y:0.5,r:0.35,color:[249,115,22],speed:0.000055},
+    ];
+    function draw(){
+      ctx.clearRect(0,0,W,H); t++;
+      blobs.forEach((b,i)=>{
+        const ox=Math.sin(t*b.speed*1000+i*1.2)*0.15;
+        const oy=Math.cos(t*b.speed*800+i*0.9)*0.12;
+        const cx=(b.x+ox)*W, cy=(b.y+oy)*H, rad=b.r*Math.min(W,H);
+        const g=ctx.createRadialGradient(cx,cy,0,cx,cy,rad);
+        const [r,g2,bl]=b.color;
+        g.addColorStop(0,`rgba(${r},${g2},${bl},0.22)`);
+        g.addColorStop(0.4,`rgba(${r},${g2},${bl},0.09)`);
+        g.addColorStop(1,`rgba(${r},${g2},${bl},0)`);
+        ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+      });
+      requestAnimationFrame(draw);
     }
-
-    // Enter key submits
-    document.getElementById('password').addEventListener('keydown', e => {
-      if (e.key === 'Enter') handleLogin();
-    });
-    document.getElementById('email').addEventListener('keydown', e => {
-      if (e.key === 'Enter') document.getElementById('password').focus();
-    });
-  });
+    draw();
+  })();
 
   function redirect(isAdmin) {
-    window.location.href = isAdmin ? '/admin.html' : '/dashboard.html';
+    window.location.href = isAdmin ? 'admin.html' : 'dashboard.html';
   }
+
+  // Check if already logged in
+  (async function(){
+    const token = localStorage.getItem('sc_token');
+    if (!token) return;
+    try {
+      const res = await fetch(API, { method:'POST', body: JSON.stringify({ action:'validateSession', token }) });
+      const data = await res.json();
+      if (data.ok) redirect(data.is_admin);
+    } catch(e) {}
+  })();
+
+  function showLogin() {
+    document.getElementById('loginCard').style.display = 'block';
+    document.getElementById('resetCard').style.display = 'none';
+    document.getElementById('newPwCard').style.display = 'none';
+  }
+
+  document.getElementById('forgotLink').addEventListener('click', e => {
+    e.preventDefault();
+    const email = document.getElementById('email').value;
+    if (email) document.getElementById('resetEmail').value = email;
+    document.getElementById('loginCard').style.display = 'none';
+    document.getElementById('resetCard').style.display = 'block';
+    ['resetError','resetSuccess'].forEach(id => document.getElementById(id).classList.remove('show'));
+  });
 
   async function handleLogin() {
     const email    = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value;
     const btn      = document.getElementById('loginBtn');
-    const errAlert = document.getElementById('errorAlert');
-
-    if (!email || !password) {
-      showError('Please enter your email and password.');
-      return;
-    }
-
-    errAlert.classList.remove('show');
-    btn.classList.add('loading');
-    btn.disabled = true;
-
+    const errEl    = document.getElementById('loginError');
+    const errMsg   = document.getElementById('loginErrorMsg');
+    errEl.classList.remove('show');
+    if (!email || !password) { errMsg.textContent = 'Please enter your email and password.'; errEl.classList.add('show'); return; }
+    btn.classList.add('loading'); btn.disabled = true;
     try {
-      const res = await fetch(API, {
-        method: 'POST',
-        body: JSON.stringify({ action: 'login', email, password })
-      });
+      const res = await fetch(API, { method:'POST', body: JSON.stringify({ action:'login', email, password }) });
       const data = await res.json();
-
       if (data.ok) {
         localStorage.setItem('sc_token', data.token);
         localStorage.setItem('sc_client_id', data.client_id);
         localStorage.setItem('sc_is_admin', data.is_admin);
-        // Set first login flag — force password change before entering portal
         if (data.first_login) {
-          // Store session but don't redirect yet — show password change step
           localStorage.setItem('sc_first_login', 'true');
           document.getElementById('loginCard').style.display = 'none';
-          document.getElementById('newPasswordCard').style.display = 'block';
+          document.getElementById('newPwCard').style.display = 'block';
         } else {
           localStorage.removeItem('sc_first_login');
           redirect(data.is_admin);
         }
       } else {
-        showError(data.error || 'Invalid email or password.');
-        btn.classList.remove('loading');
-        btn.disabled = false;
+        errMsg.textContent = data.error || 'Invalid email or password.';
+        errEl.classList.add('show');
+        btn.classList.remove('loading'); btn.disabled = false;
       }
-    } catch (err) {
-      showError('Connection error. Please try again.');
-      btn.classList.remove('loading');
-      btn.disabled = false;
+    } catch(e) {
+      errMsg.textContent = 'Connection error. Please try again.';
+      errEl.classList.add('show');
+      btn.classList.remove('loading'); btn.disabled = false;
     }
-  }
-
-  function showError(msg) {
-    const el = document.getElementById('errorAlert');
-    document.getElementById('errorMsg').textContent = msg;
-    el.classList.add('show');
-  }
-
-  // ---- RESET ----
-  document.getElementById('forgotLink').addEventListener('click', e => {
-    e.preventDefault();
-    document.getElementById('resetModal').classList.add('show');
-    const email = document.getElementById('email').value;
-    if (email) document.getElementById('resetEmail').value = email;
-  });
-
-  function closeReset() {
-    document.getElementById('resetModal').classList.remove('show');
-    document.getElementById('resetError').classList.remove('show');
-    document.getElementById('resetSuccess').classList.remove('show');
   }
 
   async function handleReset() {
     const email = document.getElementById('resetEmail').value.trim();
     const btn   = document.getElementById('resetBtn');
-
+    ['resetError','resetSuccess'].forEach(id => document.getElementById(id).classList.remove('show'));
     if (!email) return;
-
-    document.getElementById('resetError').classList.remove('show');
-    document.getElementById('resetSuccess').classList.remove('show');
-    btn.classList.add('loading');
-    btn.disabled = true;
-
+    btn.classList.add('loading'); btn.disabled = true;
     try {
-      await fetch(API, {
-        method: 'POST',
-        body: JSON.stringify({ action: 'resetRequest', email })
-      });
+      await fetch(API, { method:'POST', body: JSON.stringify({ action:'resetRequest', email }) });
       document.getElementById('resetSuccess').classList.add('show');
-      btn.classList.remove('loading');
-      btn.disabled = false;
-    } catch (err) {
-      document.getElementById('resetError').textContent = 'Something went wrong. Try again.';
+    } catch(e) {
       document.getElementById('resetError').classList.add('show');
-      btn.classList.remove('loading');
-      btn.disabled = false;
     }
+    btn.classList.remove('loading'); btn.disabled = false;
   }
 
   function checkStrength(val) {
-    const bar  = document.getElementById('pwBar');
+    const bar = document.getElementById('pwBar');
     const hint = document.getElementById('pwHint');
-    if (!bar || !hint) return;
     let score = 0;
-    if (val.length >= 8)           score++;
-    if (val.length >= 12)          score++;
-    if (/[A-Z]/.test(val))         score++;
-    if (/[0-9]/.test(val))         score++;
-    if (/[^A-Za-z0-9]/.test(val))  score++;
+    if (val.length >= 8) score++;
+    if (val.length >= 12) score++;
+    if (/[A-Z]/.test(val)) score++;
+    if (/[0-9]/.test(val)) score++;
+    if (/[^A-Za-z0-9]/.test(val)) score++;
     const levels = [
-      { w: '0%',   c: 'transparent', t: 'At least 8 characters' },
-      { w: '25%',  c: '#EF4444',     t: 'Weak' },
-      { w: '50%',  c: '#FBBF24',     t: 'Fair' },
-      { w: '75%',  c: '#60A5FA',     t: 'Good' },
-      { w: '100%', c: '#22C55E',     t: 'Strong' },
+      {w:'0%',c:'transparent',t:'At least 8 characters'},
+      {w:'25%',c:'#EF4444',t:'Weak'},
+      {w:'50%',c:'#FBBF24',t:'Fair'},
+      {w:'75%',c:'#60A5FA',t:'Good'},
+      {w:'100%',c:'#22C55E',t:'Strong'},
     ];
-    const lvl = val.length === 0 ? levels[0] : levels[Math.min(score, 4)];
-    bar.style.width      = lvl.w;
-    bar.style.background = lvl.c;
-    hint.textContent     = lvl.t;
-    hint.style.color     = lvl.c === 'transparent' ? 'var(--muted)' : lvl.c;
+    const lvl = val.length === 0 ? levels[0] : levels[Math.min(score,4)];
+    bar.style.width = lvl.w; bar.style.background = lvl.c;
+    hint.textContent = lvl.t; hint.style.color = lvl.c === 'transparent' ? 'var(--muted)' : lvl.c;
   }
 
   async function handleSetPassword() {
@@ -626,24 +313,14 @@
     const errEl   = document.getElementById('newPwError');
     const sucEl   = document.getElementById('newPwSuccess');
     const errMsg  = document.getElementById('newPwErrorMsg');
-    errEl.classList.remove('show');
-    sucEl.classList.remove('show');
-    if (newPw.length < 8) {
-      errMsg.textContent = 'Password must be at least 8 characters.';
-      errEl.classList.add('show'); return;
-    }
-    if (newPw !== confirm) {
-      errMsg.textContent = 'Passwords do not match.';
-      errEl.classList.add('show'); return;
-    }
+    errEl.classList.remove('show'); sucEl.classList.remove('show');
+    if (newPw.length < 8) { errMsg.textContent = 'Password must be at least 8 characters.'; errEl.classList.add('show'); return; }
+    if (newPw !== confirm) { errMsg.textContent = 'Passwords do not match.'; errEl.classList.add('show'); return; }
     btn.classList.add('loading'); btn.disabled = true;
     try {
-      const t   = localStorage.getItem('sc_token');
-      const cid = localStorage.getItem('sc_client_id');
-      const res = await fetch(API, {
-        method: 'POST',
-        body: JSON.stringify({ action: 'changePassword', token: t, client_id: cid, new_password: newPw })
-      });
+      const token = localStorage.getItem('sc_token');
+      const clientId = localStorage.getItem('sc_client_id');
+      const res = await fetch(API, { method:'POST', body: JSON.stringify({ action:'changePassword', token, client_id: clientId, new_password: newPw }) });
       const data = await res.json();
       if (data.ok) {
         localStorage.removeItem('sc_first_login');
@@ -651,16 +328,26 @@
         setTimeout(() => redirect(localStorage.getItem('sc_is_admin') === 'true'), 1200);
       } else {
         errMsg.textContent = data.error || 'Error setting password.';
-        errEl.classList.add('show'); btn.classList.remove('loading'); btn.disabled = false;
+        errEl.classList.add('show');
+        btn.classList.remove('loading'); btn.disabled = false;
       }
     } catch(e) {
       errMsg.textContent = 'Connection error. Please try again.';
-      errEl.classList.add('show'); btn.classList.remove('loading'); btn.disabled = false;
+      errEl.classList.add('show');
+      btn.classList.remove('loading'); btn.disabled = false;
     }
   }
 
+  // Enter key support
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      if (document.getElementById('loginCard').style.display !== 'none') handleLogin();
+      else if (document.getElementById('resetCard').style.display !== 'none') handleReset();
+      else if (document.getElementById('newPwCard').style.display !== 'none') handleSetPassword();
+    }
+  });
 </script>
 
-<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.35);">Suncoast Technology · login.html · v1.8</div>
+<div style="position:fixed;bottom:8px;left:0;right:0;text-align:center;font-size:10px;color:rgba(148,163,184,0.15);z-index:10;">Suncoast Technology · login.html · v2.0</div>
 </body>
 </html>
