@@ -496,6 +496,8 @@
         // Set first login flag — cleared after password is changed in settings
         if (data.first_login) {
           localStorage.setItem('sc_first_login', 'true');
+        } else {
+          localStorage.removeItem('sc_first_login');
         }
         redirect(data.is_admin);
       } else {
@@ -558,6 +560,6 @@
   }
 </script>
 
-<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.35);">Suncoast Technology · login.html · v1.4</div>
+<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.35);">Suncoast Technology · login.html · v1.5</div>
 </body>
 </html>
