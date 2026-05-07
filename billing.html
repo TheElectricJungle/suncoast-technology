@@ -308,6 +308,11 @@
         document.getElementById('subStatus').textContent = c.plan_name ? c.plan_name + ' — Active' : 'Active';
       }
 
+      // Reset state on every load
+      document.getElementById('invoiceHero').classList.add('hidden');
+      document.getElementById('allClear').classList.add('hidden');
+      document.getElementById('heroDue').style.color = '';
+
       // Find first unpaid invoice
       currentInvoice = invoices.find(i => i.status === 'Unpaid' || i.status === 'Overdue');
 
@@ -438,6 +443,6 @@
   loadBilling();
 </script>
 
-<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.35);">Suncoast Technology · billing.html · v2.8</div>
+<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.35);">Suncoast Technology · billing.html · v2.9</div>
 </body>
 </html>
