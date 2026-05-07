@@ -1,736 +1,204 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
   <title>Dashboard — Suncoast Technology</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet" />
+  <!-- Suncoast Technology | dashboard.html | v2.0 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet"/>
+  
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{--navy:#04080F;--border:rgba(255,255,255,0.07);--muted:rgba(148,163,184,0.7);--light:#E8F0FF;--orange:#F97316;--gold:#FBBF24;--green:#22C55E;--red:#EF4444;--blue:#4FC3F7;--purple:#A78BFA;--teal:#2DD4BF;}
+    html,body{height:100%;font-family:'DM Sans',sans-serif;background:#04080F;color:var(--light);overflow-x:hidden;}
+    canvas#aurora{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;}
+    .grid{position:fixed;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none;background-image:linear-gradient(rgba(79,195,247,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(79,195,247,0.02) 1px,transparent 1px);background-size:80px 80px;}
+    .shell{position:relative;z-index:10;display:grid;grid-template-columns:220px 1fr;min-height:100vh;}
+    .sidebar{background:rgba(4,8,15,0.82);backdrop-filter:blur(24px);border-right:1px solid rgba(255,255,255,0.07);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;}
+    .sidebar-brand{padding:22px 20px 18px;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:10px;}
+    .brand-mark{width:34px;height:34px;flex-shrink:0;}
+    .brand-name{font-family:'Playfair Display',serif;font-size:14px;color:#fff;line-height:1.2;}
+    .brand-name em{color:var(--orange);font-style:normal;}
+    .brand-sub{font-size:9px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-top:2px;}
+    .nav{padding:14px 10px;flex:1;display:flex;flex-direction:column;gap:2px;overflow-y:auto;}
+    .nav-label{font-size:9px;font-weight:500;color:rgba(148,163,184,0.35);letter-spacing:0.12em;text-transform:uppercase;padding:10px 10px 5px;}
+    .nav-item{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:8px;font-size:13px;color:var(--muted);text-decoration:none;transition:background 0.15s,color 0.15s;}
+    .nav-item:hover{background:rgba(255,255,255,0.05);color:#fff;}
+    .nav-item.active{background:rgba(249,115,22,0.1);color:var(--orange);}
+    .nav-item svg{width:15px;height:15px;flex-shrink:0;}
+    .sidebar-footer{padding:14px 16px;border-top:1px solid rgba(255,255,255,0.06);}
+    .user-row{display:flex;align-items:center;gap:10px;}
+    .user-avatar{width:30px;height:30px;border-radius:50%;background:rgba(249,115,22,0.15);border:1px solid rgba(249,115,22,0.25);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--orange);flex-shrink:0;}
+    .user-name{font-size:12px;color:#fff;font-weight:500;flex:1;}
+    .logout-btn{background:none;border:none;color:var(--muted);cursor:pointer;padding:4px;display:flex;border-radius:4px;transition:color 0.15s;}
+    .logout-btn:hover{color:#fff;}
+    .main{padding:32px 36px;display:flex;flex-direction:column;gap:20px;min-width:0;}
+    .page-label{font-size:11px;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:4px;}
+    .page-title{font-family:'Playfair Display',serif;font-size:28px;font-weight:400;color:#fff;line-height:1.1;margin-bottom:4px;}
+    .page-title em{color:var(--orange);font-style:normal;}
+    .card{background:rgba(8,16,28,0.8);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:24px;position:relative;}
+    .card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.07),transparent);border-radius:16px 16px 0 0;pointer-events:none;}
+    .card-title{font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin:0 0 16px;}
+    .card-value{font-size:28px;font-weight:600;color:#fff;line-height:1.1;margin:0 0 4px;}
+    .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;}
+    .stat{background:rgba(8,16,28,0.8);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:18px 20px;}
+    .stat-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin:0 0 8px;}
+    .stat-value{font-size:22px;font-weight:600;color:#fff;}
+    .badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:500;}
+    .badge-green{background:rgba(34,197,94,0.12);color:#86EFAC;border:1px solid rgba(34,197,94,0.2);}
+    .badge-gold{background:rgba(251,191,36,0.1);color:var(--gold);border:1px solid rgba(251,191,36,0.2);}
+    .badge-red{background:rgba(239,68,68,0.1);color:#FCA5A5;border:1px solid rgba(239,68,68,0.2);}
+    .badge-blue{background:rgba(79,195,247,0.1);color:var(--blue);border:1px solid rgba(79,195,247,0.2);}
+    .badge-muted{background:rgba(148,163,184,0.08);color:var(--muted);border:1px solid rgba(148,163,184,0.15);}
+    .btn{display:inline-flex;align-items:center;gap:7px;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;border:none;transition:opacity 0.2s,transform 0.1s;text-decoration:none;}
+    .btn:active{transform:scale(0.98);}
+    .btn-primary{background:linear-gradient(135deg,var(--orange),#ea580c);color:#fff;}
+    .btn-primary:hover{opacity:0.9;}
+    .btn-primary:disabled{opacity:0.6;cursor:not-allowed;}
+    .btn-ghost{background:rgba(255,255,255,0.05);color:var(--muted);border:1px solid rgba(255,255,255,0.09);}
+    .btn-ghost:hover{background:rgba(255,255,255,0.09);color:#fff;}
+    .btn-green{background:rgba(34,197,94,0.12);color:#86EFAC;border:1px solid rgba(34,197,94,0.2);}
+    .field{display:flex;flex-direction:column;gap:5px;margin:0 0 14px;}
+    .field label{font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;}
+    .field input,.field textarea,.field select{width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:10px 13px;font-size:13px;font-family:'DM Sans',sans-serif;color:#fff;outline:none;transition:border-color 0.2s;}
+    .field input:focus,.field textarea:focus,.field select:focus{border-color:rgba(249,115,22,0.4);background:rgba(249,115,22,0.02);}
+    .field textarea{resize:vertical;min-height:80px;}
+    .field select option{background:#0D1B2A;}
+    .alert{display:none;padding:10px 14px;border-radius:8px;font-size:13px;margin:0 0 14px;align-items:center;gap:8px;}
+    .alert.show{display:flex;}
+    .alert-success{background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);color:#86EFAC;}
+    .alert-error{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#FCA5A5;}
+    .alert-info{background:rgba(79,195,247,0.08);border:1px solid rgba(79,195,247,0.2);color:var(--blue);}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+    .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+    table{width:100%;border-collapse:collapse;font-size:13px;}
+    thead th{padding:8px 12px;text-align:left;font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;border-bottom:1px solid rgba(255,255,255,0.06);background:transparent;}
+    tbody td{padding:11px 12px;border-bottom:1px solid rgba(255,255,255,0.04);color:rgba(255,255,255,0.85);background:transparent;}
+    tbody tr:last-child td{border-bottom:none;}
+    tbody tr:hover td{background:rgba(255,255,255,0.02);}
+    .empty{padding:40px;text-align:center;color:var(--muted);font-size:13px;}
+    @media(max-width:768px){.shell{grid-template-columns:1fr}.sidebar{display:none}.main{padding:20px 16px}.grid2,.grid3{grid-template-columns:1fr}}
 
-    :root {
-      --orange: #F97316;
-      --gold: #FBBF24;
-      --navy: #0F1923;
-      --slate: #1E2D3D;
-      --slate2: #243447;
-      --muted: #94A3B8;
-      --light: #F8FAFC;
-      --border: rgba(255,255,255,0.07);
-      --border2: rgba(255,255,255,0.12);
-    }
-
-    html, body {
-      min-height: 100%;
-      font-family: 'DM Sans', sans-serif;
-      background: var(--navy);
-      color: var(--light);
-    }
-
-    /* ---- LAYOUT ---- */
-    .shell {
-      display: grid;
-      grid-template-columns: 220px 1fr;
-      min-height: 100vh;
-    }
-
-    /* ---- SIDEBAR ---- */
-    .sidebar {
-      background: var(--slate);
-      border-right: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      padding: 0;
-      position: sticky;
-      top: 0;
-      height: 100vh;
-    }
-
-    .sidebar-brand {
-      padding: 24px 20px 20px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .brand-mark {
-      width: 36px;
-      height: 36px;
-      flex-shrink: 0;
-    }
-    .brand-name {
-      font-family: 'Playfair Display', serif;
-      font-size: 15px;
-      font-weight: 500;
-      color: #fff;
-      line-height: 1.1;
-    }
-    .brand-name span { color: var(--orange); }
-    .brand-sub {
-      font-size: 10px;
-      color: var(--muted);
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      margin-top: 2px;
-    }
-
-    .nav {
-      padding: 16px 12px;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-    .nav-label {
-      font-size: 10px;
-      font-weight: 500;
-      color: rgba(148,163,184,0.4);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 10px 10px 6px;
-      margin-top: 8px;
-    }
-    .nav-label:first-child { margin-top: 0; }
-    .nav-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 9px 12px;
-      border-radius: 8px;
-      font-size: 13px;
-      color: var(--muted);
-      text-decoration: none;
-      transition: background 0.15s, color 0.15s;
-      cursor: pointer;
-    }
-    .nav-item:hover { background: rgba(255,255,255,0.05); color: #fff; }
-    .nav-item.active {
-      background: rgba(249,115,22,0.12);
-      color: var(--orange);
-    }
-    .nav-item svg { width: 16px; height: 16px; flex-shrink: 0; }
-
-    .sidebar-footer {
-      padding: 16px 20px;
-      border-top: 1px solid var(--border);
-    }
-    .user-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .user-avatar {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background: rgba(249,115,22,0.2);
-      border: 1px solid rgba(249,115,22,0.3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--orange);
-      flex-shrink: 0;
-    }
-    .user-name { font-size: 13px; color: #fff; font-weight: 500; }
-    .user-plan { font-size: 11px; color: var(--muted); margin-top: 1px; }
-    .logout-btn {
-      margin-left: auto;
-      background: none;
-      border: none;
-      color: var(--muted);
-      cursor: pointer;
-      padding: 4px;
-      border-radius: 4px;
-      transition: color 0.15s;
-      display: flex;
-    }
-    .logout-btn:hover { color: #fff; }
-
-    /* ---- MAIN ---- */
-    .main {
-      padding: 32px 36px;
-      display: flex;
-      flex-direction: column;
-      gap: 28px;
-      max-width: 960px;
-    }
-
-    .topbar {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-    }
-    .greeting-label {
-      font-size: 13px;
-      color: var(--muted);
-      margin-bottom: 4px;
-    }
-    .greeting-name {
-      font-family: 'Playfair Display', serif;
-      font-size: 28px;
-      font-weight: 400;
-      color: #fff;
-    }
-    .greeting-name span { color: var(--orange); }
-    .date-badge {
-      font-size: 12px;
-      color: var(--muted);
-      background: var(--slate);
-      border: 1px solid var(--border);
-      padding: 6px 14px;
-      border-radius: 20px;
-      margin-top: 6px;
-    }
-
-    /* ---- STAT CARDS ---- */
-    .stat-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-    }
-    .stat-card {
-      background: var(--slate);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      animation: fadeUp 0.5s ease both;
-    }
-    .stat-card:nth-child(1) { animation-delay: 0.05s; }
-    .stat-card:nth-child(2) { animation-delay: 0.1s; }
-    .stat-card:nth-child(3) { animation-delay: 0.15s; }
-
-    .stat-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .stat-label {
-      font-size: 11px;
-      font-weight: 500;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-    .stat-icon {
-      width: 30px;
-      height: 30px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .icon-orange { background: rgba(249,115,22,0.15); color: var(--orange); }
-    .icon-green  { background: rgba(34,197,94,0.12);  color: #22C55E; }
-    .icon-blue   { background: rgba(59,130,246,0.12); color: #60A5FA; }
-    .icon-amber  { background: rgba(251,191,36,0.12); color: var(--gold); }
-
-    .stat-value {
-      font-size: 26px;
-      font-weight: 500;
-      color: #fff;
-      line-height: 1;
-    }
-    .stat-sub {
-      font-size: 12px;
-      color: var(--muted);
-    }
-    .status-dot {
-      display: inline-block;
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      margin-right: 5px;
-      vertical-align: middle;
-    }
-    .dot-green { background: #22C55E; box-shadow: 0 0 6px rgba(34,197,94,0.5); }
-    .dot-amber { background: var(--gold); }
-    .dot-red   { background: #EF4444; }
-
-    /* ---- BOTTOM GRID ---- */
-    .bottom-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
-
-    .panel {
-      background: var(--slate);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      overflow: hidden;
-      animation: fadeUp 0.5s ease 0.2s both;
-    }
-    .panel-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 16px 20px;
-      border-bottom: 1px solid var(--border);
-    }
-    .panel-title {
-      font-size: 13px;
-      font-weight: 500;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .panel-title svg { color: var(--orange); }
-    .panel-link {
-      font-size: 11px;
-      color: var(--muted);
-      text-decoration: none;
-      transition: color 0.15s;
-    }
-    .panel-link:hover { color: var(--orange); }
-    .panel-body { padding: 4px 0; }
-
-    /* ---- UPDATE ITEMS ---- */
-    .update-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      padding: 12px 20px;
-      border-bottom: 1px solid var(--border);
-      transition: background 0.15s;
-    }
-    .update-item:last-child { border-bottom: none; }
-    .update-item:hover { background: rgba(255,255,255,0.02); }
-    .update-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--orange);
-      flex-shrink: 0;
-      margin-top: 5px;
-    }
-    .update-title {
-      font-size: 13px;
-      color: #fff;
-      line-height: 1.4;
-      margin-bottom: 3px;
-    }
-    .update-meta {
-      font-size: 11px;
-      color: var(--muted);
-      display: flex;
-      gap: 8px;
-    }
-    .update-tag {
-      background: rgba(249,115,22,0.1);
-      color: var(--orange);
-      padding: 1px 7px;
-      border-radius: 10px;
-      font-size: 10px;
-    }
-
-    /* ---- INVOICE ITEMS ---- */
-    .invoice-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 12px 20px;
-      border-bottom: 1px solid var(--border);
-      transition: background 0.15s;
-    }
-    .invoice-item:last-child { border-bottom: none; }
-    .invoice-item:hover { background: rgba(255,255,255,0.02); }
-    .invoice-period { font-size: 13px; color: #fff; }
-    .invoice-date   { font-size: 11px; color: var(--muted); margin-top: 2px; }
-    .invoice-right  { display: flex; align-items: center; gap: 10px; }
-    .invoice-amt    { font-size: 13px; font-weight: 500; color: #fff; }
-    .badge {
-      font-size: 10px;
-      font-weight: 500;
-      padding: 3px 9px;
-      border-radius: 20px;
-    }
-    .badge-paid    { background: rgba(34,197,94,0.12);  color: #22C55E; }
-    .badge-unpaid  { background: rgba(251,191,36,0.12); color: var(--gold); }
-    .badge-overdue { background: rgba(239,68,68,0.12);  color: #EF4444; }
-
-    /* ---- PAY BANNER ---- */
-    .pay-banner {
-      background: linear-gradient(135deg, rgba(249,115,22,0.15), rgba(251,191,36,0.08));
-      border: 1px solid rgba(249,115,22,0.25);
-      border-radius: 16px;
-      padding: 20px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      animation: fadeUp 0.5s ease 0.25s both;
-    }
-    .pay-banner-left {}
-    .pay-banner-label { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
-    .pay-banner-amount { font-size: 26px; font-weight: 500; color: #fff; }
-    .pay-banner-due { font-size: 12px; color: var(--gold); margin-top: 3px; }
-    .pay-btn {
-      background: var(--orange);
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      padding: 12px 24px;
-      font-size: 13px;
-      font-weight: 500;
-      font-family: 'DM Sans', sans-serif;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.1s;
-      white-space: nowrap;
-      text-decoration: none;
-      display: inline-block;
-    }
-    .pay-btn:hover { background: #ea6c0a; }
-    .pay-btn:active { transform: scale(0.98); }
-    .pay-banner.hidden { display: none; }
-
-    /* ---- EMPTY STATES ---- */
-    .empty {
-      padding: 32px 20px;
-      text-align: center;
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    /* ---- SKELETON ---- */
-    .skeleton {
-      background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.04) 75%);
-      background-size: 200% 100%;
-      animation: shimmer 1.5s infinite;
-      border-radius: 6px;
-    }
-    @keyframes shimmer {
-      0%   { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
-    }
-
-    /* ---- ANIMATIONS ---- */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(12px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ---- MOBILE ---- */
-    @media (max-width: 768px) {
-      .shell { grid-template-columns: 1fr; }
-      .sidebar { display: none; }
-      .main { padding: 20px 16px; }
-      .stat-grid { grid-template-columns: 1fr 1fr; }
-      .bottom-grid { grid-template-columns: 1fr; }
-    }
   </style>
 </head>
 <body>
-
+<canvas id="aurora"></canvas>
+<div class="grid"></div>
 <div class="shell">
-
-  <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="sidebar-brand">
       <svg class="brand-mark" viewBox="0 0 36 36" fill="none">
-        <circle cx="18" cy="18" r="17" fill="#243447" stroke="rgba(249,115,22,0.3)" stroke-width="1"/>
+        <circle cx="18" cy="18" r="17" fill="#0D1B2A" stroke="rgba(249,115,22,0.3)" stroke-width="1"/>
         <path d="M7 22 Q18 10 29 22" stroke="#F97316" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-        <path d="M5 25 Q18 7 31 25" stroke="#FBBF24" stroke-width="1" stroke-linecap="round" fill="none" opacity="0.5"/>
+        <path d="M5 25 Q18 7 31 25" stroke="#FBBF24" stroke-width="1.2" stroke-linecap="round" fill="none" opacity="0.5"/>
         <circle cx="18" cy="27" r="3" fill="#F97316"/>
-        <line x1="7" y1="29" x2="29" y2="29" stroke="rgba(249,115,22,0.3)" stroke-width="1" stroke-linecap="round"/>
       </svg>
       <div>
-        <div class="brand-name">Suncoast <span>Technology</span></div>
+        <div class="brand-name">Suncoast <em>Technology</em></div>
         <div class="brand-sub">Client Portal</div>
       </div>
     </div>
-
     <nav class="nav">
-      <div class="nav-label">Menu</div>
-      <a href="dashboard.html" class="nav-item active">
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="1" width="6" height="6" rx="1.5"/><rect x="9" y="1" width="6" height="6" rx="1.5"/><rect x="1" y="9" width="6" height="6" rx="1.5"/><rect x="9" y="9" width="6" height="6" rx="1.5"/></svg>
-        Dashboard
-      </a>
-      <a href="billing.html" class="nav-item">
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="3" width="14" height="10" rx="2"/><path d="M1 6h14"/><path d="M4 10h2"/><path d="M8 10h2"/></svg>
-        Billing
-      </a>
-      <a href="my-site.html" class="nav-item">
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6.5"/><path d="M8 1.5C8 1.5 5.5 4 5.5 8s2.5 6.5 2.5 6.5"/><path d="M8 1.5C8 1.5 10.5 4 10.5 8s-2.5 6.5-2.5 6.5"/><path d="M1.5 8h13"/></svg>
-        My website
-      </a>
-      <a href="support.html" class="nav-item">
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 10.5a2 2 0 01-2 2H4.5L1.5 15V3.5a2 2 0 012-2h8.5a2 2 0 012 2v7z"/></svg>
-        Support
-      </a>
-      <a href="settings.html" class="nav-item">
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="2.5"/><path d="M8 1.5v1M8 13.5v1M1.5 8h1M13.5 8h1M3.2 3.2l.7.7M12.1 12.1l.7.7M12.1 3.9l-.7.7M4.6 12.1l-.7.7"/></svg>
-        Settings
-      </a>
+      <a href="dashboard.html" class="nav-item active"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="9" y="1" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="1" y="9" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="9" y="9" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.3"/></svg>Dashboard</a>
+      <a href="billing.html" class="nav-item"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="1" y="4" width="14" height="9" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M1 7h14" stroke="currentColor" stroke-width="1.3"/></svg>Billing</a>
+      <a href="my-site.html" class="nav-item"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.3"/><path d="M8 1.5C8 1.5 5.5 4 5.5 8s2.5 6.5 2.5 6.5M8 1.5C8 1.5 10.5 4 10.5 8s-2.5 6.5-2.5 6.5M1.5 8h13" stroke="currentColor" stroke-width="1.3"/></svg>My site</a>
+      <a href="support.html" class="nav-item"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M14 10.5a2 2 0 01-2 2H4.5L1.5 15V3.5a2 2 0 012-2h8.5a2 2 0 012 2v7z" stroke="currentColor" stroke-width="1.3"/></svg>Support</a>
+      <a href="settings.html" class="nav-item"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="2.5" stroke="currentColor" stroke-width="1.3"/><path d="M8 1v1.5M8 13.5V15M1 8h1.5M13.5 8H15M2.6 2.6l1 1M12.4 12.4l1 1M12.4 2.6l-1 1M3.6 12.4l-1 1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>Settings</a>
     </nav>
-
     <div class="sidebar-footer">
       <div class="user-row">
-        <div class="user-avatar" id="userAvatar">?</div>
-        <div>
-          <div class="user-name" id="userName">Loading...</div>
-          <div class="user-plan" id="userPlan">—</div>
-        </div>
-        <button class="logout-btn" onclick="handleLogout()" title="Sign out">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3"/><path d="M11 11l3-3-3-3"/><path d="M14 8H6"/></svg>
+        <div class="user-avatar"><span id='userInitials'>?</span></div>
+        <div class="user-name"><span id='userName'>Loading...</span></div>
+        <button class="logout-btn" onclick="handleLogout()">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3"/><path d="M11 11l3-3-3-3M14 8H6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
       </div>
     </div>
   </aside>
-
-  <!-- MAIN -->
   <main class="main">
-
-    <!-- Topbar -->
-    <div class="topbar">
-      <div>
-        <div class="greeting-label">Good <span id="timeOfDay">morning</span></div>
-        <div class="greeting-name" id="greetingName">Loading<span>...</span></div>
-      </div>
-      <div class="date-badge" id="dateBadge"></div>
+    <div>
+      <div class="page-label">Welcome back</div>
+      <div class="page-title" id="pageTitle">Your <em>dashboard</em></div>
     </div>
-
-    <!-- Payment due banner -->
-    <div class="pay-banner hidden" id="payBanner">
-      <div class="pay-banner-left">
-        <div class="pay-banner-label">Payment due</div>
-        <div class="pay-banner-amount" id="bannerAmount">—</div>
-        <div class="pay-banner-due" id="bannerDue">—</div>
-      </div>
-      <a href="billing.html" class="pay-btn">Pay now</a>
+    <div class="stat-grid" id="statsGrid">
+      <div class="stat"><div class="stat-label">Site status</div><div class="stat-value" id="siteStatus"><span class="badge badge-muted">Loading...</span></div></div>
+      <div class="stat"><div class="stat-label">SSL certificate</div><div class="stat-value" id="sslStatus"><span class="badge badge-muted">Loading...</span></div></div>
+      <div class="stat"><div class="stat-label">Current plan</div><div class="stat-value" id="planName" style="font-size:16px;margin-top:4px;">—</div></div>
+      <div class="stat"><div class="stat-label">Monthly rate</div><div class="stat-value" id="monthlyRate">—</div></div>
     </div>
-
-    <!-- Stat cards -->
-    <div class="stat-grid">
-      <div class="stat-card">
-        <div class="stat-header">
-          <div class="stat-label">Site status</div>
-          <div class="stat-icon icon-green">
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6.5"/><path d="M8 1.5C8 1.5 5.5 4 5.5 8s2.5 6.5 2.5 6.5"/><path d="M1.5 8h13"/></svg>
-          </div>
-        </div>
-        <div class="stat-value" id="siteStatus">
-          <span class="skeleton" style="display:inline-block;width:80px;height:26px;"></span>
-        </div>
-        <div class="stat-sub" id="siteUptime">—</div>
+    <div class="grid2">
+      <div class="card">
+        <div class="card-title">Latest invoice</div>
+        <div id="latestInvoice"><div class="empty">Loading...</div></div>
       </div>
-
-      <div class="stat-card">
-        <div class="stat-header">
-          <div class="stat-label">SSL certificate</div>
-          <div class="stat-icon icon-blue">
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1L2 4v4c0 3.5 2.5 6 6 7 3.5-1 6-3.5 6-7V4L8 1z"/></svg>
-          </div>
-        </div>
-        <div class="stat-value" id="sslStatus">
-          <span class="skeleton" style="display:inline-block;width:70px;height:26px;"></span>
-        </div>
-        <div class="stat-sub" id="sslExpiry">—</div>
-      </div>
-
-      <div class="stat-card">
-        <div class="stat-header">
-          <div class="stat-label">Current plan</div>
-          <div class="stat-icon icon-orange">
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1l1.8 3.6L14 5.3l-3 2.9.7 4.1L8 10.4l-3.7 1.9.7-4.1-3-2.9 4.2-.7z"/></svg>
-          </div>
-        </div>
-        <div class="stat-value" id="planName">
-          <span class="skeleton" style="display:inline-block;width:90px;height:26px;"></span>
-        </div>
-        <div class="stat-sub" id="planRate">—</div>
+      <div class="card">
+        <div class="card-title">Recent updates</div>
+        <div id="recentUpdates"><div class="empty">Loading...</div></div>
       </div>
     </div>
-
-    <!-- Bottom panels -->
-    <div class="bottom-grid">
-
-      <!-- Recent updates -->
-      <div class="panel">
-        <div class="panel-head">
-          <div class="panel-title">
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12V4a1 1 0 011-1h10a1 1 0 011 1v8"/><path d="M1 12h14"/><path d="M5 7h6M5 9.5h4"/></svg>
-            Recent updates
-          </div>
-          <a href="my-site.html" class="panel-link">View all →</a>
-        </div>
-        <div class="panel-body" id="updatesPanel">
-          <div class="update-item">
-            <div class="update-dot"></div>
-            <div>
-              <div class="update-title"><span class="skeleton" style="display:inline-block;width:200px;height:14px;"></span></div>
-              <div class="update-meta"><span class="skeleton" style="display:inline-block;width:100px;height:11px;"></span></div>
-            </div>
-          </div>
-        </div>
+    <div class="card">
+      <div class="card-title">Quick actions</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <a href="billing.html" class="btn btn-ghost">View billing</a>
+        <a href="support.html" class="btn btn-ghost">Submit request</a>
+        <a href="my-site.html" class="btn btn-ghost">My site</a>
+        <a href="settings.html" class="btn btn-ghost">Settings</a>
       </div>
-
-      <!-- Recent invoices -->
-      <div class="panel">
-        <div class="panel-head">
-          <div class="panel-title">
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 1h10a1 1 0 011 1v12l-2-1.5L10 14l-2-1.5L6 14l-2-1.5L2 14V2a1 1 0 011-1z"/><path d="M5 5h6M5 8h6M5 11h3"/></svg>
-            Recent invoices
-          </div>
-          <a href="billing.html" class="panel-link">View all →</a>
-        </div>
-        <div class="panel-body" id="invoicesPanel">
-          <div class="invoice-item">
-            <div>
-              <div class="invoice-period"><span class="skeleton" style="display:inline-block;width:120px;height:13px;"></span></div>
-              <div class="invoice-date"><span class="skeleton" style="display:inline-block;width:80px;height:11px;margin-top:4px;"></span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
     </div>
-
   </main>
 </div>
-
 <script>
-  const API       = 'https://script.google.com/macros/s/AKfycbyxg5LlS9eUx6VSiD_VSzE0RD94STkBAK4Hc-h14T_YU5ikqXGE3dz-Fvt1kCAE-9XRLw/exec';
-  const token     = localStorage.getItem('sc_token');
-  const clientId  = localStorage.getItem('sc_client_id');
-
-  // ---- AUTH GUARD ----
-  if (!token) window.location.href = 'login.html';
-
-  // ---- DATE ----
-  const now = new Date();
-  document.getElementById('dateBadge').textContent = now.toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric' });
-  const hour = now.getHours();
-  document.getElementById('timeOfDay').textContent = hour < 12 ? 'morning' : hour < 17 ? 'afternoon' : 'evening';
-
-  // ---- LOAD DATA ----
-  async function api(action, extra = {}) {
-    const res = await fetch(API, {
-      method: 'POST',
-      body: JSON.stringify({ action, token, client_id: clientId, ...extra })
-    });
+  const API='https://script.google.com/macros/s/AKfycbyxg5LlS9eUx6VSiD_VSzE0RD94STkBAK4Hc-h14T_YU5ikqXGE3dz-Fvt1kCAE-9XRLw/exec';
+  const token=localStorage.getItem('sc_token');
+  const clientId=localStorage.getItem('sc_client_id');
+  if(!token) window.location.href='login.html';
+  async function api(action,extra={}){
+    const res=await fetch(API,{method:'POST',body:JSON.stringify({action,token,client_id:clientId,...extra})});
     return res.json();
   }
-
-  async function loadDashboard() {
-    try {
-      const [clientRes, invoicesRes, updatesRes] = await Promise.all([
-        api('getClient'),
-        api('getInvoices'),
-        api('getUpdates')
-      ]);
-
-      if (!clientRes.ok) { window.location.href = 'login.html'; return; }
-
-      renderClient(clientRes.client);
-      renderInvoices(invoicesRes.invoices || []);
-      renderUpdates(updatesRes.updates || []);
-
-    } catch (e) {
-      console.error(e);
-    }
-  }
-
-  function renderClient(c) {
-    const initials = (c.client_name || '?').split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
-    document.getElementById('userAvatar').textContent   = initials;
-    document.getElementById('userName').textContent     = c.client_name || '—';
-    document.getElementById('userPlan').textContent     = c.plan_name   || '—';
-    document.getElementById('greetingName').innerHTML   = (c.business_name || c.client_name || 'there') + '<span>.</span>';
-
-    // Site status
-    const statusEl = document.getElementById('siteStatus');
-    const status   = c.site_status || 'Unknown';
-    const isOnline = status.toLowerCase() === 'online';
-    statusEl.innerHTML = `<span class="status-dot ${isOnline ? 'dot-green' : 'dot-amber'}"></span>${status}`;
-    document.getElementById('siteUptime').textContent = c.hosting_status ? 'Hosting: ' + c.hosting_status : '—';
-
-    // SSL
-    const sslEl = document.getElementById('sslStatus');
-    const sslOk = (c.ssl_status || '').toLowerCase() === 'active';
-    sslEl.innerHTML = `<span class="status-dot ${sslOk ? 'dot-green' : 'dot-amber'}"></span>${c.ssl_status || 'Unknown'}`;
-    document.getElementById('sslExpiry').textContent = c.ssl_expiry ? 'Expires ' + formatDate(c.ssl_expiry) : '—';
-
-    // Plan
-    document.getElementById('planName').textContent = c.plan_name    || '—';
-    document.getElementById('planRate').textContent = c.monthly_rate ? '$' + c.monthly_rate + ' / month' : '—';
-  }
-
-  function renderInvoices(invoices) {
-    const panel = document.getElementById('invoicesPanel');
-    const recent = invoices.slice(0, 4);
-
-    if (!recent.length) {
-      panel.innerHTML = '<div class="empty">No invoices yet.</div>';
-      return;
-    }
-
-    // Show pay banner for first unpaid
-    const unpaid = invoices.find(i => i.status === 'Unpaid' || i.status === 'Overdue');
-    if (unpaid) {
-      document.getElementById('payBanner').classList.remove('hidden');
-      document.getElementById('bannerAmount').textContent = '$' + unpaid.amount;
-      document.getElementById('bannerDue').textContent = 'Due ' + formatDate(unpaid.due_date);
-    }
-
-    panel.innerHTML = recent.map(inv => `
-      <div class="invoice-item">
-        <div>
-          <div class="invoice-period">${inv.period || 'Invoice ' + inv.invoice_id}</div>
-          <div class="invoice-date">${inv.due_date ? formatDate(inv.due_date) : '—'}</div>
-        </div>
-        <div class="invoice-right">
-          <span class="invoice-amt">$${inv.amount}</span>
-          <span class="badge badge-${(inv.status||'').toLowerCase()}">${inv.status || '—'}</span>
-        </div>
-      </div>
-    `).join('');
-  }
-
-  function renderUpdates(updates) {
-    const panel = document.getElementById('updatesPanel');
-    const recent = updates.slice(0, 4);
-
-    if (!recent.length) {
-      panel.innerHTML = '<div class="empty">No updates yet.</div>';
-      return;
-    }
-
-    panel.innerHTML = recent.map(u => `
-      <div class="update-item">
-        <div class="update-dot"></div>
-        <div>
-          <div class="update-title">${u.title || '—'}</div>
-          <div class="update-meta">
-            <span>${formatDate(u.created_at)}</span>
-            ${u.category ? `<span class="update-tag">${u.category}</span>` : ''}
-          </div>
-        </div>
-      </div>
-    `).join('');
-  }
-
-  function formatDate(val) {
-    if (!val) return '—';
-    const d = new Date(val);
-    if (isNaN(d)) return val;
-    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-  }
-
-  function handleLogout() {
-    fetch(API, { method: 'POST', body: JSON.stringify({ action: 'logout', token }) });
+  function handleLogout(){
+    fetch(API,{method:'POST',body:JSON.stringify({action:'logout',token})});
     localStorage.clear();
-    window.location.href = 'login.html';
+    window.location.href='login.html';
   }
 
-  loadDashboard();
+        
+  
+  load();
+
+
+  (function(){
+    const canvas = document.getElementById('aurora');
+    const ctx = canvas.getContext('2d');
+    let W, H, t = 0;
+    function resize(){ W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+    resize(); window.addEventListener('resize', resize);
+    const blobs = [
+      {x:0.2,y:0.3,r:0.55,color:[79,195,247],speed:0.00005},
+      {x:0.8,y:0.2,r:0.5,color:[167,139,250],speed:0.00004},
+      {x:0.5,y:0.7,r:0.45,color:[244,114,182],speed:0.00006},
+      {x:0.1,y:0.8,r:0.4,color:[45,212,191],speed:0.000045},
+      {x:0.9,y:0.5,r:0.35,color:[249,115,22],speed:0.000055},
+    ];
+    function draw(){
+      ctx.clearRect(0,0,W,H); t++;
+      blobs.forEach((b,i)=>{
+        const ox=Math.sin(t*b.speed*1000+i*1.2)*0.15;
+        const oy=Math.cos(t*b.speed*800+i*0.9)*0.12;
+        const cx=(b.x+ox)*W, cy=(b.y+oy)*H, rad=b.r*Math.min(W,H);
+        const g=ctx.createRadialGradient(cx,cy,0,cx,cy,rad);
+        const [r,g2,bl]=b.color;
+        g.addColorStop(0,`rgba(${r},${g2},${bl},0.22)`);
+        g.addColorStop(0.4,`rgba(${r},${g2},${bl},0.09)`);
+        g.addColorStop(1,`rgba(${r},${g2},${bl},0)`);
+        ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+      });
+      requestAnimationFrame(draw);
+    }
+    draw();
+  })();
 </script>
 </body>
 </html>
