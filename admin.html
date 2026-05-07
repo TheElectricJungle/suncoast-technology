@@ -468,8 +468,12 @@
   const token    = localStorage.getItem('sc_token');
   const isAdmin  = localStorage.getItem('sc_is_admin');
 
-  // Auth guard — admin only
-  if (!token) window.location.href = 'login.html';
+  // DEBUG — remove after testing
+  console.log('TOKEN:', token);
+  console.log('IS_ADMIN:', isAdmin);
+
+  // Auth guard — soft check only, let loadDashboard validate with API
+  if (!token) { window.location.href = 'login.html'; }
 
   let allClients  = [];
   let allRequests = [];
@@ -718,6 +722,6 @@
   loadDashboard();
 </script>
 
-<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.35);">Suncoast Technology · admin.html · v1.3</div>
+<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.35);">Suncoast Technology · admin.html · v1.4</div>
 </body>
 </html>
