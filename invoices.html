@@ -112,6 +112,23 @@
     @media(max-width:768px){.shell{grid-template-columns:1fr}.sidebar{display:none}.main{padding:20px 16px}.grid2,.grid3{grid-template-columns:1fr}.drawer{width:100%}}
 
   </style>
+
+<script>
+  // Prevent pinch zoom
+  document.addEventListener('touchmove', function(e) {
+    if (e.touches.length > 1) e.preventDefault();
+  }, { passive: false });
+  document.addEventListener('gesturestart', function(e) {
+    e.preventDefault();
+  });
+  // Reset zoom on load/refresh
+  document.addEventListener('DOMContentLoaded', function() {
+    var meta = document.querySelector('meta[name="viewport"]');
+    if (meta) {
+      meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
+    }
+  });
+</script>
 </head>
 <body>
 <canvas id="aurora"></canvas>
