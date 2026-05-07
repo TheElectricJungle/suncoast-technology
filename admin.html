@@ -1,892 +1,244 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin — Suncoast Technology</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+  <title>Admin Dashboard — Suncoast Technology</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet"/>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --orange: #F97316;
-      --gold:   #FBBF24;
-      --navy:   #0F1923;
-      --slate:  #1E2D3D;
-      --slate2: #243447;
-      --muted:  #94A3B8;
-      --light:  #F8FAFC;
-      --border: rgba(255,255,255,0.07);
-      --green:  #22C55E;
-      --red:    #EF4444;
-      --blue:   #60A5FA;
-    }
-
-    html, body { min-height: 100%; font-family: 'DM Sans', sans-serif; background: var(--navy); color: var(--light); }
-
-    .shell { display: grid; grid-template-columns: 220px 1fr; min-height: 100vh; }
-
-    /* SIDEBAR */
-    .sidebar { background: var(--slate); border-right: 1px solid var(--border); display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; }
-    .sidebar-brand { padding: 24px 20px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
-    .brand-mark { width: 36px; height: 36px; flex-shrink: 0; }
-    .brand-name { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 500; color: #fff; line-height: 1.1; }
-    .brand-name span { color: var(--orange); }
-    .brand-sub { font-size: 10px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-top: 2px; }
-    .admin-badge { font-size: 9px; background: rgba(249,115,22,0.15); color: var(--orange); border: 1px solid rgba(249,115,22,0.25); padding: 2px 7px; border-radius: 10px; margin-top: 4px; display: inline-block; letter-spacing: 0.06em; text-transform: uppercase; }
-
-    .nav { padding: 16px 12px; flex: 1; display: flex; flex-direction: column; gap: 2px; }
-    .nav-label { font-size: 10px; font-weight: 500; color: rgba(148,163,184,0.4); letter-spacing: 0.1em; text-transform: uppercase; padding: 10px 10px 6px; margin-top: 8px; }
-    .nav-label:first-child { margin-top: 0; }
-    .nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 8px; font-size: 13px; color: var(--muted); text-decoration: none; transition: background 0.15s, color 0.15s; cursor: pointer; }
-    .nav-item:hover { background: rgba(255,255,255,0.05); color: #fff; }
-    .nav-item.active { background: rgba(249,115,22,0.12); color: var(--orange); }
-    .nav-item svg { width: 16px; height: 16px; flex-shrink: 0; }
-    .nav-badge { margin-left: auto; background: var(--orange); color: #fff; font-size: 10px; font-weight: 500; padding: 1px 6px; border-radius: 10px; min-width: 18px; text-align: center; }
-
-    .sidebar-footer { padding: 16px 20px; border-top: 1px solid var(--border); }
-    .user-row { display: flex; align-items: center; gap: 10px; }
-    .user-avatar { width: 32px; height: 32px; border-radius: 50%; background: rgba(249,115,22,0.2); border: 1px solid rgba(249,115,22,0.3); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; color: var(--orange); flex-shrink: 0; }
-    .user-name { font-size: 13px; color: #fff; font-weight: 500; }
-    .user-role { font-size: 11px; color: var(--orange); margin-top: 1px; }
-    .logout-btn { margin-left: auto; background: none; border: none; color: var(--muted); cursor: pointer; padding: 4px; border-radius: 4px; transition: color 0.15s; display: flex; }
-    .logout-btn:hover { color: #fff; }
-
-    /* MAIN */
-    .main { padding: 32px 36px; display: flex; flex-direction: column; gap: 28px; }
-
-    .topbar { display: flex; align-items: flex-end; justify-content: space-between; }
-    .page-label { font-size: 12px; color: var(--muted); margin-bottom: 4px; letter-spacing: 0.04em; text-transform: uppercase; }
-    .page-title { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 400; color: #fff; }
-    .page-title span { color: var(--orange); }
-
-    .btn { display: inline-flex; align-items: center; gap: 7px; padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 500; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: background 0.15s, transform 0.1s; border: none; text-decoration: none; }
-    .btn:active { transform: scale(0.98); }
-    .btn-primary { background: var(--orange); color: #fff; }
-    .btn-primary:hover { background: #ea6c0a; }
-    .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); }
-    .btn-ghost:hover { color: #fff; border-color: rgba(255,255,255,0.2); }
-    .btn-sm { padding: 6px 12px; font-size: 12px; border-radius: 6px; }
-    .btn svg { width: 14px; height: 14px; }
-
-    /* STAT GRID */
-    .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-    .stat-card { background: var(--slate); border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; animation: fadeUp 0.4s ease both; }
-    .stat-card:nth-child(1){animation-delay:.05s} .stat-card:nth-child(2){animation-delay:.1s} .stat-card:nth-child(3){animation-delay:.15s} .stat-card:nth-child(4){animation-delay:.2s}
-    .stat-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-    .stat-label { font-size: 11px; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
-    .stat-icon { width: 28px; height: 28px; border-radius: 7px; display: flex; align-items: center; justify-content: center; }
-    .i-orange { background: rgba(249,115,22,0.15); color: var(--orange); }
-    .i-green  { background: rgba(34,197,94,0.12);  color: var(--green); }
-    .i-red    { background: rgba(239,68,68,0.12);   color: var(--red); }
-    .i-blue   { background: rgba(96,165,250,0.12);  color: var(--blue); }
-    .i-amber  { background: rgba(251,191,36,0.12);  color: var(--gold); }
-    .stat-value { font-size: 28px; font-weight: 500; color: #fff; line-height: 1; margin-bottom: 4px; }
-    .stat-sub { font-size: 12px; color: var(--muted); }
-
-    /* BOTTOM GRID */
-    .bottom-grid { display: grid; grid-template-columns: 1fr 360px; gap: 20px; align-items: start; }
-
-    /* CLIENT TABLE */
-    .panel { background: var(--slate); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; animation: fadeUp 0.4s ease 0.25s both; }
-    .panel-head { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid var(--border); }
-    .panel-title { font-size: 13px; font-weight: 500; color: #fff; display: flex; align-items: center; gap: 8px; }
-    .panel-title svg { color: var(--orange); width: 15px; height: 15px; }
-
-    .table-wrap { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    thead th { font-size: 10px; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; padding: 10px 16px; text-align: left; border-bottom: 1px solid var(--border); background: rgba(255,255,255,0.02); white-space: nowrap; }
-    tbody tr { border-bottom: 1px solid var(--border); transition: background 0.12s; cursor: pointer; }
-    tbody tr:last-child { border-bottom: none; }
-    tbody tr:hover { background: rgba(255,255,255,0.03); }
-    tbody td { padding: 12px 16px; color: var(--light); vertical-align: middle; }
-    .td-muted { color: var(--muted); font-size: 12px; }
-
-    .client-cell { display: flex; align-items: center; gap: 10px; }
-    .c-avatar { width: 30px; height: 30px; border-radius: 50%; background: rgba(249,115,22,0.15); border: 1px solid rgba(249,115,22,0.2); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; color: var(--orange); flex-shrink: 0; }
-    .c-name { font-size: 13px; color: #fff; font-weight: 500; }
-    .c-domain { font-size: 11px; color: var(--muted); margin-top: 1px; }
-
-    .badge { font-size: 10px; font-weight: 500; padding: 3px 9px; border-radius: 20px; white-space: nowrap; }
-    .badge-paid    { background: rgba(34,197,94,0.12);  color: var(--green); }
-    .badge-unpaid  { background: rgba(251,191,36,0.12); color: var(--gold); }
-    .badge-overdue { background: rgba(239,68,68,0.12);  color: var(--red); }
-    .badge-active  { background: rgba(34,197,94,0.1);   color: var(--green); }
-    .badge-suspended { background: rgba(239,68,68,0.1); color: var(--red); }
-
-    .status-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 5px; vertical-align: middle; }
-    .dot-green { background: var(--green); box-shadow: 0 0 5px rgba(34,197,94,0.5); }
-    .dot-amber { background: var(--gold); }
-    .dot-red   { background: var(--red); }
-
-    .action-btns { display: flex; gap: 6px; opacity: 0; transition: opacity 0.15s; }
-    tbody tr:hover .action-btns { opacity: 1; }
-
-    /* RIGHT PANELS */
-    .right-col { display: flex; flex-direction: column; gap: 16px; }
-
-    /* REQUESTS */
-    .req-item { padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; flex-direction: column; gap: 4px; transition: background 0.12s; }
-    .req-item:last-child { border-bottom: none; }
-    .req-item:hover { background: rgba(255,255,255,0.02); }
-    .req-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-    .req-subject { font-size: 13px; color: #fff; font-weight: 500; }
-    .req-from { font-size: 11px; color: var(--muted); }
-    .req-meta { display: flex; align-items: center; gap: 6px; }
-    .priority-high   { font-size: 10px; padding: 2px 7px; border-radius: 10px; background: rgba(239,68,68,0.12); color: var(--red); }
-    .priority-normal { font-size: 10px; padding: 2px 7px; border-radius: 10px; background: rgba(96,165,250,0.1); color: var(--blue); }
-    .priority-low    { font-size: 10px; padding: 2px 7px; border-radius: 10px; background: rgba(148,163,184,0.1); color: var(--muted); }
-
-    /* REVENUE */
-    .revenue-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; border-bottom: 1px solid var(--border); font-size: 13px; }
-    .revenue-row:last-child { border-bottom: none; }
-    .rev-label { color: var(--muted); }
-    .rev-value { color: #fff; font-weight: 500; }
-    .rev-value.green { color: var(--green); }
-    .rev-value.amber { color: var(--gold); }
-
-    /* MODAL */
-    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); z-index: 100; display: none; align-items: center; justify-content: center; padding: 1rem; }
-    .modal-overlay.show { display: flex; }
-    .modal { background: var(--slate); border: 1px solid var(--border); border-radius: 18px; padding: 28px; width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto; }
-    .modal-title { font-family: 'Playfair Display', serif; font-size: 22px; color: #fff; margin-bottom: 4px; }
-    .modal-sub { font-size: 13px; color: var(--muted); margin-bottom: 24px; line-height: 1.5; }
-    .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
-    .field label { font-size: 11px; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
-    .field input, .field select, .field textarea { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 10px 14px; font-size: 13px; font-family: 'DM Sans', sans-serif; color: #fff; outline: none; transition: border-color 0.2s; }
-    .field input:focus, .field select:focus, .field textarea:focus { border-color: rgba(249,115,22,0.4); }
-    .field select option { background: var(--slate); }
-    .field textarea { resize: vertical; min-height: 80px; }
-    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
-    .modal-actions .btn { flex: 1; justify-content: center; }
-
-    .alert { padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-bottom: 14px; display: none; }
-    .alert.show { display: block; }
-    .alert-success { background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.2); color: #86EFAC; }
-    .alert-error   { background: rgba(239,68,68,0.1);  border: 1px solid rgba(239,68,68,0.2);  color: #FCA5A5; }
-
-    .empty { padding: 32px 20px; text-align: center; color: var(--muted); font-size: 13px; }
-    .skeleton { background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.04) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 6px; }
-    @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
-    @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
-
-    @media (max-width: 1100px) { .stat-grid { grid-template-columns: repeat(2,1fr); } .bottom-grid { grid-template-columns: 1fr; } }
-    @media (max-width: 768px)  { .shell { grid-template-columns: 1fr; } .sidebar { display: none; } .main { padding: 20px 16px; } }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{--navy:#04080F;--border:rgba(255,255,255,0.07);--muted:rgba(148,163,184,0.7);--light:#E8F0FF;--orange:#F97316;--gold:#FBBF24;--green:#22C55E;--red:#EF4444;--blue:#4FC3F7;--purple:#A78BFA;}
+    html,body{min-height:100%;font-family:'DM Sans',sans-serif;background:#04080F;color:var(--light);overflow-x:hidden;}
+    canvas#aurora{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;}
+    .grid{position:fixed;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none;background-image:linear-gradient(rgba(79,195,247,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(79,195,247,0.02) 1px,transparent 1px);background-size:80px 80px;}
+    .shell{position:relative;z-index:10;display:grid;grid-template-columns:220px 1fr;min-height:100vh;}
+    .sidebar{background:rgba(4,8,15,0.82);backdrop-filter:blur(24px);border-right:1px solid rgba(255,255,255,0.07);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto;}
+    .sidebar-brand{padding:22px 20px 18px;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:10px;}
+    .brand-mark{width:34px;height:34px;flex-shrink:0;}
+    .brand-name{font-family:'Playfair Display',serif;font-size:14px;color:#fff;line-height:1.2;}
+    .brand-name em{color:var(--orange);font-style:normal;}
+    .brand-sub{font-size:9px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-top:2px;}
+    .nav{padding:14px 10px;flex:1;display:flex;flex-direction:column;gap:2px;}
+    .nav-item{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:8px;font-size:13px;color:var(--muted);text-decoration:none;transition:background 0.15s,color 0.15s;}
+    .nav-item:hover{background:rgba(255,255,255,0.05);color:#fff;}
+    .nav-item.active{background:rgba(249,115,22,0.1);color:var(--orange);}
+    .nav-item svg{width:15px;height:15px;flex-shrink:0;}
+    .sidebar-footer{padding:14px 18px;border-top:1px solid rgba(255,255,255,0.06);}
+    .user-row{display:flex;align-items:center;gap:9px;}
+    .user-avatar{width:30px;height:30px;border-radius:50%;background:rgba(249,115,22,0.15);border:1px solid rgba(249,115,22,0.25);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:var(--orange);flex-shrink:0;}
+    .user-name{font-size:13px;color:#fff;font-weight:500;flex:1;}
+    .logout-btn{background:none;border:none;color:var(--muted);cursor:pointer;padding:4px;display:flex;border-radius:4px;}
+    .logout-btn:hover{color:#fff;}
+    .main{padding:32px 36px;display:flex;flex-direction:column;gap:20px;}
+    .page-label{font-size:10px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:4px;}
+    .page-title{font-family:'Playfair Display',serif;font-size:26px;font-weight:400;color:#fff;}
+    .page-title em{color:var(--orange);font-style:normal;}
+    .card{background:rgba(8,16,28,0.75);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:24px;position:relative;}
+    .card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.07),transparent);border-radius:16px 16px 0 0;pointer-events:none;}
+    .card-title{font-size:13px;font-weight:500;color:#fff;margin-bottom:16px;}
+    .badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:500;}
+    .badge-green{background:rgba(34,197,94,0.1);color:#86EFAC;border:1px solid rgba(34,197,94,0.15);}
+    .badge-gold{background:rgba(251,191,36,0.1);color:var(--gold);border:1px solid rgba(251,191,36,0.15);}
+    .badge-red{background:rgba(239,68,68,0.1);color:#FCA5A5;border:1px solid rgba(239,68,68,0.15);}
+    .badge-blue{background:rgba(79,195,247,0.1);color:var(--blue);border:1px solid rgba(79,195,247,0.15);}
+    .badge-muted{background:rgba(255,255,255,0.05);color:var(--muted);border:1px solid rgba(255,255,255,0.08);}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:9px 16px;border-radius:8px;font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all 0.15s;border:none;text-decoration:none;}
+    .btn-primary{background:linear-gradient(135deg,var(--orange),#ea580c);color:#fff;}
+    .btn-primary:hover{opacity:0.9;}
+    .btn-ghost{background:rgba(255,255,255,0.05);color:var(--muted);border:1px solid rgba(255,255,255,0.08);}
+    .btn-ghost:hover{background:rgba(255,255,255,0.09);color:#fff;}
+    .btn-sm{padding:6px 12px;font-size:12px;}
+    .btn:disabled{opacity:0.5;cursor:not-allowed;}
+    .field{display:flex;flex-direction:column;gap:5px;margin-bottom:14px;}
+    .field label{font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;}
+    .field input,.field textarea,.field select{width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:10px 13px;font-size:13px;font-family:'DM Sans',sans-serif;color:#fff;outline:none;transition:border-color 0.2s;}
+    .field input:focus,.field textarea:focus,.field select:focus{border-color:rgba(249,115,22,0.4);}
+    .field textarea{resize:vertical;min-height:80px;}
+    .field select option{background:#0D1B2A;}
+    .field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+    .alert{padding:10px 14px;border-radius:8px;font-size:13px;display:none;margin-bottom:14px;}
+    .alert.show{display:block;}
+    .alert-error{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#FCA5A5;}
+    .alert-success{background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);color:#86EFAC;}
+    table{width:100%;border-collapse:collapse;}
+    thead th{padding:10px 12px;text-align:left;font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;border-bottom:1px solid rgba(255,255,255,0.06);}
+    tbody td{padding:11px 12px;font-size:13px;border-bottom:1px solid rgba(255,255,255,0.04);}
+    tbody tr:hover{background:rgba(255,255,255,0.02);}
+    .empty{padding:40px;text-align:center;color:var(--muted);font-size:13px;}
+    .search-bar{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:9px 14px;}
+    .search-bar input{background:none;border:none;outline:none;font-size:13px;color:#fff;font-family:'DM Sans',sans-serif;width:100%;}
+    .search-bar input::placeholder{color:var(--muted);}
+    .modal-overlay{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(4,8,15,0.85);backdrop-filter:blur(12px);}
+    .modal-overlay.open{display:flex;}
+    .modal{background:rgba(8,16,28,0.97);backdrop-filter:blur(30px);border:1px solid rgba(255,255,255,0.1);border-radius:20px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;position:relative;}
+    .modal::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(79,195,247,0.3),rgba(167,139,250,0.3),transparent);border-radius:20px 20px 0 0;}
+    .modal-head{padding:22px 24px 0;display:flex;align-items:center;justify-content:space-between;}
+    .modal-title{font-family:'Playfair Display',serif;font-size:18px;color:#fff;}
+    .modal-close{background:none;border:none;color:var(--muted);cursor:pointer;padding:4px;display:flex;border-radius:6px;}
+    .modal-close:hover{color:#fff;}
+    .modal-body{padding:18px 24px 24px;}
+    .modal-tabs{display:flex;gap:4px;margin-bottom:20px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:3px;}
+    .modal-tab{flex:1;padding:7px;border-radius:6px;font-size:12px;color:var(--muted);background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.15s;}
+    .modal-tab.active{background:rgba(249,115,22,0.12);color:var(--orange);}
+    .drawer{position:fixed;top:0;right:0;bottom:0;width:580px;background:rgba(4,8,15,0.97);backdrop-filter:blur(30px);border-left:1px solid rgba(255,255,255,0.08);z-index:100;display:flex;flex-direction:column;transform:translateX(100%);transition:transform 0.3s ease;}
+    .drawer.show{transform:translateX(0);}
+    .drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);backdrop-filter:blur(4px);z-index:99;display:none;}
+    .drawer-overlay.show{display:block;}
+    .drawer-head{padding:18px 24px;border-bottom:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+    .drawer-title{font-family:'Playfair Display',serif;font-size:17px;color:#fff;}
+    .drawer-tabs{display:flex;border-bottom:1px solid rgba(255,255,255,0.07);flex-shrink:0;}
+    .drawer-tab{padding:10px 16px;font-size:12px;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.15s;background:none;border-top:none;border-left:none;border-right:none;font-family:'DM Sans',sans-serif;}
+    .drawer-tab.active{color:var(--orange);border-bottom-color:var(--orange);}
+    .drawer-body{flex:1;overflow-y:auto;padding:20px 24px;}
+    .drawer-footer{padding:14px 24px;border-top:1px solid rgba(255,255,255,0.07);display:flex;gap:10px;flex-shrink:0;}
+    @media(max-width:900px){.shell{grid-template-columns:1fr}.sidebar{display:none}.main{padding:20px 16px}.drawer{width:100%}.field-row{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
-
+<canvas id="aurora"></canvas>
+<script>
+  (function(){
+    const canvas = document.getElementById('aurora');
+    const ctx = canvas.getContext('2d');
+    let W, H, t = 0;
+    function resize(){ W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+    resize(); window.addEventListener('resize', resize);
+    const blobs = [
+      {x:0.2,y:0.3,r:0.55,color:[79,195,247],speed:0.00005},
+      {x:0.8,y:0.2,r:0.5,color:[167,139,250],speed:0.00004},
+      {x:0.5,y:0.7,r:0.45,color:[244,114,182],speed:0.00006},
+      {x:0.1,y:0.8,r:0.4,color:[45,212,191],speed:0.000045},
+      {x:0.9,y:0.5,r:0.35,color:[249,115,22],speed:0.000055},
+    ];
+    function draw(){
+      ctx.clearRect(0,0,W,H); t++;
+      blobs.forEach((b,i)=>{
+        const ox=Math.sin(t*b.speed*500+i*1.2)*0.15;
+        const oy=Math.cos(t*b.speed*400+i*0.9)*0.12;
+        const cx=(b.x+ox)*W, cy=(b.y+oy)*H, rad=b.r*Math.min(W,H);
+        const g=ctx.createRadialGradient(cx,cy,0,cx,cy,rad);
+        const [r,g2,bl]=b.color;
+        g.addColorStop(0,`rgba(${r},${g2},${bl},0.22)`);
+        g.addColorStop(0.4,`rgba(${r},${g2},${bl},0.09)`);
+        g.addColorStop(1,`rgba(${r},${g2},${bl},0)`);
+        ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+      });
+      requestAnimationFrame(draw);
+    }
+    draw();
+  })();
+</script>
+<div class="grid"></div>
 <div class="shell">
-
-  <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="sidebar-brand">
       <svg class="brand-mark" viewBox="0 0 36 36" fill="none">
-        <circle cx="18" cy="18" r="17" fill="#243447" stroke="rgba(249,115,22,0.3)" stroke-width="1"/>
+        <circle cx="18" cy="18" r="17" fill="#0D1B2A" stroke="rgba(249,115,22,0.3)" stroke-width="1"/>
         <path d="M7 22 Q18 10 29 22" stroke="#F97316" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-        <path d="M5 25 Q18 7 31 25" stroke="#FBBF24" stroke-width="1" stroke-linecap="round" fill="none" opacity="0.5"/>
+        <path d="M5 25 Q18 7 31 25" stroke="#FBBF24" stroke-width="1.2" stroke-linecap="round" fill="none" opacity="0.5"/>
         <circle cx="18" cy="27" r="3" fill="#F97316"/>
-        <line x1="7" y1="29" x2="29" y2="29" stroke="rgba(249,115,22,0.3)" stroke-width="1" stroke-linecap="round"/>
       </svg>
       <div>
-        <div class="brand-name">Suncoast <span>Technology</span></div>
+        <div class="brand-name">Suncoast <em>Technology</em></div>
         <div class="brand-sub">Admin Panel</div>
-        <div class="admin-badge">Administrator</div>
       </div>
     </div>
-
     <nav class="nav">
-      <div class="nav-label">Admin</div>
-      <a href="index.html" class="nav-item active">
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="1" width="6" height="6" rx="1.5"/><rect x="9" y="1" width="6" height="6" rx="1.5"/><rect x="1" y="9" width="6" height="6" rx="1.5"/><rect x="9" y="9" width="6" height="6" rx="1.5"/></svg>
-        Dashboard
-      </a>
-      <a href="clients.html" class="nav-item">
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
-        Clients
-      </a>
-      <a href="updates.html" class="nav-item">
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12V4a1 1 0 011-1h10a1 1 0 011 1v8"/><path d="M1 12h14"/><path d="M5 7h6M5 9.5h4"/></svg>
-        Post update
-      </a>
-      <a href="invoices.html" class="nav-item">
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 1h10a1 1 0 011 1v12l-2-1.5L10 14l-2-1.5L6 14l-2-1.5L2 14V2a1 1 0 011-1z"/><path d="M5 5h6M5 8h6M5 11h3"/></svg>
-        Invoices
-      </a>
-      <a href="support.html" class="nav-item" id="supportNavItem">
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 10.5a2 2 0 01-2 2H4.5L1.5 15V3.5a2 2 0 012-2h8.5a2 2 0 012 2v7z"/></svg>
-        Support queue
-        <span class="nav-badge" id="openCount" style="display:none">0</span>
-      </a>
+      <a href="admin.html" class="nav-item active"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>Dashboard</a>
+      <a href="clients.html" class="nav-item "><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="5" r="2.5"/><path d="M1 13c0-2.76 2.24-5 5-5"/><circle cx="12" cy="8" r="2"/><path d="M9.5 13c0-1.93 1.12-3 2.5-3s2.5 1.07 2.5 3"/></svg>Clients</a>
+      <a href="invoices.html" class="nav-item "><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 1h10a1 1 0 011 1v12l-2-1.5L10 14l-2-1.5L6 14l-2-1.5L2 14V2a1 1 0 011-1z"/><path d="M5 5h6M5 8h6M5 11h3"/></svg>Invoices</a>
+      <a href="updates.html" class="nav-item "><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6.5"/><path d="M8 4.5v4l2.5 1.5"/></svg>Updates</a>
+      <a href="admin-support.html" class="nav-item "><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 10.5a2 2 0 01-2 2H4.5L1.5 15V3.5a2 2 0 012-2h8.5a2 2 0 012 2v7z"/></svg>Support</a>
     </nav>
-
     <div class="sidebar-footer">
       <div class="user-row">
-        <div class="user-avatar">JR</div>
-        <div>
-          <div class="user-name" id="adminName">Admin</div>
-          <div class="user-role">Administrator</div>
-        </div>
-        <button class="logout-btn" onclick="handleLogout()" title="Sign out">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3"/><path d="M11 11l3-3-3-3"/><path d="M14 8H6"/></svg>
-        </button>
+        <div class="user-avatar" id="userInitials">JR</div>
+        <div class="user-name" id="userName">Admin</div>
+        <button class="logout-btn" onclick="handleLogout()"><svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3"/><path d="M11 11l3-3-3-3M14 8H6"/></svg></button>
       </div>
     </div>
   </aside>
-
-  <!-- MAIN -->
   <main class="main">
-
-    <div class="topbar">
-      <div>
-        <div class="page-label">Overview</div>
-        <div class="page-title">Admin <span>dashboard</span></div>
-      </div>
-      <button class="btn btn-primary" onclick="openAddClient()">
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3v10M3 8h10"/></svg>
-        Add client
-      </button>
+    <div>
+      <div class="page-label">Admin</div>
+      <div class="page-title">Dashboard <em>overview</em></div>
     </div>
-
-    <!-- Stat cards -->
-    <div class="stat-grid">
-      <div class="stat-card">
-        <div class="stat-top">
-          <div class="stat-label">Total clients</div>
-          <div class="stat-icon i-blue"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg></div>
-        </div>
-        <div class="stat-value" id="statTotal">—</div>
-        <div class="stat-sub" id="statActive">— active</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-top">
-          <div class="stat-label">Monthly revenue</div>
-          <div class="stat-icon i-green"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2v12M5 5.5C5 4.1 6.3 3 8 3s3 1.1 3 2.5S9.7 8 8 8s-3 1.1-3 2.5S6.3 13 8 13s3-1.1 3-2.5"/></svg></div>
-        </div>
-        <div class="stat-value" id="statRevenue">—</div>
-        <div class="stat-sub">active clients</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-top">
-          <div class="stat-label">Unpaid invoices</div>
-          <div class="stat-icon i-amber"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 1h10a1 1 0 011 1v12l-2-1.5L10 14l-2-1.5L6 14l-2-1.5L2 14V2a1 1 0 011-1z"/><path d="M8 5v3M8 10h.01"/></svg></div>
-        </div>
-        <div class="stat-value" id="statUnpaid">—</div>
-        <div class="stat-sub" id="statUnpaidAmt">awaiting payment</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-top">
-          <div class="stat-label">Open requests</div>
-          <div class="stat-icon i-orange"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 10.5a2 2 0 01-2 2H4.5L1.5 15V3.5a2 2 0 012-2h8.5a2 2 0 012 2v7z"/></svg></div>
-        </div>
-        <div class="stat-value" id="statRequests">—</div>
-        <div class="stat-sub">need attention</div>
-      </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;" id="statsGrid">
+      <div class="card"><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Total clients</div><div style="font-size:28px;font-weight:600;color:#fff;" id="totalClients">—</div></div>
+      <div class="card"><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Active clients</div><div style="font-size:28px;font-weight:600;color:var(--green);" id="activeClients">—</div></div>
+      <div class="card"><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Outstanding</div><div style="font-size:28px;font-weight:600;color:var(--gold);" id="outstanding">—</div></div>
+      <div class="card"><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Open requests</div><div style="font-size:28px;font-weight:600;color:var(--blue);" id="openRequests">—</div></div>
     </div>
-
-    <!-- Bottom grid -->
-    <div class="bottom-grid">
-
-      <!-- Client table -->
-      <div class="panel">
-        <div class="panel-head">
-          <div class="panel-title">
-            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
-            All clients
-          </div>
-          <a href="clients.html" class="btn btn-ghost btn-sm">Manage →</a>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Client</th>
-                <th>Site status</th>
-                <th>Plan</th>
-                <th>Payment</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody id="clientTableBody">
-              <tr><td colspan="5"><div class="empty"><span class="skeleton" style="display:inline-block;width:200px;height:14px;"></span></div></td></tr>
-            </tbody>
-          </table>
-        </div>
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+        <div class="card-title" style="margin:0;">Clients</div>
+        <a href="clients.html" class="btn btn-ghost btn-sm">Manage →</a>
       </div>
-
-      <!-- Right column -->
-      <div class="right-col">
-
-        <!-- Revenue summary -->
-        <div class="panel">
-          <div class="panel-head">
-            <div class="panel-title">
-              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12l3-3 3 3 3-4 3 2"/></svg>
-              Revenue summary
-            </div>
-          </div>
-          <div id="revenuePanel">
-            <div class="revenue-row"><span class="rev-label">Monthly (active)</span><span class="rev-value green" id="revMonthly">—</span></div>
-            <div class="revenue-row"><span class="rev-label">Unpaid balance</span><span class="rev-value amber" id="revUnpaid">—</span></div>
-            <div class="revenue-row"><span class="rev-label">Active clients</span><span class="rev-value" id="revActive">—</span></div>
-            <div class="revenue-row"><span class="rev-label">Suspended</span><span class="rev-value" id="revSuspended">—</span></div>
-          </div>
-        </div>
-
-        <!-- Open requests -->
-        <div class="panel">
-          <div class="panel-head">
-            <div class="panel-title">
-              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 10.5a2 2 0 01-2 2H4.5L1.5 15V3.5a2 2 0 012-2h8.5a2 2 0 012 2v7z"/></svg>
-              Open requests
-            </div>
-            <a href="support.html" class="btn btn-ghost btn-sm">View all →</a>
-          </div>
-          <div id="requestsPanel">
-            <div class="empty"><span class="skeleton" style="display:inline-block;width:160px;height:13px;"></span></div>
-          </div>
-        </div>
-
-      </div>
+      <div id="clientsBody"><div class="empty">Loading...</div></div>
     </div>
   </main>
 </div>
-
-<!-- ADD CLIENT MODAL -->
-<div class="modal-overlay" id="addClientModal">
-  <div class="modal">
-    <div class="modal-title">Add new client</div>
-    <div class="modal-sub">A temporary password will be generated and emailed to the client automatically.</div>
-
-    <div class="alert alert-success" id="addSuccess">Client added! Welcome email sent.</div>
-    <div class="alert alert-error"   id="addError">Something went wrong. Please try again.</div>
-
-    <div class="field-row">
-      <div class="field"><label>Full name</label><input type="text" id="newName" placeholder="Jane Smith" /></div>
-      <div class="field"><label>Business name</label><input type="text" id="newBiz" placeholder="Jane's Diner" /></div>
-    </div>
-    <div class="field-row">
-      <div class="field"><label>Email</label><input type="email" id="newEmail" placeholder="jane@janesdiner.com" /></div>
-      <div class="field"><label>Phone</label><input type="text" id="newPhone" placeholder="727-555-0100" /></div>
-    </div>
-    <div class="field"><label>Domain</label><input type="text" id="newDomain" placeholder="janesdiner.com" /></div>
-    <div class="field-row">
-      <div class="field"><label>Plan name</label><input type="text" id="newPlan" placeholder="Pro Care" /></div>
-      <div class="field"><label>Monthly rate ($)</label><input type="number" id="newRate" placeholder="120" /></div>
-    </div>
-    <div class="field-row">
-      <div class="field"><label>Billing day</label><input type="number" id="newBillingDay" placeholder="1" min="1" max="28" value="1" /></div>
-      <div class="field"><label>Hosting status</label><input type="text" id="newHosting" placeholder="Running" value="Running" /></div>
-    </div>
-    <div class="field"><label>Notes (private)</label><textarea id="newNotes" placeholder="Any notes about this client..."></textarea></div>
-
-    <!-- First invoice toggle -->
-    <div style="border-top:1px solid var(--border);margin-top:16px;padding-top:16px;">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
-        <input type="checkbox" id="createFirstInvoice" style="width:16px;height:16px;accent-color:var(--orange);cursor:pointer;" onchange="toggleFirstInvoice()" />
-        <div>
-          <div style="font-size:13px;color:#fff;font-weight:500;">Create first invoice now</div>
-          <div style="font-size:11px;color:var(--muted);margin-top:1px;">Client will see this invoice when they first log in</div>
-        </div>
-      </div>
-      <div id="firstInvoiceFields" style="display:none;">
-        <div class="field-row">
-          <div class="field"><label>Invoice amount ($)</label><input type="number" id="firstInvAmount" placeholder="120" /></div>
-          <div class="field"><label>Due date</label><input type="date" id="firstInvDue" /></div>
-        </div>
-        <div class="field">
-          <label>Invoice description</label>
-          <input type="text" id="firstInvDesc" placeholder="e.g. Monthly web services — June 2026" />
-        </div>
-      </div>
-    </div>
-
-    <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closeModal('addClientModal')">Cancel</button>
-      <button class="btn btn-primary" id="addClientBtn" onclick="handleAddClient()">
-        Add client &amp; send invite
-      </button>
-    </div>
-  </div>
-</div>
-
-<!-- EDIT CLIENT MODAL -->
-<div class="modal-overlay" id="editClientModal">
-  <div class="modal">
-    <div class="modal-title">Edit client</div>
-    <div class="modal-sub">Changes are saved immediately to Google Sheets and reflected in the client portal.</div>
-
-    <div class="alert alert-success" id="editSuccess">Changes saved.</div>
-    <div class="alert alert-error"   id="editError">Something went wrong.</div>
-
-    <input type="hidden" id="editClientId" />
-    <div class="field-row">
-      <div class="field"><label>Full name</label><input type="text" id="editName" /></div>
-      <div class="field"><label>Business name</label><input type="text" id="editBiz" /></div>
-    </div>
-    <div class="field-row">
-      <div class="field"><label>Email</label><input type="email" id="editEmail" /></div>
-      <div class="field"><label>Phone</label><input type="text" id="editPhone" /></div>
-    </div>
-    <div class="field"><label>Domain</label><input type="text" id="editDomain" /></div>
-    <div class="field-row">
-      <div class="field">
-        <label>Site status</label>
-        <select id="editSiteStatus">
-          <option>Online</option>
-          <option>Maintenance</option>
-          <option>Offline</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>SSL status</label>
-        <select id="editSslStatus">
-          <option>Active</option>
-          <option>Expiring Soon</option>
-          <option>Expired</option>
-        </select>
-      </div>
-    </div>
-    <div class="field-row">
-      <div class="field">
-        <label>Plan</label>
-        <select id="editPlan">
-          <option>Basic</option>
-          <option>Pro Care</option>
-          <option>Premium</option>
-        </select>
-      </div>
-      <div class="field"><label>Monthly rate ($)</label><input type="number" id="editRate" /></div>
-    </div>
-    <div class="field-row">
-      <div class="field">
-        <label>Account status</label>
-        <select id="editStatus">
-          <option>Active</option>
-          <option>Suspended</option>
-          <option>Cancelled</option>
-        </select>
-      </div>
-      <div class="field"><label>Hosting status</label><input type="text" id="editHosting" /></div>
-    </div>
-    <div class="field"><label>Notes (private)</label><textarea id="editNotes"></textarea></div>
-
-    <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closeModal('editClientModal')">Cancel</button>
-      <button class="btn btn-primary" onclick="handleEditClient()">Save changes</button>
-    </div>
-  </div>
-</div>
-
 <script>
-  const API      = 'https://script.google.com/macros/s/AKfycbyxg5LlS9eUx6VSiD_VSzE0RD94STkBAK4Hc-h14T_YU5ikqXGE3dz-Fvt1kCAE-9XRLw/exec';
-  const token    = localStorage.getItem('sc_token');
-  const isAdmin  = localStorage.getItem('sc_is_admin');
-
-  // Auth guard — admin only
-  if (!token || isAdmin !== 'true') window.location.href = 'login.html';
-
-  let allClients  = [];
-  let allRequests = [];
-
-  async function api(action, extra = {}) {
-    const res = await fetch(API, {
-      method: 'POST',
-      body: JSON.stringify({ action, token, ...extra })
-    });
+  const API = 'https://script.google.com/macros/s/AKfycbyxg5LlS9eUx6VSiD_VSzE0RD94STkBAK4Hc-h14T_YU5ikqXGE3dz-Fvt1kCAE-9XRLw/exec';
+  const token = localStorage.getItem('sc_token');
+  const clientId = localStorage.getItem('sc_client_id');
+  if (!token) window.location.href = 'login.html';
+  async function api(action, extra={}) {
+    const res = await fetch(API, { method:'POST', body: JSON.stringify({action, token, client_id:clientId, ...extra}) });
     return res.json();
   }
-
-  async function loadDashboard() {
-    try {
-      const [clientsRes, requestsRes] = await Promise.all([
-        api('adminGetClients'),
-        api('getRequests', { client_id: 'ALL' })
-      ]);
-
-      if (!clientsRes.ok) { window.location.href = 'login.html'; return; }
-
-      allClients  = clientsRes.clients || [];
-      allRequests = requestsRes.requests || [];
-
-      // Filter out admin account from display
-      const clients = allClients.filter(c => !c.is_admin || c.is_admin === 'FALSE' || c.is_admin === false);
-
-      renderStats(clients);
-      renderClientTable(clients);
-      renderRequests();
-
-    } catch(e) { console.error(e); }
-  }
-
-  function renderStats(clients) {
-    const active    = clients.filter(c => c.status === 'Active');
-    const revenue   = active.reduce((s, c) => s + (parseFloat(c.monthly_rate) || 0), 0);
-    const unpaid    = allClients.reduce((s, c) => s + (c.unpaid_count || 0), 0);
-    const openReqs  = allRequests.filter(r => r.status === 'Open' || r.status === 'In Progress').length;
-    const suspended = clients.filter(c => c.status === 'Suspended').length;
-
-    document.getElementById('statTotal').textContent    = clients.length;
-    document.getElementById('statActive').textContent   = active.length + ' active';
-    document.getElementById('statRevenue').textContent  = '$' + revenue.toLocaleString();
-    document.getElementById('statUnpaid').textContent   = unpaid;
-    document.getElementById('statRequests').textContent = openReqs;
-    document.getElementById('revMonthly').textContent   = '$' + revenue.toLocaleString();
-    document.getElementById('revUnpaid').textContent    = unpaid + ' invoice' + (unpaid !== 1 ? 's' : '');
-    document.getElementById('revActive').textContent    = active.length;
-    document.getElementById('revSuspended').textContent = suspended;
-
-    // Support badge
-    if (openReqs > 0) {
-      const badge = document.getElementById('openCount');
-      badge.textContent = openReqs;
-      badge.style.display = 'inline-block';
-    }
-
-    // Admin name
-    const admin = allClients.find(c => c.is_admin === true || c.is_admin === 'TRUE');
-    if (admin) document.getElementById('adminName').textContent = admin.client_name || 'Admin';
-  }
-
-  function renderClientTable(clients) {
-    const tbody = document.getElementById('clientTableBody');
-    if (!clients.length) {
-      tbody.innerHTML = '<tr><td colspan="5"><div class="empty">No clients yet. Add your first client above.</div></td></tr>';
-      return;
-    }
-
-    tbody.innerHTML = clients.map(c => {
-      const initials   = (c.business_name || c.client_name || '?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
-      const siteOnline = (c.site_status || '').toLowerCase() === 'online';
-      const payStatus  = c.unpaid_count > 0 ? (c.unpaid_count > 1 ? 'overdue' : 'unpaid') : 'paid';
-      const payLabel   = c.unpaid_count > 0 ? c.unpaid_count + ' unpaid' : 'Paid';
-
-      return `
-        <tr onclick="openEditClient('${c.client_id}')">
-          <td>
-            <div class="client-cell">
-              <div class="c-avatar">${initials}</div>
-              <div>
-                <div class="c-name">${c.business_name || c.client_name || '—'}</div>
-                <div class="c-domain">${c.domain || '—'}</div>
-              </div>
-            </div>
-          </td>
-          <td>
-            <span class="status-dot ${siteOnline ? 'dot-green' : 'dot-amber'}"></span>
-            ${c.site_status || '—'}
-          </td>
-          <td class="td-muted">${c.plan_name || '—'}</td>
-          <td><span class="badge badge-${payStatus}">${payLabel}</span></td>
-          <td>
-            <div class="action-btns">
-              <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation(); openEditClient('${c.client_id}')">Edit</button>
-              ${c.stripe_subscription_id ? 
-                `<button class="btn btn-sm" style="background:rgba(239,68,68,0.15);color:#EF4444;border:1px solid rgba(239,68,68,0.2);" onclick="event.stopPropagation(); openCancelSubscription('${c.client_id}')">Cancel sub</button>` :
-                `<button class="btn btn-sm" style="background:rgba(34,197,94,0.12);color:#22C55E;border:1px solid rgba(34,197,94,0.2);" onclick="event.stopPropagation(); openCreateSubscription('${c.client_id}')">+ Subscribe</button>`
-              }
-            </div>
-          </td>
-        </tr>
-      `;
-    }).join('');
-  }
-
-  function renderRequests() {
-    const panel = document.getElementById('requestsPanel');
-    const open  = allRequests.filter(r => r.status === 'Open' || r.status === 'In Progress').slice(0, 5);
-
-    if (!open.length) {
-      panel.innerHTML = '<div class="empty">No open requests.</div>';
-      return;
-    }
-
-    const clientMap = {};
-    allClients.forEach(c => clientMap[c.client_id] = c.business_name || c.client_name || c.client_id);
-
-    panel.innerHTML = open.map(r => `
-      <div class="req-item">
-        <div class="req-top">
-          <div class="req-subject">${r.subject || '—'}</div>
-          <span class="priority-${(r.priority||'normal').toLowerCase()}">${r.priority || 'Normal'}</span>
-        </div>
-        <div class="req-from">${clientMap[r.client_id] || r.client_id} &middot; ${formatDate(r.submitted_date || r.created_at)}</div>
-      </div>
-    `).join('');
-  }
-
-  // ---- ADD CLIENT ----
-  function openAddClient() {
-    ['addSuccess','addError'].forEach(id => document.getElementById(id).classList.remove('show'));
-    document.getElementById('createFirstInvoice').checked = false;
-    document.getElementById('firstInvoiceFields').style.display = 'none';
-    // Default first invoice due date to 1st of next month
-    const due = new Date();
-    due.setMonth(due.getMonth() + 1);
-    due.setDate(1);
-    document.getElementById('firstInvDue').value = due.toISOString().split('T')[0];
-    document.getElementById('addClientModal').classList.add('show');
-  }
-
-  function toggleFirstInvoice() {
-    const checked = document.getElementById('createFirstInvoice').checked;
-    document.getElementById('firstInvoiceFields').style.display = checked ? 'block' : 'none';
-    if (checked) {
-      // Pre-fill amount from monthly rate if set
-      const rate = document.getElementById('newRate').value;
-      if (rate && !document.getElementById('firstInvAmount').value) {
-        document.getElementById('firstInvAmount').value = rate;
-      }
-      // Pre-fill description
-      const plan = document.getElementById('newPlan').value.trim();
-      const biz  = document.getElementById('newBiz').value.trim();
-      if (!document.getElementById('firstInvDesc').value && plan) {
-        const month = new Date().toLocaleString('en-US', { month: 'long', year: 'numeric' });
-        document.getElementById('firstInvDesc').value = (plan || 'Web Services') + (biz ? ' — ' + biz : '') + ' — ' + month;
-      }
-    }
-  }
-
-  async function handleAddClient() {
-    const btn = document.getElementById('addClientBtn');
-    btn.disabled = true; btn.textContent = 'Saving...';
-    ['addSuccess','addError'].forEach(id => document.getElementById(id).classList.remove('show'));
-
-    const client = {
-      client_name:    document.getElementById('newName').value.trim(),
-      business_name:  document.getElementById('newBiz').value.trim(),
-      contact_email:  document.getElementById('newEmail').value.trim(),
-      phone:          document.getElementById('newPhone').value.trim(),
-      domain:         document.getElementById('newDomain').value.trim(),
-      plan_name:      document.getElementById('newPlan').value.trim(),
-      monthly_rate:   document.getElementById('newRate').value,
-      billing_day:    document.getElementById('newBillingDay').value || 1,
-      hosting_status: document.getElementById('newHosting').value.trim() || 'Running',
-      notes:          document.getElementById('newNotes').value.trim(),
-    };
-
-    if (!client.client_name || !client.contact_email) {
-      document.getElementById('addError').textContent = 'Name and email are required.';
-      document.getElementById('addError').classList.add('show');
-      btn.disabled = false; btn.textContent = 'Add client & send invite';
-      return;
-    }
-
-    const createInvoice = document.getElementById('createFirstInvoice').checked;
-    const firstInvoice  = createInvoice ? {
-      amount:      document.getElementById('firstInvAmount').value,
-      due_date:    document.getElementById('firstInvDue').value,
-      description: document.getElementById('firstInvDesc').value.trim(),
-      period:      new Date().toLocaleString('en-US', { month: 'long', year: 'numeric' })
-    } : null;
-
-    if (createInvoice && !firstInvoice.amount) {
-      document.getElementById('addError').textContent = 'Please enter an invoice amount.';
-      document.getElementById('addError').classList.add('show');
-      btn.disabled = false; btn.textContent = 'Add client & send invite';
-      return;
-    }
-
-    try {
-      const res = await api('adminSaveClient', { client, first_invoice: firstInvoice });
-      if (res.ok) {
-        document.getElementById('addSuccess').textContent = createInvoice
-          ? 'Client added! Welcome email and invoice sent.'
-          : 'Client added! Welcome email sent.';
-        document.getElementById('addSuccess').classList.add('show');
-        setTimeout(() => { closeModal('addClientModal'); loadDashboard(); }, 1800);
-      } else {
-        document.getElementById('addError').textContent = res.error || 'Error saving client.';
-        document.getElementById('addError').classList.add('show');
-      }
-    } catch(e) {
-      document.getElementById('addError').classList.add('show');
-    }
-
-    btn.disabled = false; btn.textContent = 'Add client & send invite';
-  }
-
-  // ---- EDIT CLIENT ----
-  function openEditClient(clientId) {
-    const c = allClients.find(x => x.client_id === clientId);
-    if (!c) return;
-
-    ['editSuccess','editError'].forEach(id => document.getElementById(id).classList.remove('show'));
-    document.getElementById('editClientId').value    = c.client_id;
-    document.getElementById('editName').value        = c.client_name    || '';
-    document.getElementById('editBiz').value         = c.business_name  || '';
-    document.getElementById('editEmail').value       = c.contact_email  || '';
-    document.getElementById('editPhone').value       = c.phone          || '';
-    document.getElementById('editDomain').value      = c.domain         || '';
-    document.getElementById('editSiteStatus').value  = c.site_status    || 'Online';
-    document.getElementById('editSslStatus').value   = c.ssl_status     || 'Active';
-    document.getElementById('editPlan').value        = c.plan_name      || 'Pro Care';
-    document.getElementById('editRate').value        = c.monthly_rate   || '';
-    document.getElementById('editStatus').value      = c.status         || 'Active';
-    document.getElementById('editHosting').value     = c.hosting_status || '';
-    document.getElementById('editNotes').value       = c.notes          || '';
-
-    document.getElementById('editClientModal').classList.add('show');
-  }
-
-  async function handleEditClient() {
-    ['editSuccess','editError'].forEach(id => document.getElementById(id).classList.remove('show'));
-
-    const client = {
-      client_id:      document.getElementById('editClientId').value,
-      client_name:    document.getElementById('editName').value.trim(),
-      business_name:  document.getElementById('editBiz').value.trim(),
-      contact_email:  document.getElementById('editEmail').value.trim(),
-      phone:          document.getElementById('editPhone').value.trim(),
-      domain:         document.getElementById('editDomain').value.trim(),
-      site_status:    document.getElementById('editSiteStatus').value,
-      ssl_status:     document.getElementById('editSslStatus').value,
-      plan_name:      document.getElementById('editPlan').value,
-      monthly_rate:   document.getElementById('editRate').value,
-      status:         document.getElementById('editStatus').value,
-      hosting_status: document.getElementById('editHosting').value.trim(),
-      notes:          document.getElementById('editNotes').value.trim(),
-    };
-
-    try {
-      const res = await api('adminSaveClient', { client });
-      if (res.ok) {
-        document.getElementById('editSuccess').classList.add('show');
-        setTimeout(() => { closeModal('editClientModal'); loadDashboard(); }, 1200);
-      } else {
-        document.getElementById('editError').textContent = res.error || 'Error saving.';
-        document.getElementById('editError').classList.add('show');
-      }
-    } catch(e) {
-      document.getElementById('editError').classList.add('show');
-    }
-  }
-
-  function closeModal(id) { document.getElementById(id).classList.remove('show'); }
-  document.querySelectorAll('.modal-overlay').forEach(el => {
-    el.addEventListener('click', e => { if (e.target === el) el.classList.remove('show'); });
-  });
-
-  function formatDate(val) {
-    if (!val) return '—';
-    const d = new Date(val);
-    if (isNaN(d)) return val;
-    return d.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
-  }
-
   function handleLogout() {
-    fetch(API, { method:'POST', body: JSON.stringify({ action:'logout', token }) });
-    localStorage.clear();
-    window.location.href = 'login.html';
+    fetch(API, { method:'POST', body: JSON.stringify({action:'logout', token}) });
+    localStorage.clear(); window.location.href = 'login.html';
   }
-
-  loadDashboard();
-
-  // ---- SUBSCRIPTION ----
-  function openCreateSubscription(clientId) {
-    const c = allClients.find(x => x.client_id === clientId);
-    if (!c) return;
-    ['subSuccess','subError'].forEach(id => document.getElementById(id).classList.remove('show'));
-    document.getElementById('subClientId').value    = clientId;
-    document.getElementById('subClientName').value  = c.business_name || c.client_name;
-    document.getElementById('subAmount').value      = c.monthly_rate || '';
-    document.getElementById('subDesc').value        = (c.plan_name || 'Web Services') + ' — ' + (c.business_name || c.client_name);
-    document.getElementById('subModal').classList.add('show');
+  function badge(status) {
+    const s=(status||'').toLowerCase();
+    if(['online','active','paid','resolved'].includes(s)) return `<span class="badge badge-green">${status}</span>`;
+    if(['unpaid','open','pending'].includes(s)) return `<span class="badge badge-gold">${status}</span>`;
+    if(['overdue','offline','expired'].includes(s)) return `<span class="badge badge-red">${status}</span>`;
+    if(s==='in progress') return `<span class="badge badge-blue">${status}</span>`;
+    return `<span class="badge badge-muted">${status||'—'}</span>`;
   }
+  (function(){
+    const canvas=document.getElementById('aurora'),ctx=canvas.getContext('2d');
+    let W,H,t=0;
+    function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+    resize();window.addEventListener('resize',resize);
+    const blobs=[{x:0.2,y:0.3,r:0.55,color:[79,195,247],speed:0.00005},{x:0.8,y:0.2,r:0.5,color:[167,139,250],speed:0.00004},{x:0.5,y:0.7,r:0.45,color:[244,114,182],speed:0.00006},{x:0.1,y:0.8,r:0.4,color:[45,212,191],speed:0.000045},{x:0.9,y:0.5,r:0.35,color:[249,115,22],speed:0.000055}];
+    function draw(){ctx.clearRect(0,0,W,H);t++;blobs.forEach((b,i)=>{const ox=Math.sin(t*b.speed*500+i*1.2)*0.15,oy=Math.cos(t*b.speed*400+i*0.9)*0.12,cx=(b.x+ox)*W,cy=(b.y+oy)*H,rad=b.r*Math.min(W,H),g=ctx.createRadialGradient(cx,cy,0,cx,cy,rad);const [r,g2,bl]=b.color;g.addColorStop(0,`rgba(${r},${g2},${bl},0.22)`);g.addColorStop(0.4,`rgba(${r},${g2},${bl},0.09)`);g.addColorStop(1,`rgba(${r},${g2},${bl},0)`);ctx.fillStyle=g;ctx.fillRect(0,0,W,H);});requestAnimationFrame(draw);}
+    draw();
+  })();
 
-  async function handleCreateSubscription() {
-    const btn = document.getElementById('subBtn');
-    ['subSuccess','subError'].forEach(id => document.getElementById(id).classList.remove('show'));
-    const client_id   = document.getElementById('subClientId').value;
-    const amount      = document.getElementById('subAmount').value;
-    const interval    = document.getElementById('subInterval').value;
-    const description = document.getElementById('subDesc').value.trim();
-    if (!amount) { document.getElementById('subError').textContent = 'Amount is required.'; document.getElementById('subError').classList.add('show'); return; }
-    btn.disabled = true; btn.textContent = 'Creating...';
+  async function load() {
     try {
-      const res = await api('adminCreateSubscription', { client_id, amount, interval, description });
-      if (res.ok) {
-        document.getElementById('subSuccess').classList.add('show');
-        setTimeout(() => { closeModal('subModal'); loadDashboard(); }, 1800);
-      } else {
-        document.getElementById('subError').textContent = res.error || 'Error creating subscription.';
-        document.getElementById('subError').classList.add('show');
-      }
-    } catch(e) { document.getElementById('subError').classList.add('show'); }
-    btn.disabled = false; btn.textContent = 'Create & email client';
-  }
+      const res = await api('adminGetClients');
+      if(!res.ok){ window.location.href='login.html'; return; }
+      const clients = res.clients||[];
+      const active = clients.filter(c=>(c.status||'').toLowerCase()==='active');
+      document.getElementById('totalClients').textContent = clients.length;
+      document.getElementById('activeClients').textContent = active.length;
 
-  function openCancelSubscription(clientId) {
-    const c = allClients.find(x => x.client_id === clientId);
-    if (!c) return;
-    ['cancelSubSuccess','cancelSubError'].forEach(id => document.getElementById(id).classList.remove('show'));
-    document.getElementById('cancelSubClientId').value = clientId;
-    document.getElementById('cancelSubText').textContent = 'This will immediately cancel the subscription for ' + (c.business_name || c.client_name) + '. They will not be charged again.';
-    document.getElementById('cancelSubModal').classList.add('show');
-  }
+      // Rough outstanding calc
+      let outstanding = 0;
+      clients.forEach(c=>{ if(c.monthly_rate) outstanding += parseFloat(c.monthly_rate)||0; });
+      document.getElementById('outstanding').textContent = `$${outstanding.toFixed(0)}`;
+      document.getElementById('openRequests').textContent = '—';
 
-  async function handleCancelSubscription() {
-    const client_id = document.getElementById('cancelSubClientId').value;
-    ['cancelSubSuccess','cancelSubError'].forEach(id => document.getElementById(id).classList.remove('show'));
-    try {
-      const res = await api('adminCancelSubscription', { client_id });
-      if (res.ok) {
-        document.getElementById('cancelSubSuccess').classList.add('show');
-        setTimeout(() => { closeModal('cancelSubModal'); loadDashboard(); }, 1500);
-      } else {
-        document.getElementById('cancelSubError').textContent = res.error || 'Error cancelling.';
-        document.getElementById('cancelSubError').classList.add('show');
-      }
-    } catch(e) { document.getElementById('cancelSubError').classList.add('show'); }
+      document.getElementById('clientsBody').innerHTML = clients.length ? `
+        <table><thead><tr><th>Name</th><th>Business</th><th>Domain</th><th>Plan</th><th>Status</th></tr></thead>
+        <tbody>${clients.map(c=>`<tr style="cursor:pointer;" onclick="window.location='clients.html'">
+          <td style="font-weight:500;">${c.client_name||'—'}</td>
+          <td style="color:var(--muted);">${c.business_name||'—'}</td>
+          <td style="color:var(--muted);font-size:12px;">${c.domain||'—'}</td>
+          <td>${c.plan_name||'—'}</td>
+          <td>${badge(c.status||'Active')}</td>
+        </tr>`).join('')}</tbody></table>` : '<div class="empty">No clients yet.</div>';
+    } catch(e){ console.error(e); }
   }
-
+  load();
 </script>
-
-<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.35);">Suncoast Technology · admin.html · v2.2</div>
-
-<!-- CREATE SUBSCRIPTION MODAL -->
-<div class="modal-overlay" id="subModal">
-  <div class="modal">
-    <div class="modal-title">Create subscription</div>
-    <div class="modal-sub">Stripe will charge this client automatically. They'll receive an email to add their card.</div>
-    <div class="alert alert-success" id="subSuccess">Subscription created! Client has been emailed.</div>
-    <div class="alert alert-error"   id="subError">Something went wrong.</div>
-    <input type="hidden" id="subClientId" />
-    <div class="field"><label>Client</label><input type="text" id="subClientName" disabled /></div>
-    <div class="field-row">
-      <div class="field"><label>Amount ($)</label><input type="number" id="subAmount" placeholder="120" /></div>
-      <div class="field">
-        <label>Billing interval</label>
-        <select id="subInterval">
-          <option value="month">Monthly</option>
-          <option value="year">Annual</option>
-        </select>
-      </div>
-    </div>
-    <div class="field"><label>Description</label><input type="text" id="subDesc" placeholder="e.g. Pro Care — Web Services" /></div>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closeModal('subModal')">Cancel</button>
-      <button class="btn btn-primary" id="subBtn" onclick="handleCreateSubscription()">Create &amp; email client</button>
-    </div>
-  </div>
-</div>
-
-<!-- CANCEL SUBSCRIPTION MODAL -->
-<div class="modal-overlay" id="cancelSubModal">
-  <div class="modal">
-    <div class="modal-title">Cancel subscription</div>
-    <div class="modal-sub" id="cancelSubText">This will immediately cancel the client's Stripe subscription. They will not be charged again.</div>
-    <div class="alert alert-success" id="cancelSubSuccess">Subscription cancelled.</div>
-    <div class="alert alert-error"   id="cancelSubError">Something went wrong.</div>
-    <input type="hidden" id="cancelSubClientId" />
-    <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closeModal('cancelSubModal')">Keep subscription</button>
-      <button class="btn" style="background:#EF4444;color:#fff;flex:2;justify-content:center;" onclick="handleCancelSubscription()">Cancel subscription</button>
-    </div>
-  </div>
-</div>
+<div style="position:fixed;bottom:6px;right:12px;font-size:10px;color:rgba(148,163,184,0.12);z-index:10;">Suncoast Technology · admin.html · v2.0</div>
 </body>
 </html>
