@@ -217,6 +217,31 @@
         </div>
       </div>
 
+      <div class="notify-row" style="margin-top:8px;">
+        <input type="checkbox" id="createInvoice" />
+        <div>
+          <div class="notify-label">Create an invoice for this update</div>
+          <div class="notify-sub">Opens the invoice form pre-filled with this update's details</div>
+        </div>
+      </div>
+
+      <div id="invoiceFields" style="display:none;background:rgba(249,115,22,0.06);border:1px solid rgba(249,115,22,0.2);border-radius:10px;padding:14px 16px;margin-top:8px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
+          <div class="field" style="margin-bottom:0;">
+            <label>Invoice amount ($)</label>
+            <input type="number" id="invAmount" placeholder="150" />
+          </div>
+          <div class="field" style="margin-bottom:0;">
+            <label>Created date</label>
+            <input type="date" id="invCreated" />
+          </div>
+          <div class="field" style="margin-bottom:0;">
+            <label>Due date</label>
+            <input type="date" id="invDue" />
+          </div>
+        </div>
+      </div>
+
       <div class="form-actions">
         <button class="btn btn-primary" id="submitBtn" onclick="handleSubmit()">
           Post update
@@ -338,6 +363,24 @@
     try {
       const res = await api('adminPostUpdate', { client_id, title, content, category, notify_client });
       if (res.ok) {
+        // Also create invoice if checked
+        const shouldInvoice = document.getElementById('createInvoice').checked;
+        if (shouldInvoice) {
+          const invAmount  = document.getElementById('invAmount').value;
+          const invDue     = document.getElementById('invDue').value;
+          const invCreated = document.getElementById('invCreated').value;
+          if (invAmount) {
+            await api('adminSaveInvoice', {
+              invoice: {
+                client_id,
+                amount:      invAmount,
+                due_date:    invDue,
+                period:      new Date().toLocaleString('en-US', { month: 'long', year: 'numeric' }),
+                description: title
+              }
+            });
+          }
+        }
         document.getElementById('successAlert').classList.add('show');
         clearForm();
         loadData();
@@ -358,13 +401,32 @@
   }
 
   function clearForm() {
-    document.getElementById('clientSelect').value   = '';
-    document.getElementById('updateTitle').value    = '';
-    document.getElementById('updateContent').value  = '';
-    document.getElementById('updateCategory').value = 'General';
-    document.getElementById('updateDate').value     = new Date().toISOString().split('T')[0];
-    document.getElementById('notifyClient').checked = true;
+    document.getElementById('clientSelect').value    = '';
+    document.getElementById('updateTitle').value     = '';
+    document.getElementById('updateContent').value   = '';
+    document.getElementById('updateCategory').value  = 'General';
+    document.getElementById('updateDate').value      = new Date().toISOString().split('T')[0];
+    document.getElementById('notifyClient').checked  = true;
+    document.getElementById('createInvoice').checked = false;
+    document.getElementById('invoiceFields').style.display = 'none';
+    if (document.getElementById('invAmount')) document.getElementById('invAmount').value = '';
   }
+
+  // Toggle invoice fields
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('createInvoice').addEventListener('change', function() {
+      const fields = document.getElementById('invoiceFields');
+      fields.style.display = this.checked ? 'block' : 'none';
+      if (this.checked) {
+        const today = new Date();
+        const due = new Date();
+        due.setMonth(due.getMonth() + 1);
+        due.setDate(1);
+        document.getElementById('invCreated').value = today.toISOString().split('T')[0];
+        document.getElementById('invDue').value = due.toISOString().split('T')[0];
+      }
+    });
+  });
 
   function formatDate(val) {
     if (!val) return '—';
@@ -382,6 +444,6 @@
   loadData();
 </script>
 
-<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.35);">Suncoast Technology · updates.html · v1.0</div>
+<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.35);">Suncoast Technology · updates.html · v2.0</div>
 </body>
 </html>
