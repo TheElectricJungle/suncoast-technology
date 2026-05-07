@@ -464,12 +464,12 @@
 </div>
 
 <script>
-  const API      = 'https://script.google.com/macros/s/AKfycbyynJ0wNQLUCY3e4O-z0sJ4xH_g841qrJkbwLMstMV4Mi2U99TZCRr0XHsmTA3IYpcisg/exec';
+  const API      = 'https://script.google.com/macros/s/AKfycbwQnWaVf_03uO0kBEpwOJZO-OnT9PR_G-nvos9GJOlbRiDeIUjBN5zIQr0UDl1Ti_DZCQ/exec';
   const token    = localStorage.getItem('sc_token');
   const isAdmin  = localStorage.getItem('sc_is_admin');
 
   // Auth guard — admin only
-  if (!token) { window.location.href = 'login.html'; }
+  if (!token || isAdmin !== 'true') window.location.href = 'login.html';
 
   let allClients  = [];
   let allRequests = [];
@@ -484,31 +484,24 @@
 
   async function loadDashboard() {
     try {
-      const clientsRes = await api('adminGetClients');
-      if (!clientsRes.ok) { console.error('API error:', clientsRes.error); return; }
+      const [clientsRes, requestsRes] = await Promise.all([
+        api('adminGetClients'),
+        api('getRequests', { client_id: 'ALL' })
+      ]);
 
-      allClients = clientsRes.clients || [];
-      allRequests = [];
+      if (!clientsRes.ok) { window.location.href = 'login.html'; return; }
 
-      const clients = allClients.filter(c =>
-        c.is_admin !== true && c.is_admin !== 'TRUE'
-      );
+      allClients  = clientsRes.clients || [];
+      allRequests = requestsRes.requests || [];
 
-      // Fetch requests per client — no ALL query needed
-      if (clients.length > 0) {
-        const results = await Promise.all(
-          clients.map(c =>
-            api('getRequests', { client_id: c.client_id }).catch(() => ({ requests: [] }))
-          )
-        );
-        allRequests = results.flatMap(r => r.requests || []);
-      }
+      // Filter out admin account from display
+      const clients = allClients.filter(c => !c.is_admin || c.is_admin === 'FALSE' || c.is_admin === false);
 
       renderStats(clients);
       renderClientTable(clients);
       renderRequests();
 
-    } catch(e) { console.error('Dashboard error:', e); }
+    } catch(e) { console.error(e); }
   }
 
   function renderStats(clients) {
@@ -725,6 +718,6 @@
   loadDashboard();
 </script>
 
-<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.35);">Suncoast Technology · admin.html · v1.6</div>
+<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.35);">Suncoast Technology · admin.html · v1.7</div>
 </body>
 </html>
