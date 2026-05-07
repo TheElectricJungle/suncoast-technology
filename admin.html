@@ -566,6 +566,10 @@
           <td>
             <div class="action-btns">
               <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation(); openEditClient('${c.client_id}')">Edit</button>
+              ${c.stripe_subscription_id ? 
+                '<button class="btn btn-sm" style="background:rgba(239,68,68,0.15);color:#EF4444;border:1px solid rgba(239,68,68,0.2);" onclick="event.stopPropagation(); openCancelSubscription('' + c.client_id + '')">Cancel sub</button>' :
+                '<button class="btn btn-sm" style="background:rgba(34,197,94,0.12);color:#22C55E;border:1px solid rgba(34,197,94,0.2);" onclick="event.stopPropagation(); openCreateSubscription('' + c.client_id + '')">+ Subscribe</button>'
+              }
             </div>
           </td>
         </tr>
@@ -716,8 +720,109 @@
   }
 
   loadDashboard();
+
+  // ---- SUBSCRIPTION ----
+  function openCreateSubscription(clientId) {
+    const c = allClients.find(x => x.client_id === clientId);
+    if (!c) return;
+    ['subSuccess','subError'].forEach(id => document.getElementById(id).classList.remove('show'));
+    document.getElementById('subClientId').value    = clientId;
+    document.getElementById('subClientName').value  = c.business_name || c.client_name;
+    document.getElementById('subAmount').value      = c.monthly_rate || '';
+    document.getElementById('subDesc').value        = (c.plan_name || 'Web Services') + ' — ' + (c.business_name || c.client_name);
+    document.getElementById('subModal').classList.add('show');
+  }
+
+  async function handleCreateSubscription() {
+    const btn = document.getElementById('subBtn');
+    ['subSuccess','subError'].forEach(id => document.getElementById(id).classList.remove('show'));
+    const client_id   = document.getElementById('subClientId').value;
+    const amount      = document.getElementById('subAmount').value;
+    const interval    = document.getElementById('subInterval').value;
+    const description = document.getElementById('subDesc').value.trim();
+    if (!amount) { document.getElementById('subError').textContent = 'Amount is required.'; document.getElementById('subError').classList.add('show'); return; }
+    btn.disabled = true; btn.textContent = 'Creating...';
+    try {
+      const res = await api('adminCreateSubscription', { client_id, amount, interval, description });
+      if (res.ok) {
+        document.getElementById('subSuccess').classList.add('show');
+        setTimeout(() => { closeModal('subModal'); loadDashboard(); }, 1800);
+      } else {
+        document.getElementById('subError').textContent = res.error || 'Error creating subscription.';
+        document.getElementById('subError').classList.add('show');
+      }
+    } catch(e) { document.getElementById('subError').classList.add('show'); }
+    btn.disabled = false; btn.textContent = 'Create & email client';
+  }
+
+  function openCancelSubscription(clientId) {
+    const c = allClients.find(x => x.client_id === clientId);
+    if (!c) return;
+    ['cancelSubSuccess','cancelSubError'].forEach(id => document.getElementById(id).classList.remove('show'));
+    document.getElementById('cancelSubClientId').value = clientId;
+    document.getElementById('cancelSubText').textContent = 'This will immediately cancel the subscription for ' + (c.business_name || c.client_name) + '. They will not be charged again.';
+    document.getElementById('cancelSubModal').classList.add('show');
+  }
+
+  async function handleCancelSubscription() {
+    const client_id = document.getElementById('cancelSubClientId').value;
+    ['cancelSubSuccess','cancelSubError'].forEach(id => document.getElementById(id).classList.remove('show'));
+    try {
+      const res = await api('adminCancelSubscription', { client_id });
+      if (res.ok) {
+        document.getElementById('cancelSubSuccess').classList.add('show');
+        setTimeout(() => { closeModal('cancelSubModal'); loadDashboard(); }, 1500);
+      } else {
+        document.getElementById('cancelSubError').textContent = res.error || 'Error cancelling.';
+        document.getElementById('cancelSubError').classList.add('show');
+      }
+    } catch(e) { document.getElementById('cancelSubError').classList.add('show'); }
+  }
+
 </script>
 
-<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.35);">Suncoast Technology · admin.html · v1.7</div>
+<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.35);">Suncoast Technology · admin.html · v2.0</div>
+
+<!-- CREATE SUBSCRIPTION MODAL -->
+<div class="modal-overlay" id="subModal">
+  <div class="modal">
+    <div class="modal-title">Create subscription</div>
+    <div class="modal-sub">Stripe will charge this client automatically. They'll receive an email to add their card.</div>
+    <div class="alert alert-success" id="subSuccess">Subscription created! Client has been emailed.</div>
+    <div class="alert alert-error"   id="subError">Something went wrong.</div>
+    <input type="hidden" id="subClientId" />
+    <div class="field"><label>Client</label><input type="text" id="subClientName" disabled /></div>
+    <div class="field-row">
+      <div class="field"><label>Amount ($)</label><input type="number" id="subAmount" placeholder="120" /></div>
+      <div class="field">
+        <label>Billing interval</label>
+        <select id="subInterval">
+          <option value="month">Monthly</option>
+          <option value="year">Annual</option>
+        </select>
+      </div>
+    </div>
+    <div class="field"><label>Description</label><input type="text" id="subDesc" placeholder="e.g. Pro Care — Web Services" /></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('subModal')">Cancel</button>
+      <button class="btn btn-primary" id="subBtn" onclick="handleCreateSubscription()">Create &amp; email client</button>
+    </div>
+  </div>
+</div>
+
+<!-- CANCEL SUBSCRIPTION MODAL -->
+<div class="modal-overlay" id="cancelSubModal">
+  <div class="modal">
+    <div class="modal-title">Cancel subscription</div>
+    <div class="modal-sub" id="cancelSubText">This will immediately cancel the client's Stripe subscription. They will not be charged again.</div>
+    <div class="alert alert-success" id="cancelSubSuccess">Subscription cancelled.</div>
+    <div class="alert alert-error"   id="cancelSubError">Something went wrong.</div>
+    <input type="hidden" id="cancelSubClientId" />
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('cancelSubModal')">Keep subscription</button>
+      <button class="btn" style="background:#EF4444;color:#fff;flex:2;justify-content:center;" onclick="handleCancelSubscription()">Cancel subscription</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
