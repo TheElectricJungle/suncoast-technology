@@ -225,6 +225,18 @@
       </div>
     </div>
 
+    <!-- Subscription management -->
+    <div class="plan-card" id="subCard" style="display:none;">
+      <div>
+        <div class="plan-label">Subscription</div>
+        <div class="plan-name" id="subStatus">Active</div>
+        <div class="plan-rate">Auto-renews automatically via Stripe</div>
+      </div>
+      <button onclick="handleManageSub()" id="manageSubBtn" style="background:#F97316;color:#fff;border:none;border-radius:8px;padding:11px 20px;font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;white-space:nowrap;transition:background 0.15s;">
+        Manage subscription
+      </button>
+    </div>
+
     <!-- Invoice history -->
     <div class="panel">
       <div class="panel-head">
@@ -290,6 +302,12 @@
       document.getElementById('planBillingDay').textContent = c.billing_day  ? 'Day ' + c.billing_day : '—';
       document.getElementById('planDomain').textContent     = c.domain       || '—';
 
+      // Show subscription management if client has active Stripe subscription
+      if (c.stripe_subscription_id) {
+        document.getElementById('subCard').style.display = 'flex';
+        document.getElementById('subStatus').textContent = c.plan_name ? c.plan_name + ' — Active' : 'Active';
+      }
+
       // Find first unpaid invoice
       currentInvoice = invoices.find(i => i.status === 'Unpaid' || i.status === 'Overdue');
 
@@ -339,6 +357,25 @@
         </tbody>
       </table>
     `;
+  }
+
+  // MANAGE SUBSCRIPTION — opens Stripe billing portal
+  async function handleManageSub() {
+    const btn = document.getElementById('manageSubBtn');
+    btn.disabled = true;
+    btn.textContent = 'Loading...';
+    try {
+      const res = await api('getPortalLink');
+      if (res.ok && res.url) {
+        window.location.href = res.url;
+      } else {
+        alert(res.error || 'Could not open billing portal. Please try again.');
+      }
+    } catch(e) {
+      alert('Connection error. Please try again.');
+    }
+    btn.disabled = false;
+    btn.textContent = 'Manage subscription';
   }
 
   // STRIPE HOSTED CHECKOUT
@@ -401,6 +438,6 @@
   loadBilling();
 </script>
 
-<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.35);">Suncoast Technology · billing.html · v2.7</div>
+<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.35);">Suncoast Technology · billing.html · v2.8</div>
 </body>
 </html>
