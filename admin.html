@@ -374,17 +374,35 @@
     </div>
     <div class="field"><label>Domain</label><input type="text" id="newDomain" placeholder="janesdiner.com" /></div>
     <div class="field-row">
-      <div class="field">
-        <label>Plan</label>
-        <select id="newPlan">
-          <option>Basic</option>
-          <option selected>Pro Care</option>
-          <option>Premium</option>
-        </select>
-      </div>
+      <div class="field"><label>Plan name</label><input type="text" id="newPlan" placeholder="Pro Care" /></div>
       <div class="field"><label>Monthly rate ($)</label><input type="number" id="newRate" placeholder="120" /></div>
     </div>
+    <div class="field-row">
+      <div class="field"><label>Billing day</label><input type="number" id="newBillingDay" placeholder="1" min="1" max="28" value="1" /></div>
+      <div class="field"><label>Hosting status</label><input type="text" id="newHosting" placeholder="Running" value="Running" /></div>
+    </div>
     <div class="field"><label>Notes (private)</label><textarea id="newNotes" placeholder="Any notes about this client..."></textarea></div>
+
+    <!-- First invoice toggle -->
+    <div style="border-top:1px solid var(--border);margin-top:16px;padding-top:16px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+        <input type="checkbox" id="createFirstInvoice" style="width:16px;height:16px;accent-color:var(--orange);cursor:pointer;" onchange="toggleFirstInvoice()" />
+        <div>
+          <div style="font-size:13px;color:#fff;font-weight:500;">Create first invoice now</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:1px;">Client will see this invoice when they first log in</div>
+        </div>
+      </div>
+      <div id="firstInvoiceFields" style="display:none;">
+        <div class="field-row">
+          <div class="field"><label>Invoice amount ($)</label><input type="number" id="firstInvAmount" placeholder="120" /></div>
+          <div class="field"><label>Due date</label><input type="date" id="firstInvDue" /></div>
+        </div>
+        <div class="field">
+          <label>Invoice description</label>
+          <input type="text" id="firstInvDesc" placeholder="e.g. Monthly web services — June 2026" />
+        </div>
+      </div>
+    </div>
 
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="closeModal('addClientModal')">Cancel</button>
@@ -603,7 +621,33 @@
   // ---- ADD CLIENT ----
   function openAddClient() {
     ['addSuccess','addError'].forEach(id => document.getElementById(id).classList.remove('show'));
+    document.getElementById('createFirstInvoice').checked = false;
+    document.getElementById('firstInvoiceFields').style.display = 'none';
+    // Default first invoice due date to 1st of next month
+    const due = new Date();
+    due.setMonth(due.getMonth() + 1);
+    due.setDate(1);
+    document.getElementById('firstInvDue').value = due.toISOString().split('T')[0];
     document.getElementById('addClientModal').classList.add('show');
+  }
+
+  function toggleFirstInvoice() {
+    const checked = document.getElementById('createFirstInvoice').checked;
+    document.getElementById('firstInvoiceFields').style.display = checked ? 'block' : 'none';
+    if (checked) {
+      // Pre-fill amount from monthly rate if set
+      const rate = document.getElementById('newRate').value;
+      if (rate && !document.getElementById('firstInvAmount').value) {
+        document.getElementById('firstInvAmount').value = rate;
+      }
+      // Pre-fill description
+      const plan = document.getElementById('newPlan').value.trim();
+      const biz  = document.getElementById('newBiz').value.trim();
+      if (!document.getElementById('firstInvDesc').value && plan) {
+        const month = new Date().toLocaleString('en-US', { month: 'long', year: 'numeric' });
+        document.getElementById('firstInvDesc').value = (plan || 'Web Services') + (biz ? ' — ' + biz : '') + ' — ' + month;
+      }
+    }
   }
 
   async function handleAddClient() {
@@ -612,14 +656,16 @@
     ['addSuccess','addError'].forEach(id => document.getElementById(id).classList.remove('show'));
 
     const client = {
-      client_name:  document.getElementById('newName').value.trim(),
-      business_name: document.getElementById('newBiz').value.trim(),
-      contact_email: document.getElementById('newEmail').value.trim(),
-      phone:         document.getElementById('newPhone').value.trim(),
-      domain:        document.getElementById('newDomain').value.trim(),
-      plan_name:     document.getElementById('newPlan').value,
-      monthly_rate:  document.getElementById('newRate').value,
-      notes:         document.getElementById('newNotes').value.trim(),
+      client_name:    document.getElementById('newName').value.trim(),
+      business_name:  document.getElementById('newBiz').value.trim(),
+      contact_email:  document.getElementById('newEmail').value.trim(),
+      phone:          document.getElementById('newPhone').value.trim(),
+      domain:         document.getElementById('newDomain').value.trim(),
+      plan_name:      document.getElementById('newPlan').value.trim(),
+      monthly_rate:   document.getElementById('newRate').value,
+      billing_day:    document.getElementById('newBillingDay').value || 1,
+      hosting_status: document.getElementById('newHosting').value.trim() || 'Running',
+      notes:          document.getElementById('newNotes').value.trim(),
     };
 
     if (!client.client_name || !client.contact_email) {
@@ -629,11 +675,29 @@
       return;
     }
 
+    const createInvoice = document.getElementById('createFirstInvoice').checked;
+    const firstInvoice  = createInvoice ? {
+      amount:      document.getElementById('firstInvAmount').value,
+      due_date:    document.getElementById('firstInvDue').value,
+      description: document.getElementById('firstInvDesc').value.trim(),
+      period:      new Date().toLocaleString('en-US', { month: 'long', year: 'numeric' })
+    } : null;
+
+    if (createInvoice && !firstInvoice.amount) {
+      document.getElementById('addError').textContent = 'Please enter an invoice amount.';
+      document.getElementById('addError').classList.add('show');
+      btn.disabled = false; btn.textContent = 'Add client & send invite';
+      return;
+    }
+
     try {
-      const res = await api('adminSaveClient', { client });
+      const res = await api('adminSaveClient', { client, first_invoice: firstInvoice });
       if (res.ok) {
+        document.getElementById('addSuccess').textContent = createInvoice
+          ? 'Client added! Welcome email and invoice sent.'
+          : 'Client added! Welcome email sent.';
         document.getElementById('addSuccess').classList.add('show');
-        setTimeout(() => { closeModal('addClientModal'); loadDashboard(); }, 1500);
+        setTimeout(() => { closeModal('addClientModal'); loadDashboard(); }, 1800);
       } else {
         document.getElementById('addError').textContent = res.error || 'Error saving client.';
         document.getElementById('addError').classList.add('show');
@@ -781,7 +845,7 @@
 
 </script>
 
-<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.35);">Suncoast Technology · admin.html · v2.1</div>
+<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.35);">Suncoast Technology · admin.html · v2.2</div>
 
 <!-- CREATE SUBSCRIPTION MODAL -->
 <div class="modal-overlay" id="subModal">
