@@ -189,8 +189,8 @@
     function draw(){
       ctx.clearRect(0,0,W,H); t++;
       blobs.forEach((b,i)=>{
-        const ox=Math.sin(t*b.speed*1000+i*1.2)*0.15;
-        const oy=Math.cos(t*b.speed*800+i*0.9)*0.12;
+        const ox=Math.sin(t*b.speed*500+i*1.2)*0.15;
+        const oy=Math.cos(t*b.speed*400+i*0.9)*0.12;
         const cx=(b.x+ox)*W, cy=(b.y+oy)*H, rad=b.r*Math.min(W,H);
         const g=ctx.createRadialGradient(cx,cy,0,cx,cy,rad);
         const [r,g2,bl]=b.color;
