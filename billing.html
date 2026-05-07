@@ -86,6 +86,23 @@
     .invoice-period{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px;}
     .invoice-due{font-size:13px;color:var(--gold);margin-top:6px;}
   </style>
+
+<script>
+  // Prevent pinch zoom
+  document.addEventListener('touchmove', function(e) {
+    if (e.touches.length > 1) e.preventDefault();
+  }, { passive: false });
+  document.addEventListener('gesturestart', function(e) {
+    e.preventDefault();
+  });
+  // Reset zoom on load/refresh
+  document.addEventListener('DOMContentLoaded', function() {
+    var meta = document.querySelector('meta[name="viewport"]');
+    if (meta) {
+      meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
+    }
+  });
+</script>
 </head>
 <body>
 <canvas id="aurora"></canvas>
