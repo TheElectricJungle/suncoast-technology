@@ -91,6 +91,8 @@
     .action-cell { display: flex; gap: 6px; }
 
     .empty { padding: 48px 20px; text-align: center; color: var(--muted); font-size: 13px; }
+    .inv-type-btn { flex:1;padding:8px 14px;border-radius:8px;font-size:12px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--muted);transition:all 0.15s; }
+    .inv-type-btn.active { background:rgba(249,115,22,0.12);color:var(--orange);border-color:rgba(249,115,22,0.3); }
 
     /* MODAL */
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); z-index: 100; display: none; align-items: center; justify-content: center; padding: 1rem; }
@@ -252,6 +254,18 @@
   <div class="modal">
     <div class="modal-title">New invoice</div>
     <div class="modal-sub">Invoice will be created and emailed to the client automatically.</div>
+    <div style="display:flex;gap:8px;margin-bottom:16px;">
+      <button class="inv-type-btn active" id="typeOneOff" onclick="setInvType('oneoff')">One-off invoice</button>
+      <button class="inv-type-btn" id="typeSub" onclick="setInvType('sub')">Set up subscription</button>
+    </div>
+    <div id="subSection" style="display:none;background:rgba(249,115,22,0.06);border:1px solid rgba(249,115,22,0.2);border-radius:10px;padding:14px 16px;margin-bottom:14px;">
+      <p style="font-size:12px;color:rgba(148,163,184,0.8);margin-bottom:10px;line-height:1.5;">Creates a Stripe subscription. Client will be emailed a link to add their card and will be charged automatically.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div class="field"><label>Monthly rate ($)</label><input type="number" id="subMonthlyRate" placeholder="120" /></div>
+        <div class="field"><label>Annual rate ($)</label><input type="number" id="subAnnualRate" placeholder="1200" /></div>
+      </div>
+      <div class="field"><label>Plan description</label><input type="text" id="subPlanDesc" placeholder="e.g. Pro Care — Web Services" /></div>
+    </div>
     <div class="alert alert-success" id="invSuccess">Invoice created and sent!</div>
     <div class="alert alert-error"   id="invError">Something went wrong.</div>
     <div class="field">
@@ -262,7 +276,12 @@
       <div class="field"><label>Amount ($)</label><input type="number" id="invAmount" placeholder="120" /></div>
       <div class="field"><label>Due date</label><input type="date" id="invDue" /></div>
     </div>
+    <div class="field-row">
+      <div class="field"><label>Created date</label><input type="date" id="invCreated" /></div>
+      <div class="field"><label>Due date</label><input type="date" id="invDue" /></div>
+    </div>
     <div class="field"><label>Period (e.g. June 2026)</label><input type="text" id="invPeriod" placeholder="June 2026" /></div>
+    <div class="field"><label>Description / reason for invoice</label><input type="text" id="invDesc" placeholder="e.g. Monthly web services, Homepage redesign, Added 3 new pages..." /></div>
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="closeModal('newInvoiceModal')">Cancel</button>
       <button class="btn btn-primary" id="invSubmitBtn" onclick="handleNewInvoice()">Create &amp; send</button>
@@ -394,8 +413,12 @@
         <td>
           <div class="client-name">${getClientName(inv.client_id)}</div>
         </td>
-        <td class="td-muted">${inv.period || '—'}</td>
+        <td class="td-muted">
+          ${inv.period || '—'}
+          ${inv.description ? '<br><span style="font-size:11px;color:var(--muted);">' + inv.description + '</span>' : ''}
+        </td>
         <td><span class="amount">$${parseFloat(inv.amount || 0).toFixed(2)}</span></td>
+        <td class="td-muted">${formatDate(inv.created_at)}</td>
         <td class="td-muted">${formatDate(inv.due_date)}</td>
         <td><span class="badge badge-${(inv.status||'unpaid').toLowerCase()}">${inv.status || 'Unpaid'}</span></td>
         <td>
@@ -408,14 +431,27 @@
   }
 
   // NEW INVOICE
-  function openNewInvoice() {
+  function setInvType(type) {
+    const subSection = document.getElementById('subSection');
+    const invFields  = document.getElementById('invFields');
+    document.getElementById('typeOneOff').classList.toggle('active', type === 'oneoff');
+    document.getElementById('typeSub').classList.toggle('active', type === 'sub');
+    subSection.style.display = type === 'sub' ? 'block' : 'none';
+    if (invFields) invFields.style.display = type === 'oneoff' ? 'block' : 'none';
+  }
+
+  function openNewInvoice(prefillClientId, prefillDesc) {
     ['invSuccess','invError'].forEach(id => document.getElementById(id).classList.remove('show'));
-    // Default due date to 1st of next month
-    const d = new Date();
-    d.setMonth(d.getMonth() + 1);
-    d.setDate(1);
-    document.getElementById('invDue').value    = d.toISOString().split('T')[0];
-    document.getElementById('invPeriod').value = d.toLocaleString('en-US', { month: 'long', year: 'numeric' });
+    setInvType('oneoff');
+    const today = new Date();
+    const due = new Date();
+    due.setMonth(due.getMonth() + 1);
+    due.setDate(1);
+    document.getElementById('invCreated').value = today.toISOString().split('T')[0];
+    document.getElementById('invDue').value     = due.toISOString().split('T')[0];
+    document.getElementById('invPeriod').value  = due.toLocaleString('en-US', { month: 'long', year: 'numeric' });
+    document.getElementById('invDesc').value    = prefillDesc || '';
+    if (prefillClientId) document.getElementById('invClient').value = prefillClientId;
     document.getElementById('newInvoiceModal').classList.add('show');
   }
 
@@ -423,11 +459,35 @@
     const btn = document.getElementById('invSubmitBtn');
     ['invSuccess','invError'].forEach(id => document.getElementById(id).classList.remove('show'));
 
+    const isSub = document.getElementById('typeSub').classList.contains('active');
+
+    if (isSub) {
+      // Handle subscription creation
+      const client_id   = document.getElementById('invClient').value;
+      const monthlyRate = document.getElementById('subMonthlyRate').value;
+      const annualRate  = document.getElementById('subAnnualRate').value;
+      const description = document.getElementById('subPlanDesc').value.trim();
+      if (!client_id) { document.getElementById('invError').textContent = 'Please select a client.'; document.getElementById('invError').classList.add('show'); return; }
+      if (!monthlyRate && !annualRate) { document.getElementById('invError').textContent = 'Enter at least one rate.'; document.getElementById('invError').classList.add('show'); return; }
+      btn.disabled = true; btn.textContent = 'Creating...';
+      // Use monthly if set, otherwise annual
+      const amount   = monthlyRate || annualRate;
+      const interval = monthlyRate ? 'month' : 'year';
+      try {
+        const res = await api('adminCreateSubscription', { client_id, amount, interval, description });
+        if (res.ok) { document.getElementById('invSuccess').textContent = 'Subscription created! Client has been emailed to add their card.'; document.getElementById('invSuccess').classList.add('show'); setTimeout(() => { closeModal('newInvoiceModal'); loadData(); }, 2000); }
+        else { document.getElementById('invError').textContent = res.error || 'Error creating subscription.'; document.getElementById('invError').classList.add('show'); }
+      } catch(e) { document.getElementById('invError').classList.add('show'); }
+      btn.disabled = false; btn.textContent = 'Create & send';
+      return;
+    }
+
     const invoice = {
-      client_id: document.getElementById('invClient').value,
-      amount:    document.getElementById('invAmount').value,
-      due_date:  document.getElementById('invDue').value,
-      period:    document.getElementById('invPeriod').value,
+      client_id:   document.getElementById('invClient').value,
+      amount:      document.getElementById('invAmount').value,
+      due_date:    document.getElementById('invDue').value,
+      period:      document.getElementById('invPeriod').value,
+      description: document.getElementById('invDesc').value.trim(),
     };
 
     if (!invoice.client_id || !invoice.amount) {
@@ -502,6 +562,6 @@
   loadData();
 </script>
 
-<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.35);">Suncoast Technology · invoices.html · v1.0</div>
+<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.35);">Suncoast Technology · invoices.html · v2.0</div>
 </body>
 </html>
