@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clients — Suncoast Technology</title>
+  <!-- Suncoast Technology | clients.html | v1.0 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{--orange:#F97316;--gold:#FBBF24;--navy:#0F1923;--slate:#1E2D3D;--slate2:#243447;--muted:#94A3B8;--light:#F8FAFC;--border:rgba(255,255,255,0.07);--green:#22C55E;--red:#EF4444;--blue:#60A5FA;}
+    html,body{min-height:100%;font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--light);}
+    .shell{display:grid;grid-template-columns:220px 1fr;min-height:100vh;}
+
+    /* SIDEBAR */
+    .sidebar{background:var(--slate);border-right:1px solid var(--border);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;}
+    .sidebar-brand{padding:24px 20px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;}
+    .brand-mark{width:36px;height:36px;flex-shrink:0;}
+    .brand-name{font-family:'Playfair Display',serif;font-size:15px;font-weight:500;color:#fff;line-height:1.1;}
+    .brand-name span{color:var(--orange);}
+    .brand-sub{font-size:10px;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase;margin-top:2px;}
+    .nav{padding:16px 12px;flex:1;display:flex;flex-direction:column;gap:2px;}
+    .nav-label{font-size:10px;font-weight:500;color:rgba(148,163,184,0.4);letter-spacing:0.1em;text-transform:uppercase;padding:10px 10px 6px;margin-top:8px;}
+    .nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;font-size:13px;color:var(--muted);text-decoration:none;transition:background 0.15s,color 0.15s;}
+    .nav-item:hover{background:rgba(255,255,255,0.05);color:#fff;}
+    .nav-item.active{background:rgba(249,115,22,0.12);color:var(--orange);}
+    .nav-item svg{width:16px;height:16px;flex-shrink:0;}
+    .sidebar-footer{padding:16px 20px;border-top:1px solid var(--border);}
+    .user-row{display:flex;align-items:center;gap:10px;}
+    .user-avatar{width:32px;height:32px;border-radius:50%;background:rgba(249,115,22,0.2);border:1px solid rgba(249,115,22,0.3);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:var(--orange);flex-shrink:0;}
+    .user-name{font-size:13px;color:#fff;font-weight:500;}
+    .logout-btn{margin-left:auto;background:none;border:none;color:var(--muted);cursor:pointer;padding:4px;border-radius:4px;transition:color 0.15s;display:flex;}
+    .logout-btn:hover{color:#fff;}
+
+    /* MAIN */
+    .main{padding:32px 36px;display:flex;flex-direction:column;gap:24px;}
+    .page-header{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;}
+    .page-label{font-size:12px;color:var(--muted);margin-bottom:4px;letter-spacing:0.04em;text-transform:uppercase;}
+    .page-title{font-family:'Playfair Display',serif;font-size:28px;font-weight:400;color:#fff;}
+    .page-title span{color:var(--orange);}
+    .search-bar{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:9px 14px;width:260px;}
+    .search-bar svg{color:var(--muted);flex-shrink:0;}
+    .search-bar input{background:none;border:none;outline:none;font-size:13px;color:#fff;font-family:'DM Sans',sans-serif;width:100%;}
+    .search-bar input::placeholder{color:var(--muted);}
+
+    /* CLIENT GRID */
+    .client-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;}
+    .client-card{background:var(--slate);border:1px solid var(--border);border-radius:14px;padding:20px;cursor:pointer;transition:border-color 0.15s,transform 0.15s;animation:fadeUp 0.3s ease both;}
+    .client-card:hover{border-color:rgba(249,115,22,0.3);transform:translateY(-2px);}
+    .client-card-top{display:flex;align-items:center;gap:12px;margin:0 0 14px 0;}
+    .client-avatar{width:40px;height:40px;border-radius:10px;background:rgba(249,115,22,0.15);border:1px solid rgba(249,115,22,0.2);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;color:var(--orange);flex-shrink:0;}
+    .client-name{font-size:14px;font-weight:500;color:#fff;margin:0 0 2px 0;}
+    .client-biz{font-size:12px;color:var(--muted);}
+    .client-meta{display:flex;flex-direction:column;gap:5px;}
+    .client-meta-row{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);}
+    .client-meta-row svg{width:12px;height:12px;flex-shrink:0;}
+    .client-footer{display:flex;align-items:center;justify-content:space-between;margin:14px 0 0 0;padding:12px 0 0 0;border-top:1px solid var(--border);}
+    .status-dot{width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0;}
+    .status-dot.inactive{background:var(--muted);}
+    .status-text{font-size:11px;color:var(--muted);}
+    .profile-btn{font-size:11px;color:var(--orange);font-weight:500;background:none;border:none;cursor:pointer;padding:0;font-family:'DM Sans',sans-serif;}
+    .empty{padding:60px 20px;text-align:center;color:var(--muted);font-size:13px;}
+
+    /* PROFILE DRAWER */
+    .drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);z-index:50;display:none;}
+    .drawer-overlay.show{display:block;}
+    .drawer{position:fixed;top:0;right:0;bottom:0;width:580px;background:var(--slate);border-left:1px solid var(--border);z-index:51;display:flex;flex-direction:column;transform:translateX(100%);transition:transform 0.3s ease;}
+    .drawer.show{transform:translateX(0);}
+    .drawer-head{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+    .drawer-title{font-family:'Playfair Display',serif;font-size:20px;color:#fff;}
+    .drawer-close{background:none;border:none;color:var(--muted);cursor:pointer;padding:6px;border-radius:6px;display:flex;transition:color 0.15s;}
+    .drawer-close:hover{color:#fff;}
+    .drawer-tabs{display:flex;border-bottom:1px solid var(--border);flex-shrink:0;}
+    .drawer-tab{padding:12px 20px;font-size:13px;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:color 0.15s,border-color 0.15s;background:none;border-top:none;border-left:none;border-right:none;font-family:'DM Sans',sans-serif;}
+    .drawer-tab.active{color:var(--orange);border-bottom-color:var(--orange);}
+    .drawer-body{flex:1;overflow-y:auto;padding:24px;}
+    .drawer-footer{padding:16px 24px;border-top:1px solid var(--border);display:flex;gap:10px;flex-shrink:0;}
+
+    /* FORM SECTIONS */
+    .form-section{margin:0 0 28px 0;}
+    .form-section-title{font-size:11px;font-weight:600;color:var(--orange);text-transform:uppercase;letter-spacing:0.08em;margin:0 0 14px 0;display:flex;align-items:center;gap:8px;}
+    .form-section-title svg{width:14px;height:14px;}
+    .field-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+    .field-grid.single{grid-template-columns:1fr;}
+    .field{display:flex;flex-direction:column;gap:5px;}
+    .field label{font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.04em;}
+    .field input,.field textarea,.field select{width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);border-radius:7px;padding:9px 12px;font-size:13px;font-family:'DM Sans',sans-serif;color:#fff;outline:none;transition:border-color 0.2s;}
+    .field input:focus,.field textarea:focus,.field select:focus{border-color:rgba(249,115,22,0.4);background:rgba(249,115,22,0.03);}
+    .field textarea{resize:vertical;min-height:80px;}
+    .field input.pw-field{font-family:monospace;letter-spacing:0.05em;color:var(--gold);}
+    .pw-toggle{position:relative;}
+    .pw-toggle input{padding-right:36px;}
+    .pw-toggle button{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted);cursor:pointer;padding:2px;display:flex;}
+
+    /* BUTTONS */
+    .btn{display:inline-flex;align-items:center;gap:7px;padding:10px 18px;border-radius:8px;font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;transition:background 0.15s,transform 0.1s;border:none;}
+    .btn:active{transform:scale(0.98);}
+    .btn-primary{background:var(--orange);color:#fff;flex:1;justify-content:center;}
+    .btn-primary:hover{background:#ea6c0a;}
+    .btn-primary:disabled{opacity:0.6;cursor:not-allowed;}
+    .btn-ghost{background:rgba(255,255,255,0.05);color:var(--muted);border:1px solid var(--border);}
+    .btn-ghost:hover{background:rgba(255,255,255,0.08);color:#fff;}
+    .btn-green{background:rgba(34,197,94,0.12);color:var(--green);border:1px solid rgba(34,197,94,0.2);}
+    .btn-green:hover{background:rgba(34,197,94,0.2);}
+
+    /* CHECKBOXES FOR DOCUMENT */
+    .doc-options{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 16px 0;}
+    .doc-option{display:flex;align-items:center;gap:8px;padding:10px 12px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:8px;cursor:pointer;}
+    .doc-option input{width:14px;height:14px;accent-color:var(--orange);cursor:pointer;}
+    .doc-option label{font-size:13px;color:#fff;cursor:pointer;}
+
+    /* ALERTS */
+    .alert{padding:10px 14px;border-radius:8px;font-size:13px;display:none;margin:0 0 14px 0;}
+    .alert.show{display:block;}
+    .alert-success{background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);color:#86EFAC;}
+    .alert-error{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#FCA5A5;}
+
+    @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+    @media(max-width:768px){.shell{grid-template-columns:1fr}.sidebar{display:none}.main{padding:20px 16px}.drawer{width:100%}.field-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <svg class="brand-mark" viewBox="0 0 36 36" fill="none">
+        <circle cx="18" cy="18" r="17" fill="#243447" stroke="rgba(249,115,22,0.3)" stroke-width="1"/>
+        <path d="M7 22 Q18 10 29 22" stroke="#F97316" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+        <path d="M5 25 Q18 7 31 25" stroke="#FBBF24" stroke-width="1" stroke-linecap="round" fill="none" opacity="0.5"/>
+        <circle cx="18" cy="27" r="3" fill="#F97316"/>
+        <line x1="7" y1="29" x2="29" y2="29" stroke="rgba(249,115,22,0.3)" stroke-width="1" stroke-linecap="round"/>
+      </svg>
+      <div>
+        <div class="brand-name">Suncoast <span>Technology</span></div>
+        <div class="brand-sub">Admin Panel</div>
+      </div>
+    </div>
+    <nav class="nav">
+      <div class="nav-label">Admin</div>
+      <a href="admin.html" class="nav-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="1" width="6" height="6" rx="1.5"/><rect x="9" y="1" width="6" height="6" rx="1.5"/><rect x="1" y="9" width="6" height="6" rx="1.5"/><rect x="9" y="9" width="6" height="6" rx="1.5"/></svg>Dashboard</a>
+      <a href="clients.html" class="nav-item active"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="5" r="2.5"/><path d="M1 13c0-2.76 2.24-5 5-5"/><circle cx="12" cy="8" r="2"/><path d="M9.5 13c0-1.93 1.12-3 2.5-3s2.5 1.07 2.5 3"/></svg>Clients</a>
+      <a href="invoices.html" class="nav-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 1h10a1 1 0 011 1v12l-2-1.5L10 14l-2-1.5L6 14l-2-1.5L2 14V2a1 1 0 011-1z"/><path d="M5 5h6M5 8h6M5 11h3"/></svg>Invoices</a>
+      <a href="updates.html" class="nav-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6.5"/><path d="M8 4.5v4l2.5 1.5"/></svg>Updates</a>
+      <a href="admin-support.html" class="nav-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 10.5a2 2 0 01-2 2H4.5L1.5 15V3.5a2 2 0 012-2h8.5a2 2 0 012 2v7z"/></svg>Support</a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-row">
+        <div class="user-avatar">JR</div>
+        <div><div class="user-name">Justin R.</div></div>
+        <button class="logout-btn" onclick="handleLogout()"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3"/><path d="M11 11l3-3-3-3"/><path d="M14 8H6"/></svg></button>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="page-header">
+      <div>
+        <div class="page-label">Admin</div>
+        <div class="page-title">Client <span>profiles</span></div>
+      </div>
+      <div class="search-bar">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6.5" cy="6.5" r="5"/><path d="M10.5 10.5L14 14" stroke-linecap="round"/></svg>
+        <input type="text" id="searchInput" placeholder="Search clients..." oninput="filterClients(this.value)" />
+      </div>
+    </div>
+    <div class="client-grid" id="clientGrid">
+      <div class="empty" style="grid-column:1/-1;">Loading clients...</div>
+    </div>
+  </main>
+</div>
+
+<!-- PROFILE DRAWER -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-head">
+    <div class="drawer-title" id="drawerTitle">Client profile</div>
+    <button class="drawer-close" onclick="closeDrawer()">
+      <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4l8 8M12 4l-8 8"/></svg>
+    </button>
+  </div>
+  <div class="drawer-tabs">
+    <button class="drawer-tab active" onclick="switchTab('profile')">Profile</button>
+    <button class="drawer-tab" onclick="switchTab('domain')">Domain</button>
+    <button class="drawer-tab" onclick="switchTab('hosting')">Hosting</button>
+    <button class="drawer-tab" onclick="switchTab('credentials')">Credentials</button>
+    <button class="drawer-tab" onclick="switchTab('document')">Send doc</button>
+  </div>
+  <div class="drawer-body" id="drawerBody"></div>
+  <div class="drawer-footer">
+    <button class="btn btn-ghost" onclick="closeDrawer()">Cancel</button>
+    <button class="btn btn-primary" id="saveBtn" onclick="handleSave()">Save changes</button>
+  </div>
+</div>
+
+<script>
+  const API      = 'https://script.google.com/macros/s/AKfycbyxg5LlS9eUx6VSiD_VSzE0RD94STkBAK4Hc-h14T_YU5ikqXGE3dz-Fvt1kCAE-9XRLw/exec';
+  const token    = localStorage.getItem('sc_token');
+  const clientId = localStorage.getItem('sc_client_id');
+  if (!token) window.location.href = 'login.html';
+
+  let allClients   = [];
+  let currentClient = null;
+  let currentDetails = {};
+  let currentTab   = 'profile';
+
+  async function api(action, extra = {}) {
+    const res = await fetch(API, { method: 'POST', body: JSON.stringify({ action, token, client_id: clientId, ...extra }) });
+    return res.json();
+  }
+
+  async function loadClients() {
+    try {
+      const res = await api('adminGetClients');
+      if (!res.ok) { window.location.href = 'login.html'; return; }
+      allClients = res.clients.filter(c => c.client_id !== clientId);
+      renderGrid(allClients);
+    } catch(e) { console.error(e); }
+  }
+
+  function renderGrid(clients) {
+    const grid = document.getElementById('clientGrid');
+    if (!clients.length) {
+      grid.innerHTML = '<div class="empty" style="grid-column:1/-1;">No clients found.</div>';
+      return;
+    }
+    grid.innerHTML = clients.map((c, i) => {
+      const initials = (c.client_name || '?').split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
+      const isActive = (c.status || 'Active').toLowerCase() === 'active';
+      return `
+        <div class="client-card" style="animation-delay:${i * 0.04}s" onclick="openProfile('${c.client_id}')">
+          <div class="client-card-top">
+            <div class="client-avatar">${initials}</div>
+            <div>
+              <div class="client-name">${c.client_name || '—'}</div>
+              <div class="client-biz">${c.business_name || '—'}</div>
+            </div>
+          </div>
+          <div class="client-meta">
+            ${c.contact_email ? `<div class="client-meta-row"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="4" width="14" height="9" rx="1.5"/><path d="M1 4l7 5.5L15 4"/></svg>${c.contact_email}</div>` : ''}
+            ${c.domain ? `<div class="client-meta-row"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6.5"/><path d="M8 1.5C8 1.5 5.5 4 5.5 8s2.5 6.5 2.5 6.5M8 1.5C8 1.5 10.5 4 10.5 8s-2.5 6.5-2.5 6.5M1.5 8h13"/></svg>${c.domain}</div>` : ''}
+            ${c.plan_name ? `<div class="client-meta-row"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1l1.9 3.9 4.1.6-3 2.9.7 4.1L8 10.4l-3.7 2.1.7-4.1-3-2.9 4.1-.6z"/></svg>${c.plan_name}${c.monthly_rate ? ' · $' + c.monthly_rate + '/mo' : ''}</div>` : ''}
+          </div>
+          <div class="client-footer">
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="status-dot ${isActive ? '' : 'inactive'}"></div>
+              <span class="status-text">${c.status || 'Active'}</span>
+            </div>
+            <button class="profile-btn">View profile →</button>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  function filterClients(q) {
+    const s = q.toLowerCase();
+    const filtered = allClients.filter(c =>
+      (c.client_name || '').toLowerCase().includes(s) ||
+      (c.business_name || '').toLowerCase().includes(s) ||
+      (c.contact_email || '').toLowerCase().includes(s) ||
+      (c.domain || '').toLowerCase().includes(s)
+    );
+    renderGrid(filtered);
+  }
+
+  async function openProfile(cid) {
+    currentClient  = allClients.find(c => c.client_id === cid);
+    if (!currentClient) return;
+
+    document.getElementById('drawerTitle').textContent = currentClient.business_name || currentClient.client_name;
+    document.getElementById('drawerOverlay').classList.add('show');
+    document.getElementById('drawer').classList.add('show');
+
+    // Load details
+    try {
+      const res = await api('adminGetClientDetails', { client_id: cid });
+      currentDetails = res.details || {};
+    } catch(e) { currentDetails = {}; }
+
+    switchTab('profile');
+  }
+
+  function closeDrawer() {
+    document.getElementById('drawer').classList.remove('show');
+    document.getElementById('drawerOverlay').classList.remove('show');
+    currentClient = null;
+    currentDetails = {};
+  }
+
+  function switchTab(tab) {
+    currentTab = tab;
+    document.querySelectorAll('.drawer-tab').forEach((t, i) => {
+      t.classList.toggle('active', ['profile','domain','hosting','credentials','document'][i] === tab);
+    });
+    const saveBtn = document.getElementById('saveBtn');
+    saveBtn.style.display = tab === 'document' ? 'none' : 'flex';
+
+    const body = document.getElementById('drawerBody');
+    const c = currentClient;
+    const d = currentDetails;
+
+    if (tab === 'profile') {
+      body.innerHTML = `
+        <div class="alert alert-success" id="profileSuccess">Saved successfully.</div>
+        <div class="alert alert-error" id="profileError">Error saving.</div>
+        <div class="form-section">
+          <div class="form-section-title"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.31 2.69-6 6-6s6 2.69 6 6"/></svg>Contact</div>
+          <div class="field-grid">
+            <div class="field"><label>Full name</label><input type="text" id="p_name" value="${c.client_name || ''}" /></div>
+            <div class="field"><label>Business name</label><input type="text" id="p_biz" value="${c.business_name || ''}" /></div>
+            <div class="field"><label>Email</label><input type="email" id="p_email" value="${c.contact_email || ''}" /></div>
+            <div class="field"><label>Phone</label><input type="text" id="p_phone" value="${c.phone || ''}" /></div>
+          </div>
+        </div>
+        <div class="form-section">
+          <div class="form-section-title"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="3" width="14" height="10" rx="2"/><path d="M1 6h14"/></svg>Billing</div>
+          <div class="field-grid">
+            <div class="field"><label>Plan name</label><input type="text" id="p_plan" value="${c.plan_name || ''}" /></div>
+            <div class="field"><label>Monthly rate ($)</label><input type="number" id="p_rate" value="${c.monthly_rate || ''}" /></div>
+            <div class="field"><label>Billing day</label><input type="number" id="p_billing_day" value="${c.billing_day || 1}" min="1" max="28" /></div>
+            <div class="field"><label>Status</label><select id="p_status"><option ${c.status==='Active'?'selected':''}>Active</option><option ${c.status==='Inactive'?'selected':''}>Inactive</option></select></div>
+          </div>
+        </div>
+        <div class="form-section">
+          <div class="form-section-title"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6.5"/><path d="M8 1.5C8 1.5 5.5 4 5.5 8s2.5 6.5 2.5 6.5M8 1.5C8 1.5 10.5 4 10.5 8s-2.5 6.5-2.5 6.5M1.5 8h13"/></svg>Website</div>
+          <div class="field-grid">
+            <div class="field"><label>Domain</label><input type="text" id="p_domain" value="${c.domain || ''}" /></div>
+            <div class="field"><label>Site status</label><select id="p_site_status"><option ${c.site_status==='Online'?'selected':''}>Online</option><option ${c.site_status==='Offline'?'selected':''}>Offline</option><option ${c.site_status==='Maintenance'?'selected':''}>Maintenance</option></select></div>
+            <div class="field"><label>SSL status</label><select id="p_ssl_status"><option ${c.ssl_status==='Active'?'selected':''}>Active</option><option ${c.ssl_status==='Expired'?'selected':''}>Expired</option></select></div>
+            <div class="field"><label>SSL expiry</label><input type="text" id="p_ssl_expiry" value="${c.ssl_expiry || ''}" placeholder="MM/DD/YYYY" /></div>
+          </div>
+        </div>
+        <div class="form-section">
+          <div class="form-section-title"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 2h12v10H2zM5 15h6"/><path d="M8 12v3"/></svg>Notes</div>
+          <div class="field field-grid single"><label>Internal notes (private)</label><textarea id="p_notes">${c.notes || ''}</textarea></div>
+        </div>`;
+    }
+
+    if (tab === 'domain') {
+      body.innerHTML = `
+        <div class="alert alert-success" id="domainSuccess">Domain details saved.</div>
+        <div class="alert alert-error" id="domainError">Error saving.</div>
+        <div class="form-section">
+          <div class="form-section-title"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6.5"/><path d="M8 1.5C8 1.5 5.5 4 5.5 8s2.5 6.5 2.5 6.5M8 1.5C8 1.5 10.5 4 10.5 8s-2.5 6.5-2.5 6.5M1.5 8h13"/></svg>Domain registrar</div>
+          <div class="field-grid">
+            <div class="field"><label>Registrar</label><input type="text" id="d_registrar" value="${d.domain_registrar || ''}" placeholder="e.g. Namecheap, GoDaddy" /></div>
+            <div class="field"><label>Username</label><input type="text" id="d_username" value="${d.domain_username || ''}" /></div>
+            <div class="field pw-toggle"><label>Password</label><input type="password" id="d_password" class="pw-field" value="${d.domain_password || ''}" /><button type="button" onclick="togglePw('d_password')"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="3"/><path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z"/></svg></button></div>
+            <div class="field"><label>Purchase date</label><input type="date" id="d_purchase" value="${d.domain_purchase_date || ''}" /></div>
+            <div class="field"><label>Expiry date</label><input type="date" id="d_expiry" value="${d.domain_expiry_date || ''}" /></div>
+            <div class="field"><label>Renewal cost ($)</label><input type="number" id="d_cost" value="${d.domain_renewal_cost || ''}" /></div>
+          </div>
+          <div class="field field-grid single" style="margin-top:12px;"><label>Notes</label><textarea id="d_notes">${d.domain_notes || ''}</textarea></div>
+        </div>
+        <div class="form-section">
+          <div class="form-section-title"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 8h14M8 1l-3 7 3 7 3-7z"/></svg>DNS</div>
+          <div class="field-grid">
+            <div class="field"><label>DNS provider</label><input type="text" id="dns_provider" value="${d.dns_provider || ''}" placeholder="e.g. Cloudflare" /></div>
+            <div class="field"><label>Username</label><input type="text" id="dns_username" value="${d.dns_username || ''}" /></div>
+            <div class="field pw-toggle"><label>Password</label><input type="password" id="dns_password" class="pw-field" value="${d.dns_password || ''}" /><button type="button" onclick="togglePw('dns_password')"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="3"/><path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z"/></svg></button></div>
+            <div class="field"><label>Notes</label><input type="text" id="dns_notes" value="${d.dns_notes || ''}" /></div>
+          </div>
+        </div>
+        <div class="form-section">
+          <div class="form-section-title"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="3" width="14" height="10" rx="2"/><path d="M5 7h6M5 10h4"/></svg>SSL Certificate</div>
+          <div class="field-grid">
+            <div class="field"><label>SSL provider</label><input type="text" id="ssl_provider" value="${d.ssl_provider || ''}" placeholder="e.g. Let's Encrypt" /></div>
+            <div class="field"><label>Expiry date</label><input type="date" id="ssl_expiry_date" value="${d.ssl_expiry || ''}" /></div>
+            <div class="field field-grid single"><label>Notes</label><input type="text" id="ssl_notes" value="${d.ssl_notes || ''}" /></div>
+          </div>
+        </div>`;
+    }
+
+    if (tab === 'hosting') {
+      body.innerHTML = `
+        <div class="alert alert-success" id="hostingSuccess">Hosting details saved.</div>
+        <div class="alert alert-error" id="hostingError">Error saving.</div>
+        <div class="form-section">
+          <div class="form-section-title"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="3" width="14" height="4" rx="1.5"/><rect x="1" y="9" width="14" height="4" rx="1.5"/><circle cx="3.5" cy="5" r="0.75" fill="currentColor"/><circle cx="3.5" cy="11" r="0.75" fill="currentColor"/></svg>Hosting</div>
+          <div class="field-grid">
+            <div class="field"><label>Provider</label><input type="text" id="h_provider" value="${d.hosting_provider || ''}" placeholder="e.g. SiteGround, WP Engine" /></div>
+            <div class="field"><label>Dashboard URL</label><input type="text" id="h_url" value="${d.hosting_url || ''}" /></div>
+            <div class="field"><label>Username</label><input type="text" id="h_username" value="${d.hosting_username || ''}" /></div>
+            <div class="field pw-toggle"><label>Password</label><input type="password" id="h_password" class="pw-field" value="${d.hosting_password || ''}" /><button type="button" onclick="togglePw('h_password')"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="3"/><path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z"/></svg></button></div>
+            <div class="field"><label>Plan</label><input type="text" id="h_plan" value="${d.hosting_plan || ''}" /></div>
+            <div class="field"><label>Monthly cost ($)</label><input type="number" id="h_cost" value="${d.hosting_cost || ''}" /></div>
+            <div class="field"><label>Renewal date</label><input type="date" id="h_renewal" value="${d.hosting_renewal_date || ''}" /></div>
+            <div class="field"><label>Notes</label><input type="text" id="h_notes" value="${d.hosting_notes || ''}" /></div>
+          </div>
+        </div>`;
+    }
+
+    if (tab === 'credentials') {
+      body.innerHTML = `
+        <div class="alert alert-success" id="credSuccess">Credentials saved.</div>
+        <div class="alert alert-error" id="credError">Error saving.</div>
+        <div class="form-section">
+          <div class="form-section-title"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="8" width="12" height="7" rx="1.5"/><path d="M5 8V5.5a3 3 0 016 0V8"/><circle cx="8" cy="12" r="1" fill="currentColor"/></svg>CMS / Platform</div>
+          <div class="field-grid">
+            <div class="field"><label>Platform</label><input type="text" id="cms_platform" value="${d.cms_platform || ''}" placeholder="e.g. WordPress, Webflow" /></div>
+            <div class="field"><label>Admin URL</label><input type="text" id="cms_url" value="${d.cms_url || ''}" /></div>
+            <div class="field"><label>Username</label><input type="text" id="cms_username" value="${d.cms_username || ''}" /></div>
+            <div class="field pw-toggle"><label>Password</label><input type="password" id="cms_password" class="pw-field" value="${d.cms_password || ''}" /><button type="button" onclick="togglePw('cms_password')"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="3"/><path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z"/></svg></button></div>
+            <div class="field field-grid single"><label>Notes</label><input type="text" id="cms_notes" value="${d.cms_notes || ''}" /></div>
+          </div>
+        </div>
+        <div class="form-section">
+          <div class="form-section-title"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="4" width="14" height="9" rx="1.5"/><path d="M1 4l7 5.5L15 4"/></svg>Email</div>
+          <div class="field-grid">
+            <div class="field"><label>Provider</label><input type="text" id="email_provider" value="${d.email_provider || ''}" placeholder="e.g. Google Workspace" /></div>
+            <div class="field"><label>Username / Email</label><input type="text" id="email_username" value="${d.email_username || ''}" /></div>
+            <div class="field pw-toggle"><label>Password</label><input type="password" id="email_password" class="pw-field" value="${d.email_password || ''}" /><button type="button" onclick="togglePw('email_password')"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="3"/><path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z"/></svg></button></div>
+            <div class="field"><label>Notes</label><input type="text" id="email_notes" value="${d.email_notes || ''}" /></div>
+          </div>
+        </div>
+        <div class="form-section">
+          <div class="form-section-title"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6.5"/><path d="M8 5v4M8 11v.5"/></svg>Other logins & notes</div>
+          <div class="field field-grid single"><label>Any other credentials or notes</label><textarea id="other_logins" style="min-height:120px;">${d.other_logins || ''}</textarea></div>
+        </div>
+        <div class="form-section">
+          <div class="form-section-title">Internal notes</div>
+          <div class="field field-grid single"><label>Private notes (not sent to client)</label><textarea id="internal_notes">${d.internal_notes || ''}</textarea></div>
+        </div>`;
+    }
+
+    if (tab === 'document') {
+      body.innerHTML = `
+        <div class="alert alert-success" id="docSuccess">Document emailed to client successfully!</div>
+        <div class="alert alert-error" id="docError">Error sending document.</div>
+        <p style="font-size:14px;color:var(--muted);margin:0 0 20px 0;line-height:1.6;">Select which sections to include in the document emailed to <strong style="color:#fff;">${c.contact_email}</strong>.</p>
+        <div class="doc-options">
+          <div class="doc-option"><input type="checkbox" id="inc_domain" checked /><label for="inc_domain">Domain details</label></div>
+          <div class="doc-option"><input type="checkbox" id="inc_hosting" checked /><label for="inc_hosting">Hosting details</label></div>
+          <div class="doc-option"><input type="checkbox" id="inc_dns" checked /><label for="inc_dns">DNS details</label></div>
+          <div class="doc-option"><input type="checkbox" id="inc_ssl" checked /><label for="inc_ssl">SSL certificate</label></div>
+          <div class="doc-option"><input type="checkbox" id="inc_cms" checked /><label for="inc_cms">CMS / Platform</label></div>
+          <div class="doc-option"><input type="checkbox" id="inc_email" checked /><label for="inc_email">Email credentials</label></div>
+          <div class="doc-option"><input type="checkbox" id="inc_other" /><label for="inc_other">Other logins</label></div>
+        </div>
+        <div style="background:rgba(249,115,22,0.06);border:1px solid rgba(249,115,22,0.15);border-radius:10px;padding:14px 16px;margin:0 0 20px 0;">
+          <p style="margin:0;font-size:13px;color:rgba(148,163,184,0.8);line-height:1.6;">⚠️ This email will include passwords in plain text. Only send to the client directly. Make sure all details are saved and up to date before sending.</p>
+        </div>
+        <button class="btn btn-green" style="width:100%;justify-content:center;" onclick="handleSendDocument()">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2L1 7l5 2 2 5 6-12z"/></svg>
+          Send credentials document to client
+        </button>`;
+    }
+  }
+
+  async function handleSave() {
+    if (!currentClient) return;
+    const btn = document.getElementById('saveBtn');
+    btn.disabled = true; btn.textContent = 'Saving...';
+
+    try {
+      if (currentTab === 'profile') {
+        const res = await api('adminSaveClient', { client: {
+          client_id:    currentClient.client_id,
+          client_name:  document.getElementById('p_name').value.trim(),
+          business_name: document.getElementById('p_biz').value.trim(),
+          contact_email: document.getElementById('p_email').value.trim(),
+          phone:         document.getElementById('p_phone').value.trim(),
+          plan_name:     document.getElementById('p_plan').value.trim(),
+          monthly_rate:  document.getElementById('p_rate').value,
+          billing_day:   document.getElementById('p_billing_day').value,
+          status:        document.getElementById('p_status').value,
+          domain:        document.getElementById('p_domain').value.trim(),
+          site_status:   document.getElementById('p_site_status').value,
+          ssl_status:    document.getElementById('p_ssl_status').value,
+          ssl_expiry:    document.getElementById('p_ssl_expiry').value.trim(),
+          notes:         document.getElementById('p_notes').value.trim(),
+        }});
+        showAlert('profileSuccess', 'profileError', res.ok);
+        if (res.ok) { await loadClients(); currentClient = allClients.find(c => c.client_id === currentClient.client_id); }
+      }
+
+      if (currentTab === 'domain') {
+        const res = await api('adminSaveClientDetails', { details: {
+          client_id:          currentClient.client_id,
+          domain_registrar:   document.getElementById('d_registrar').value.trim(),
+          domain_username:    document.getElementById('d_username').value.trim(),
+          domain_password:    document.getElementById('d_password').value,
+          domain_purchase_date: document.getElementById('d_purchase').value,
+          domain_expiry_date: document.getElementById('d_expiry').value,
+          domain_renewal_cost: document.getElementById('d_cost').value,
+          domain_notes:       document.getElementById('d_notes').value.trim(),
+          dns_provider:       document.getElementById('dns_provider').value.trim(),
+          dns_username:       document.getElementById('dns_username').value.trim(),
+          dns_password:       document.getElementById('dns_password').value,
+          dns_notes:          document.getElementById('dns_notes').value.trim(),
+          ssl_provider:       document.getElementById('ssl_provider').value.trim(),
+          ssl_expiry:         document.getElementById('ssl_expiry_date').value,
+          ssl_notes:          document.getElementById('ssl_notes').value.trim(),
+        }});
+        showAlert('domainSuccess', 'domainError', res.ok);
+        if (res.ok) currentDetails = { ...currentDetails, ...await refreshDetails() };
+      }
+
+      if (currentTab === 'hosting') {
+        const res = await api('adminSaveClientDetails', { details: {
+          client_id:          currentClient.client_id,
+          hosting_provider:   document.getElementById('h_provider').value.trim(),
+          hosting_url:        document.getElementById('h_url').value.trim(),
+          hosting_username:   document.getElementById('h_username').value.trim(),
+          hosting_password:   document.getElementById('h_password').value,
+          hosting_plan:       document.getElementById('h_plan').value.trim(),
+          hosting_cost:       document.getElementById('h_cost').value,
+          hosting_renewal_date: document.getElementById('h_renewal').value,
+          hosting_notes:      document.getElementById('h_notes').value.trim(),
+        }});
+        showAlert('hostingSuccess', 'hostingError', res.ok);
+        if (res.ok) currentDetails = { ...currentDetails, ...await refreshDetails() };
+      }
+
+      if (currentTab === 'credentials') {
+        const res = await api('adminSaveClientDetails', { details: {
+          client_id:      currentClient.client_id,
+          cms_platform:   document.getElementById('cms_platform').value.trim(),
+          cms_url:        document.getElementById('cms_url').value.trim(),
+          cms_username:   document.getElementById('cms_username').value.trim(),
+          cms_password:   document.getElementById('cms_password').value,
+          cms_notes:      document.getElementById('cms_notes').value.trim(),
+          email_provider: document.getElementById('email_provider').value.trim(),
+          email_username: document.getElementById('email_username').value.trim(),
+          email_password: document.getElementById('email_password').value,
+          email_notes:    document.getElementById('email_notes').value.trim(),
+          other_logins:   document.getElementById('other_logins').value.trim(),
+          internal_notes: document.getElementById('internal_notes').value.trim(),
+        }});
+        showAlert('credSuccess', 'credError', res.ok);
+        if (res.ok) currentDetails = { ...currentDetails, ...await refreshDetails() };
+      }
+    } catch(e) { console.error(e); }
+
+    btn.disabled = false; btn.textContent = 'Save changes';
+  }
+
+  async function refreshDetails() {
+    const res = await api('adminGetClientDetails', { client_id: currentClient.client_id });
+    return res.details || {};
+  }
+
+  async function handleSendDocument() {
+    const btn = document.querySelector('.btn-green');
+    btn.disabled = true; btn.textContent = 'Sending...';
+    ['docSuccess','docError'].forEach(id => document.getElementById(id).classList.remove('show'));
+
+    try {
+      const res = await api('adminSendClientDocument', {
+        client_id: currentClient.client_id,
+        include_fields: {
+          domain:  document.getElementById('inc_domain').checked,
+          hosting: document.getElementById('inc_hosting').checked,
+          dns:     document.getElementById('inc_dns').checked,
+          ssl:     document.getElementById('inc_ssl').checked,
+          cms:     document.getElementById('inc_cms').checked,
+          email:   document.getElementById('inc_email').checked,
+          other:   document.getElementById('inc_other').checked,
+        }
+      });
+      document.getElementById(res.ok ? 'docSuccess' : 'docError').classList.add('show');
+    } catch(e) {
+      document.getElementById('docError').classList.add('show');
+    }
+    btn.disabled = false; btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2L1 7l5 2 2 5 6-12z"/></svg> Send credentials document to client';
+  }
+
+  function showAlert(successId, errorId, ok) {
+    document.getElementById(successId).classList.toggle('show', ok);
+    document.getElementById(errorId).classList.toggle('show', !ok);
+    if (ok) setTimeout(() => document.getElementById(successId).classList.remove('show'), 3000);
+  }
+
+  function togglePw(id) {
+    const input = document.getElementById(id);
+    input.type = input.type === 'password' ? 'text' : 'password';
+  }
+
+  function handleLogout() {
+    fetch(API, { method: 'POST', body: JSON.stringify({ action: 'logout', token }) });
+    localStorage.clear();
+    window.location.href = 'login.html';
+  }
+
+  loadClients();
+</script>
+<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.35);">Suncoast Technology · clients.html · v1.0</div>
+</body>
+</html>
