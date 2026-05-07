@@ -323,31 +323,46 @@
     `;
   }
 
-  // STRIPE — opens Stripe Checkout
-  // To activate: replace YOUR_STRIPE_PAYMENT_LINK with your actual Stripe Payment Link URL
-  // Create one at dashboard.stripe.com → Payment Links → + New
-  // Add metadata invoice_id so the webhook can match it
-  function handleStripePayment() {
+  // STRIPE — creates a real checkout session via Apps Script
+  async function handleStripePayment() {
     if (!currentInvoice) return;
-    const stripeLink = 'https://buy.stripe.com/YOUR_STRIPE_PAYMENT_LINK';
-    if (stripeLink.includes('YOUR_STRIPE')) {
-      alert('Stripe payment link not configured yet. Contact Suncoast Technology to pay by card.');
-      return;
+    const btn = document.getElementById('stripeBtn');
+    btn.disabled = true;
+    btn.textContent = 'Loading...';
+    try {
+      const res = await api('createCheckoutSession', { invoice_id: currentInvoice.invoice_id });
+      if (res.ok && res.url) {
+        window.location.href = res.url;
+      } else {
+        alert(res.error || 'Could not create checkout. Please try again.');
+        btn.disabled = false;
+        btn.textContent = 'Pay with card';
+      }
+    } catch(e) {
+      alert('Connection error. Please try again.');
+      btn.disabled = false;
+      btn.textContent = 'Pay with card';
     }
-    window.open(stripeLink + '?client_reference_id=' + currentInvoice.invoice_id, '_blank');
   }
 
-  // PAYPAL — opens PayPal payment page
-  // To activate: replace YOUR_PAYPAL_ME with your actual PayPal.me username
   function handlePayPalPayment() {
-    if (!currentInvoice) return;
-    const paypalMe = 'https://paypal.me/YOUR_PAYPAL_ME';
-    if (paypalMe.includes('YOUR_PAYPAL')) {
-      alert('PayPal not configured yet. Contact Suncoast Technology to pay via PayPal.');
-      return;
-    }
-    window.open(paypalMe + '/' + parseFloat(currentInvoice.amount).toFixed(2), '_blank');
+    alert('Please use card payment or contact us to arrange PayPal.');
   }
+
+  // Check for success/cancelled return from Stripe
+  window.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('paid') === 'true') {
+      document.body.insertAdjacentHTML('afterbegin',
+        '<div style="background:#1E2D3D;border-bottom:1px solid rgba(34,197,94,0.3);padding:14px 24px;text-align:center;font-size:14px;color:#86EFAC;font-family:DM Sans,sans-serif;">Payment successful! Your invoice has been marked paid.</div>'
+      );
+      // Clean URL
+      history.replaceState({}, '', '/billing.html');
+    }
+    if (params.get('cancelled') === 'true') {
+      history.replaceState({}, '', '/billing.html');
+    }
+  });
 
   function formatDate(val) {
     if (!val) return '—';
@@ -365,6 +380,6 @@
   loadBilling();
 </script>
 
-<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.35);">Suncoast Technology · billing.html · v1.0</div>
+<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.35);">Suncoast Technology · billing.html · v2.0</div>
 </body>
 </html>
