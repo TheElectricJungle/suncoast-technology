@@ -86,6 +86,23 @@
     .priority-btn.selected-High{background:rgba(251,191,36,0.1);border-color:rgba(251,191,36,0.3);color:var(--gold);}
     .priority-btn.selected-Urgent{background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.3);color:#FCA5A5;}
   </style>
+
+<script>
+  // Prevent pinch zoom
+  document.addEventListener('touchmove', function(e) {
+    if (e.touches.length > 1) e.preventDefault();
+  }, { passive: false });
+  document.addEventListener('gesturestart', function(e) {
+    e.preventDefault();
+  });
+  // Reset zoom on load/refresh
+  document.addEventListener('DOMContentLoaded', function() {
+    var meta = document.querySelector('meta[name="viewport"]');
+    if (meta) {
+      meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
+    }
+  });
+</script>
 </head>
 <body>
 <canvas id="aurora"></canvas>
