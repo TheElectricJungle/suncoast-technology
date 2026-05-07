@@ -361,7 +361,16 @@
   const _params = new URLSearchParams(window.location.search);
   if (_params.get('paid') === 'true') {
     showPaymentSuccess();
+    const _invoiceId = _params.get('invoice_id');
     history.replaceState({}, '', '/billing.html');
+    // Mark paid directly as fallback in case webhook is delayed
+    if (_invoiceId) {
+      api('adminMarkPaid', { invoice_id: _invoiceId, payment_method: 'Stripe' })
+        .then(() => loadBilling())
+        .catch(() => loadBilling());
+    } else {
+      setTimeout(() => loadBilling(), 2000);
+    }
   }
 
   function formatDate(val) {
@@ -380,7 +389,7 @@
   loadBilling();
 </script>
 
-<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.35);">Suncoast Technology · billing.html · v2.2</div>
+<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.35);">Suncoast Technology · billing.html · v2.3</div>
 
         <div style="font-size:11px;color:var(--muted);margin-top:2px;">Secure payment via Stripe</div>
       </div>
