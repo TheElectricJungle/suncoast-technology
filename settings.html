@@ -78,6 +78,23 @@
     .section-divider{height:1px;background:rgba(255,255,255,0.06);margin:8px 0 20px;}
     .danger-zone{border-color:rgba(239,68,68,0.2);background:rgba(239,68,68,0.03);}
   </style>
+
+<script>
+  // Prevent pinch zoom
+  document.addEventListener('touchmove', function(e) {
+    if (e.touches.length > 1) e.preventDefault();
+  }, { passive: false });
+  document.addEventListener('gesturestart', function(e) {
+    e.preventDefault();
+  });
+  // Reset zoom on load/refresh
+  document.addEventListener('DOMContentLoaded', function() {
+    var meta = document.querySelector('meta[name="viewport"]');
+    if (meta) {
+      meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
+    }
+  });
+</script>
 </head>
 <body>
 <canvas id="aurora"></canvas>
@@ -201,20 +218,23 @@
       const res = await api('getClient');
       if(!res.ok){ window.location.href='login.html'; return; }
       const c = res.client;
-      setUser(c.client_name||'');
-      document.getElementById('fullName').value  = c.client_name||'';
-      document.getElementById('email').value = c.contact_email||'';
-      document.getElementById('phone').value     = c.phone||'';
+      setUser(c.client_name||'User');
+      const nameEl  = document.getElementById('fullName');
+      const emailEl = document.getElementById('email');
+      const phoneEl = document.getElementById('phone');
+      if(nameEl)  nameEl.value  = c.client_name    || '';
+      if(emailEl) emailEl.value = c.contact_email  || '';
+      if(phoneEl) phoneEl.value = c.phone          || '';
       const planEl = document.getElementById('planDetails');
-      if(planEl) planEl.innerHTML = `
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
-          <span style="font-size:13px;color:var(--muted);">Plan</span>
-          <span style="font-size:13px;color:#fff;font-weight:500;">${c.plan_name||'—'}</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;">
-          <span style="font-size:13px;color:var(--muted);">Monthly rate</span>
-          <span style="font-size:13px;color:#fff;font-weight:500;">${c.monthly_rate ? '$'+c.monthly_rate+'/mo' : '—'}</span>
-        </div>`;
+      if(planEl) planEl.innerHTML =
+        '<div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.06);">' +
+          '<span style="font-size:13px;color:var(--muted);">Plan</span>' +
+          '<span style="font-size:13px;color:#fff;font-weight:500;">' + (c.plan_name||'—') + '</span>' +
+        '</div>' +
+        '<div style="display:flex;justify-content:space-between;padding:10px 0;">' +
+          '<span style="font-size:13px;color:var(--muted);">Monthly rate</span>' +
+          '<span style="font-size:13px;color:#fff;font-weight:500;">' + (c.monthly_rate ? '$'+c.monthly_rate+'/mo' : '—') + '</span>' +
+        '</div>';
     } catch(e){ console.error(e); }
   }
   
@@ -223,9 +243,10 @@
     ['profileSuccess','profileError'].forEach(id=>document.getElementById(id).classList.remove('show'));
     try {
       const res = await api('updateClient',{
-        client_name:   document.getElementById('fullName').value.trim(),
-        contact_email: document.getElementById('email').value.trim(),
-        phone:         document.getElementById('phone').value.trim(),
+        fields: {
+          client_name: document.getElementById('fullName').value.trim(),
+          phone:       document.getElementById('phone').value.trim(),
+        }
       });
       document.getElementById(res.ok?'profileSuccess':'profileError').classList.add('show');
       if(res.ok) setUser(document.getElementById('fullName').value.trim());
