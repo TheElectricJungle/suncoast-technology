@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="https://js.stripe.com/v3/"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -323,46 +324,80 @@
     `;
   }
 
-  // STRIPE — creates a real checkout session via Apps Script
+  // STRIPE EMBEDDED CHECKOUT
+  const STRIPE_PK = 'pk_live_51TUJCI5cbdus8ltXhE3JND5IJFtLPkvZXM1tvDDCHHBwbBQpjqWGKpyv7BvU07AHWapibn5gS385F8kjmBHdN0tt009MAgxYd4';
+  let stripeInstance = null;
+  let checkoutInstance = null;
+
   async function handleStripePayment() {
     if (!currentInvoice) return;
     const btn = document.getElementById('stripeBtn');
     btn.disabled = true;
     btn.textContent = 'Loading...';
+
     try {
       const res = await api('createCheckoutSession', { invoice_id: currentInvoice.invoice_id });
-      if (res.ok && res.url) {
-        window.location.href = res.url;
-      } else {
-        alert(res.error || 'Could not create checkout. Please try again.');
+      if (!res.ok || !res.client_secret) {
+        alert(res.error || 'Could not load checkout. Please try again.');
         btn.disabled = false;
         btn.textContent = 'Pay with card';
+        return;
       }
+
+      // Show the checkout overlay
+      document.getElementById('checkoutOverlay').classList.add('show');
+      document.getElementById('checkoutAmount').textContent = '$' + parseFloat(currentInvoice.amount).toFixed(2);
+      document.getElementById('checkoutTitle').textContent = currentInvoice.period || currentInvoice.invoice_id;
+      document.getElementById('stripe-checkout-container').innerHTML = '<div class="checkout-loading">Loading secure payment form...</div>';
+
+      // Initialize Stripe embedded checkout
+      if (!stripeInstance) stripeInstance = Stripe(STRIPE_PK);
+      if (checkoutInstance) { checkoutInstance.destroy(); checkoutInstance = null; }
+
+      checkoutInstance = await stripeInstance.initEmbeddedCheckout({
+        clientSecret: res.client_secret,
+        onComplete: () => {
+          closeCheckout();
+          showPaymentSuccess();
+          setTimeout(() => loadBilling(), 1500);
+        }
+      });
+
+      document.getElementById('stripe-checkout-container').innerHTML = '';
+      checkoutInstance.mount('#stripe-checkout-container');
+
     } catch(e) {
+      console.error(e);
       alert('Connection error. Please try again.');
-      btn.disabled = false;
-      btn.textContent = 'Pay with card';
     }
+
+    btn.disabled = false;
+    btn.textContent = 'Pay with card';
+  }
+
+  function closeCheckout() {
+    document.getElementById('checkoutOverlay').classList.remove('show');
+    if (checkoutInstance) { checkoutInstance.destroy(); checkoutInstance = null; }
+  }
+
+  function showPaymentSuccess() {
+    const banner = document.createElement('div');
+    banner.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#1E2D3D;border-bottom:2px solid #22C55E;padding:14px 24px;text-align:center;font-size:14px;color:#86EFAC;font-family:DM Sans,sans-serif;z-index:200;';
+    banner.textContent = '✓ Payment successful! Your invoice has been marked paid.';
+    document.body.prepend(banner);
+    setTimeout(() => banner.remove(), 5000);
   }
 
   function handlePayPalPayment() {
     alert('Please use card payment or contact us to arrange PayPal.');
   }
 
-  // Check for success/cancelled return from Stripe
-  window.addEventListener('DOMContentLoaded', () => {
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('paid') === 'true') {
-      document.body.insertAdjacentHTML('afterbegin',
-        '<div style="background:#1E2D3D;border-bottom:1px solid rgba(34,197,94,0.3);padding:14px 24px;text-align:center;font-size:14px;color:#86EFAC;font-family:DM Sans,sans-serif;">Payment successful! Your invoice has been marked paid.</div>'
-      );
-      // Clean URL
-      history.replaceState({}, '', '/billing.html');
-    }
-    if (params.get('cancelled') === 'true') {
-      history.replaceState({}, '', '/billing.html');
-    }
-  });
+  // Handle return from Stripe (fallback for non-embedded)
+  const _params = new URLSearchParams(window.location.search);
+  if (_params.get('paid') === 'true') {
+    showPaymentSuccess();
+    history.replaceState({}, '', '/billing.html');
+  }
 
   function formatDate(val) {
     if (!val) return '—';
@@ -380,6 +415,25 @@
   loadBilling();
 </script>
 
-<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.35);">Suncoast Technology · billing.html · v2.0</div>
+<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.35);">Suncoast Technology · billing.html · v2.1</div>
+
+<!-- STRIPE EMBEDDED CHECKOUT OVERLAY -->
+<div class="checkout-overlay" id="checkoutOverlay">
+  <div class="checkout-container">
+    <div class="checkout-header">
+      <div>
+        <div class="checkout-header-title" id="checkoutTitle">Invoice payment</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px;">Secure payment via Stripe</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px;">
+        <div class="checkout-header-amount" id="checkoutAmount"></div>
+        <button class="checkout-close" onclick="closeCheckout()">
+          <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4l8 8M12 4l-8 8"/></svg>
+        </button>
+      </div>
+    </div>
+    <div id="stripe-checkout-container"></div>
+  </div>
+</div>
 </body>
 </html>
