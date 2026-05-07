@@ -124,6 +124,23 @@
     .doc-option input{width:14px;height:14px;accent-color:var(--orange);cursor:pointer;}
     .doc-option label{font-size:13px;color:#fff;cursor:pointer;}
   </style>
+
+<script>
+  // Prevent pinch zoom
+  document.addEventListener('touchmove', function(e) {
+    if (e.touches.length > 1) e.preventDefault();
+  }, { passive: false });
+  document.addEventListener('gesturestart', function(e) {
+    e.preventDefault();
+  });
+  // Reset zoom on load/refresh
+  document.addEventListener('DOMContentLoaded', function() {
+    var meta = document.querySelector('meta[name="viewport"]');
+    if (meta) {
+      meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
+    }
+  });
+</script>
 </head>
 <body>
 <canvas id="aurora"></canvas>
