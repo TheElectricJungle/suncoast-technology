@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
   <title>My Site — Suncoast Technology</title>
-  <!-- Suncoast Technology | my-site.html | v2.0 -->
+  <!-- Suncoast Technology | my-site.html | v3.0 -->
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet"/>
@@ -90,6 +90,24 @@
     * {
       max-width: 100%;
     }
+  
+    /* CF Stats */
+    .cf-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin:0 0 4px;}
+    .cf-stat{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:14px 16px;}
+    .cf-stat-label{font-size:10px;color:rgba(148,163,184,0.5);text-transform:uppercase;letter-spacing:0.08em;margin:0 0 6px;}
+    .cf-stat-value{font-size:20px;font-weight:600;color:#fff;}
+    .cf-stat-sub{font-size:11px;color:rgba(148,163,184,0.5);margin-top:2px;}
+    .cf-live{display:flex;align-items:center;gap:5px;font-size:10px;color:rgba(45,212,191,0.7);margin:0 0 16px;}
+    .cf-live-dot{width:5px;height:5px;border-radius:50%;background:#2DD4BF;animation:pulse 2s ease-in-out infinite;}
+    .security-bar{display:flex;gap:6px;align-items:center;margin-top:8px;}
+    .security-pip{flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,0.06);}
+    .security-pip.on-low{background:#FBBF24;}
+    .security-pip.on-med{background:#4FC3F7;}
+    .security-pip.on-high{background:#22C55E;}
+    .not-connected{text-align:center;padding:32px 20px;}
+    .not-connected-icon{width:44px;height:44px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;}
+    .not-connected p{font-size:13px;color:rgba(148,163,184,0.6);line-height:1.6;}
+
   </style>
 
 <script>
@@ -180,14 +198,29 @@
       <div class="page-label">Your website</div>
       <div class="page-title">My <em>site</em></div>
     </div>
+
+    <!-- Status row -->
     <div class="grid3" id="siteStats">
       <div class="card"><div class="card-title">Site status</div><div id="siteStatus"><span class="badge badge-muted">Loading...</span></div></div>
       <div class="card"><div class="card-title">SSL certificate</div><div id="sslStatus"><span class="badge badge-muted">Loading...</span></div></div>
-      <div class="card"><div class="card-title">SSL expiry</div><div id="sslExpiry" class="card-value" style="font-size:16px;margin-top:4px;">—</div></div>
+      <div class="card"><div class="card-title">Domain</div><div id="domainShort" class="card-value" style="font-size:15px;margin-top:4px;">—</div></div>
     </div>
+
+    <!-- Cloudflare live stats -->
+    <div class="card" id="cfCard">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin:0 0 4px;">
+        <div class="card-title" style="margin:0;">Cloudflare protection</div>
+        <div class="cf-live" id="cfLive" style="display:none;">
+          <span class="cf-live-dot"></span>Live data
+        </div>
+      </div>
+      <div id="cfStats"><div class="empty" style="padding:24px 0;">Loading site data...</div></div>
+    </div>
+
+    <!-- Domain & hosting -->
     <div class="grid2">
       <div class="card">
-        <div class="card-title">Domain</div>
+        <div class="card-title">Domain details</div>
         <div id="domainInfo"><div class="empty">Loading...</div></div>
       </div>
       <div class="card">
@@ -195,6 +228,8 @@
         <div id="hostingInfo"><div class="empty">Loading...</div></div>
       </div>
     </div>
+
+    <!-- Recent updates -->
     <div class="card">
       <div class="card-title">Recent updates</div>
       <div id="updatesSection"><div class="empty">Loading...</div></div>
@@ -202,22 +237,192 @@
   </main>
 </div>
 <script>
-  const API='https://script.google.com/macros/s/AKfycbyxg5LlS9eUx6VSiD_VSzE0RD94STkBAK4Hc-h14T_YU5ikqXGE3dz-Fvt1kCAE-9XRLw/exec';
-  const token=localStorage.getItem('sc_token');
-  const clientId=localStorage.getItem('sc_client_id');
-  if(!token) window.location.href='login.html';
-  async function api(action,extra={}){
-    const res=await fetch(API,{method:'POST',body:JSON.stringify({action,token,client_id:clientId,...extra})});
+  const API = 'https://script.google.com/macros/s/AKfycbyxg5LlS9eUx6VSiD_VSzE0RD94STkBAK4Hc-h14T_YU5ikqXGE3dz-Fvt1kCAE-9XRLw/exec';
+  const token    = localStorage.getItem('sc_token');
+  const clientId = localStorage.getItem('sc_client_id');
+  if (!token) window.location.href = 'login.html';
+
+  async function api(action, extra = {}) {
+    const res = await fetch(API, { method: 'POST', body: JSON.stringify({ action, token, client_id: clientId, ...extra }) });
     return res.json();
   }
-  function handleLogout(){
-    fetch(API,{method:'POST',body:JSON.stringify({action:'logout',token})});
+
+  function handleLogout() {
+    fetch(API, { method: 'POST', body: JSON.stringify({ action: 'logout', token }) });
     localStorage.clear();
-    window.location.href='login.html';
+    window.location.href = 'login.html';
   }
 
-        
-  
+  function badge(text, type) {
+    const colors = {
+      green:  'background:rgba(34,197,94,0.12);color:#86EFAC;border:1px solid rgba(34,197,94,0.2)',
+      red:    'background:rgba(239,68,68,0.12);color:#FCA5A5;border:1px solid rgba(239,68,68,0.2)',
+      gold:   'background:rgba(251,191,36,0.12);color:#FBBF24;border:1px solid rgba(251,191,36,0.2)',
+      blue:   'background:rgba(79,195,247,0.12);color:#4FC3F7;border:1px solid rgba(79,195,247,0.2)',
+      muted:  'background:rgba(255,255,255,0.06);color:rgba(148,163,184,0.7);border:1px solid rgba(255,255,255,0.08)'
+    };
+    return `<span style="display:inline-block;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:500;${colors[type] || colors.muted}">${text}</span>`;
+  }
+
+  function row(label, value) {
+    return `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);">
+      <span style="font-size:12px;color:rgba(148,163,184,0.6);">${label}</span>
+      <span style="font-size:13px;color:#fff;font-weight:500;">${value}</span>
+    </div>`;
+  }
+
+  async function load() {
+    try {
+      const res = await api('getClient');
+      if (!res.ok) { window.location.href = 'login.html'; return; }
+      const c = res.client;
+
+      // Basic status
+      document.getElementById('domainShort').textContent = c.domain || '—';
+      const siteOk = (c.site_status || '').toLowerCase() === 'online';
+      document.getElementById('siteStatus').innerHTML = badge(c.site_status || 'Unknown', siteOk ? 'green' : 'red');
+      const sslOk = (c.ssl_status || '').toLowerCase() === 'active';
+      document.getElementById('sslStatus').innerHTML = badge(c.ssl_status || 'Unknown', sslOk ? 'green' : 'gold');
+
+      // Domain info
+      document.getElementById('domainInfo').innerHTML = c.domain ? `
+        <div>
+          ${row('Domain', '<a href="https://' + c.domain + '" target="_blank" style="color:#4FC3F7;text-decoration:none;">' + c.domain + ' ↗</a>')}
+          ${c.ssl_expiry ? row('SSL expiry', c.ssl_expiry) : ''}
+          ${row('Hosting', c.hosting_status || 'Active')}
+        </div>` : '<div class="empty">No domain on file.</div>';
+
+      // Hosting info
+      document.getElementById('hostingInfo').innerHTML = `
+        <div>
+          ${row('Status', badge(c.hosting_status || 'Active', 'green'))}
+          ${row('Platform', 'GitHub Pages')}
+          ${row('CDN', 'Cloudflare')}
+          ${row('HTTPS', badge('Enforced', 'green'))}
+        </div>`;
+
+      // Load Cloudflare stats if domain exists
+      if (c.domain) {
+        loadCFStats(c.domain);
+      } else {
+        document.getElementById('cfStats').innerHTML = '<div class="not-connected"><div class="not-connected-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(148,163,184,0.4)" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg></div><p>No domain configured for this account.</p></div>';
+      }
+
+      // Updates
+      const upRes = await api('getUpdates');
+      const updates = (upRes.updates || []).slice(0, 5);
+      document.getElementById('updatesSection').innerHTML = updates.length ? updates.map(u => `
+        <div style="padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.05);">
+          <div style="display:flex;align-items:center;gap:8px;margin:0 0 4px;">
+            <span style="font-size:13px;font-weight:500;color:#fff;">${u.title}</span>
+            ${u.category ? `<span style="font-size:10px;background:rgba(79,195,247,0.1);color:#4FC3F7;padding:2px 8px;border-radius:20px;">${u.category}</span>` : ''}
+          </div>
+          <p style="margin:0;font-size:13px;color:rgba(148,163,184,0.7);line-height:1.6;">${u.content || ''}</p>
+          <div style="font-size:11px;color:rgba(148,163,184,0.4);margin-top:6px;">${new Date(u.created_at).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})}</div>
+        </div>`).join('') : '<div class="empty">No updates yet.</div>';
+
+    } catch(e) { console.error(e); }
+  }
+
+  async function loadCFStats(domain) {
+    try {
+      const res = await api('getCloudflareStats', { domain });
+      if (!res.ok) {
+        document.getElementById('cfStats').innerHTML = `<div class="not-connected">
+          <div class="not-connected-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(148,163,184,0.4)" stroke-width="1.5"><path d="M13 16h-1v-4h-1m1-4h.01"/><circle cx="12" cy="12" r="9"/></svg></div>
+          <p>Domain not yet connected to Cloudflare.</p>
+        </div>`;
+        return;
+      }
+
+      // Show live indicator
+      document.getElementById('cfLive').style.display = 'flex';
+
+      // Security level label
+      const secLabels = { off: 'Off', essentially_off: 'Minimal', low: 'Low', medium: 'Medium', high: 'High', under_attack: 'Under Attack Mode' };
+      const secLabel  = secLabels[res.security_level] || res.security_level || 'Medium';
+      const secPips   = { off: 0, essentially_off: 1, low: 1, medium: 2, high: 3, under_attack: 3 };
+      const secCount  = secPips[res.security_level] || 2;
+      const secColor  = secCount === 3 ? 'on-high' : secCount === 2 ? 'on-med' : 'on-low';
+
+      // SSL mode label
+      const sslLabels = { off: 'Off', flexible: 'Flexible', full: 'Full', strict: 'Full (Strict)' };
+      const sslLabel  = sslLabels[res.ssl_mode] || res.ssl_mode || 'Full';
+      const sslBadge  = res.ssl_mode === 'strict' || res.ssl_mode === 'full' ? 'green' : 'gold';
+
+      // Zone status
+      const zoneOk = res.zone_status === 'active';
+
+      document.getElementById('cfStats').innerHTML = `
+        <div class="cf-grid">
+          <div class="cf-stat">
+            <div class="cf-stat-label">Cloudflare</div>
+            <div class="cf-stat-value" style="font-size:14px;">${badge(zoneOk ? 'Active' : (res.zone_status || 'Pending'), zoneOk ? 'green' : 'gold')}</div>
+            <div class="cf-stat-sub">Zone status</div>
+          </div>
+          <div class="cf-stat">
+            <div class="cf-stat-label">SSL mode</div>
+            <div class="cf-stat-value" style="font-size:14px;">${badge(sslLabel, sslBadge)}</div>
+            <div class="cf-stat-sub">Encryption</div>
+          </div>
+          <div class="cf-stat">
+            <div class="cf-stat-label">HTTPS</div>
+            <div class="cf-stat-value" style="font-size:14px;">${badge(res.always_https === 'on' ? 'Enforced' : 'Optional', res.always_https === 'on' ? 'green' : 'gold')}</div>
+            <div class="cf-stat-sub">Force redirect</div>
+          </div>
+          <div class="cf-stat">
+            <div class="cf-stat-label">Security</div>
+            <div style="margin:6px 0 4px;">
+              <div class="security-bar">
+                <div class="security-pip ${secCount >= 1 ? secColor : ''}"></div>
+                <div class="security-pip ${secCount >= 2 ? secColor : ''}"></div>
+                <div class="security-pip ${secCount >= 3 ? secColor : ''}"></div>
+              </div>
+            </div>
+            <div class="cf-stat-sub">${secLabel}</div>
+          </div>
+          ${res.requests_24h !== undefined ? `
+          <div class="cf-stat">
+            <div class="cf-stat-label">Requests</div>
+            <div class="cf-stat-value">${(res.requests_24h || 0).toLocaleString()}</div>
+            <div class="cf-stat-sub">Last 24 hours</div>
+          </div>` : ''}
+          ${res.pageviews_24h !== undefined ? `
+          <div class="cf-stat">
+            <div class="cf-stat-label">Page views</div>
+            <div class="cf-stat-value">${(res.pageviews_24h || 0).toLocaleString()}</div>
+            <div class="cf-stat-sub">Last 24 hours</div>
+          </div>` : ''}
+          ${res.threats_24h !== undefined ? `
+          <div class="cf-stat">
+            <div class="cf-stat-label">Threats blocked</div>
+            <div class="cf-stat-value" style="color:${res.threats_24h > 0 ? '#FBBF24' : '#22C55E'}">${(res.threats_24h || 0).toLocaleString()}</div>
+            <div class="cf-stat-sub">Last 24 hours</div>
+          </div>` : ''}
+          ${res.bandwidth_mb !== undefined ? `
+          <div class="cf-stat">
+            <div class="cf-stat-label">Bandwidth</div>
+            <div class="cf-stat-value">${res.bandwidth_mb || 0} <span style="font-size:13px;color:rgba(148,163,184,0.5);">MB</span></div>
+            <div class="cf-stat-sub">Last 24 hours</div>
+          </div>` : ''}
+          ${res.dns_record_count ? `
+          <div class="cf-stat">
+            <div class="cf-stat-label">DNS records</div>
+            <div class="cf-stat-value">${res.dns_record_count}</div>
+            <div class="cf-stat-sub">Active records</div>
+          </div>` : ''}
+          <div class="cf-stat">
+            <div class="cf-stat-label">Plan</div>
+            <div class="cf-stat-value" style="font-size:14px;">${badge(res.plan || 'Free', 'blue')}</div>
+            <div class="cf-stat-sub">Cloudflare tier</div>
+          </div>
+        </div>`;
+
+    } catch(e) {
+      document.getElementById('cfStats').innerHTML = '<div class="empty">Could not load Cloudflare data.</div>';
+    }
+  }
+
   load();
 </script>
 
