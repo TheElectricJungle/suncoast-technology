@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
   <title>My Site — Suncoast Technology</title>
-  <!-- Suncoast Technology | my-site.html | v3.1 -->
+  <!-- Suncoast Technology | my-site.html | v3.2 -->
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet"/>
@@ -199,39 +199,65 @@
       <div class="page-title">My <em>site</em></div>
     </div>
 
-    <!-- Status row -->
-    <div class="grid3" id="siteStats">
-      <div class="card"><div class="card-title">Site status</div><div id="siteStatus"><span class="badge badge-muted">Loading...</span></div></div>
-      <div class="card"><div class="card-title">SSL certificate</div><div id="sslStatus"><span class="badge badge-muted">Loading...</span></div></div>
-      <div class="card"><div class="card-title">Domain</div><div id="domainShort" class="card-value" style="font-size:15px;margin-top:4px;">—</div></div>
+    <!-- BIG STATUS HERO ROW -->
+    <div class="grid3">
+      <div class="card" style="text-align:center;padding:28px 20px;">
+        <div style="font-size:36px;margin:0 0 10px;">🌐</div>
+        <div style="font-size:11px;color:rgba(148,163,184,0.5);text-transform:uppercase;letter-spacing:0.08em;margin:0 0 8px;">Site status</div>
+        <div id="siteStatus"><span class="badge badge-muted">Loading...</span></div>
+        <div id="siteUrl" style="font-size:12px;color:rgba(148,163,184,0.4);margin-top:8px;"></div>
+      </div>
+      <div class="card" style="text-align:center;padding:28px 20px;">
+        <div style="font-size:36px;margin:0 0 10px;">🔒</div>
+        <div style="font-size:11px;color:rgba(148,163,184,0.5);text-transform:uppercase;letter-spacing:0.08em;margin:0 0 8px;">SSL certificate</div>
+        <div id="sslStatus"><span class="badge badge-muted">Loading...</span></div>
+        <div id="sslExpiry" style="font-size:12px;color:rgba(148,163,184,0.4);margin-top:8px;"></div>
+      </div>
+      <div class="card" style="text-align:center;padding:28px 20px;">
+        <div style="font-size:36px;margin:0 0 10px;">🛡️</div>
+        <div style="font-size:11px;color:rgba(148,163,184,0.5);text-transform:uppercase;letter-spacing:0.08em;margin:0 0 8px;">Cloudflare</div>
+        <div id="cfStatus"><span class="badge badge-muted">Loading...</span></div>
+        <div style="font-size:12px;color:rgba(148,163,184,0.4);margin-top:8px;">DDoS protection active</div>
+      </div>
     </div>
 
-    <!-- Cloudflare live stats -->
+    <!-- CLOUDFLARE LIVE STATS -->
     <div class="card" id="cfCard">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin:0 0 4px;">
-        <div class="card-title" style="margin:0;">Cloudflare protection</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin:0 0 20px;">
+        <div>
+          <div class="card-title" style="margin:0 0 2px;">⚡ Live traffic & security</div>
+          <div style="font-size:12px;color:rgba(148,163,184,0.4);">Updated in real time from Cloudflare</div>
+        </div>
         <div class="cf-live" id="cfLive" style="display:none;">
-          <span class="cf-live-dot"></span>Live data
+          <span class="cf-live-dot"></span>Live
         </div>
       </div>
-      <div id="cfStats"><div class="empty" style="padding:24px 0;">Loading site data...</div></div>
+      <div id="cfStats"><div class="empty" style="padding:24px 0;">Loading Cloudflare data...</div></div>
     </div>
 
-    <!-- Domain & hosting -->
+    <!-- DOMAIN + HOSTING -->
     <div class="grid2">
       <div class="card">
-        <div class="card-title">Domain details</div>
+        <div class="card-title">🌍 Domain</div>
         <div id="domainInfo"><div class="empty">Loading...</div></div>
       </div>
       <div class="card">
-        <div class="card-title">Hosting</div>
+        <div class="card-title">🖥️ Hosting</div>
         <div id="hostingInfo"><div class="empty">Loading...</div></div>
       </div>
     </div>
 
-    <!-- Recent updates -->
+    <!-- QUICK ACTIONS -->
     <div class="card">
-      <div class="card-title">Recent updates</div>
+      <div class="card-title">⚡ Quick actions</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-top:4px;" id="quickActions">
+        <div style="opacity:0.4;font-size:12px;color:var(--muted);padding:10px 0;">Loading...</div>
+      </div>
+    </div>
+
+    <!-- RECENT UPDATES -->
+    <div class="card">
+      <div class="card-title">📋 Recent updates to your site</div>
       <div id="updatesSection"><div class="empty">Loading...</div></div>
     </div>
   </main>
@@ -271,57 +297,103 @@
     </div>`;
   }
 
+  function statusBadge(text, type) {
+    const styles = {
+      green: 'background:rgba(34,197,94,0.15);color:#4ADE80;border:1px solid rgba(34,197,94,0.3);font-size:14px;padding:6px 18px;',
+      red:   'background:rgba(239,68,68,0.15);color:#F87171;border:1px solid rgba(239,68,68,0.3);font-size:14px;padding:6px 18px;',
+      gold:  'background:rgba(251,191,36,0.15);color:#FCD34D;border:1px solid rgba(251,191,36,0.3);font-size:14px;padding:6px 18px;',
+      blue:  'background:rgba(79,195,247,0.15);color:#38BDF8;border:1px solid rgba(79,195,247,0.3);font-size:14px;padding:6px 18px;',
+      muted: 'background:rgba(255,255,255,0.06);color:rgba(148,163,184,0.7);border:1px solid rgba(255,255,255,0.08);font-size:14px;padding:6px 18px;'
+    };
+    return `<span style="display:inline-block;border-radius:20px;font-weight:600;${styles[type]||styles.muted}">${text}</span>`;
+  }
+
+  function infoRow(label, value) {
+    return `<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05);">
+      <span style="font-size:13px;color:rgba(148,163,184,0.6);">${label}</span>
+      <span style="font-size:13px;color:#fff;font-weight:500;">${value}</span>
+    </div>`;
+  }
+
   async function load() {
     try {
       const res = await api('getClient');
       if (!res.ok) { window.location.href = 'login.html'; return; }
       const c = res.client;
 
-      // Basic status
-      document.getElementById('domainShort').textContent = c.domain || '—';
-      const siteOk = (c.site_status || '').toLowerCase() === 'online';
-      document.getElementById('siteStatus').innerHTML = badge(c.site_status || 'Unknown', siteOk ? 'green' : 'red');
-      const sslOk = (c.ssl_status || '').toLowerCase() === 'active';
-      document.getElementById('sslStatus').innerHTML = badge(c.ssl_status || 'Unknown', sslOk ? 'green' : 'gold');
+      // Sidebar
+      const initials = (c.client_name||'').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+      document.getElementById('userInitials').textContent = initials || '?';
+      document.getElementById('userName').textContent = c.client_name || '';
+
+      // Site status
+      const siteOk = (c.site_status||'').toLowerCase() === 'online';
+      document.getElementById('siteStatus').innerHTML = statusBadge(siteOk ? '✓ Online' : '✗ Offline', siteOk ? 'green' : 'red');
+      if (c.domain) document.getElementById('siteUrl').innerHTML = `<a href="https://${c.domain}" target="_blank" style="color:#4FC3F7;text-decoration:none;">${c.domain} ↗</a>`;
+
+      // SSL
+      const sslOk = (c.ssl_status||'').toLowerCase() === 'active';
+      document.getElementById('sslStatus').innerHTML = statusBadge(sslOk ? '✓ Active' : '⚠ Check needed', sslOk ? 'green' : 'gold');
+      if (c.ssl_expiry) document.getElementById('sslExpiry').textContent = 'Expires ' + c.ssl_expiry;
 
       // Domain info
       document.getElementById('domainInfo').innerHTML = c.domain ? `
-        <div>
-          ${row('Domain', '<a href="https://' + c.domain + '" target="_blank" style="color:#4FC3F7;text-decoration:none;">' + c.domain + ' ↗</a>')}
-          ${c.ssl_expiry ? row('SSL expiry', c.ssl_expiry) : ''}
-          ${row('Hosting', c.hosting_status || 'Active')}
+        <div style="margin-top:4px;">
+          ${infoRow('Domain', `<a href="https://${c.domain}" target="_blank" style="color:#4FC3F7;text-decoration:none;">${c.domain} ↗</a>`)}
+          ${infoRow('Status', statusBadge(siteOk ? 'Online' : 'Offline', siteOk ? 'green' : 'red'))}
+          ${c.ssl_expiry ? infoRow('SSL expires', c.ssl_expiry) : ''}
+          ${infoRow('DNS', '<span style="color:#A78BFA;">Cloudflare</span>')}
+          ${infoRow('Registered', c.domain_purchase_date || '—')}
         </div>` : '<div class="empty">No domain on file.</div>';
 
       // Hosting info
       document.getElementById('hostingInfo').innerHTML = `
-        <div>
-          ${row('Status', badge(c.hosting_status || 'Active', 'green'))}
-          ${row('Platform', 'GitHub Pages')}
-          ${row('CDN', 'Cloudflare')}
-          ${row('HTTPS', badge('Enforced', 'green'))}
+        <div style="margin-top:4px;">
+          ${infoRow('Platform', 'GitHub Pages')}
+          ${infoRow('CDN', '<span style="color:#F97316;">Cloudflare</span>')}
+          ${infoRow('HTTPS', statusBadge('Enforced', 'green'))}
+          ${infoRow('Performance', '<span style="color:#22C55E;">Optimized</span>')}
+          ${infoRow('Uptime SLA', '<span style="color:#22C55E;">99.9%</span>')}
+          ${infoRow('Backups', 'GitHub versioned')}
         </div>`;
 
-      // Load Cloudflare stats if domain exists
-      if (c.domain) {
-        // Clean domain before passing to CF
-        const cleanDomain = c.domain.replace(/^https?:\/\//,'').replace(/^www\./,'').replace(/\/$/,'').toLowerCase().trim();
-        loadCFStats(cleanDomain);
-      } else {
-        document.getElementById('cfStats').innerHTML = '<div class="not-connected"><div class="not-connected-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(148,163,184,0.4)" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg></div><p>No domain configured for this account.</p></div>';
-      }
+      // Quick actions
+      document.getElementById('quickActions').innerHTML = [
+        { emoji: '🔗', label: 'Visit your site', action: `window.open('https://${c.domain||'#'}','_blank')`, color: '#4FC3F7' },
+        { emoji: '💬', label: 'Request a change', action: "window.location.href='support.html'", color: '#A78BFA' },
+        { emoji: '💳', label: 'View billing', action: "window.location.href='billing.html'", color: '#F97316' },
+        { emoji: '⚙️', label: 'Account settings', action: "window.location.href='settings.html'", color: '#2DD4BF' },
+      ].map(a => `
+        <button onclick="${a.action}" style="display:flex;align-items:center;gap:10px;padding:14px 16px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:10px;cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif;color:#fff;text-align:left;width:100%;" onmouseover="this.style.borderColor='${a.color}33';this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.07)';this.style.background='rgba(255,255,255,0.03)'">
+          <span style="font-size:22px;">${a.emoji}</span>
+          <span style="font-size:13px;font-weight:500;">${a.label}</span>
+        </button>`).join('');
+
+      // Load Cloudflare stats
+      const cleanDomain = (c.domain||'').replace(/^https?:\/\//,'').replace(/^www\./,'').replace(/\/$/,'').toLowerCase().trim();
+      if (cleanDomain) loadCFStats(cleanDomain);
 
       // Updates
       const upRes = await api('getUpdates');
-      const updates = (upRes.updates || []).slice(0, 5);
+      const updates = (upRes.updates || []).slice(0, 8);
       document.getElementById('updatesSection').innerHTML = updates.length ? updates.map(u => `
-        <div style="padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.05);">
-          <div style="display:flex;align-items:center;gap:8px;margin:0 0 4px;">
-            <span style="font-size:13px;font-weight:500;color:#fff;">${u.title}</span>
-            ${u.category ? `<span style="font-size:10px;background:rgba(79,195,247,0.1);color:#4FC3F7;padding:2px 8px;border-radius:20px;">${u.category}</span>` : ''}
+        <div style="display:flex;gap:14px;padding:16px 0;border-bottom:1px solid rgba(255,255,255,0.05);">
+          <div style="width:36px;height:36px;background:rgba(79,195,247,0.1);border:1px solid rgba(79,195,247,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">
+            ${u.category === 'Design' ? '🎨' : u.category === 'Feature' ? '⚡' : u.category === 'Fix' ? '🔧' : u.category === 'Content' ? '📝' : '🔄'}
           </div>
-          <p style="margin:0;font-size:13px;color:rgba(148,163,184,0.7);line-height:1.6;">${u.content || ''}</p>
-          <div style="font-size:11px;color:rgba(148,163,184,0.4);margin-top:6px;">${new Date(u.created_at).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})}</div>
-        </div>`).join('') : '<div class="empty">No updates yet.</div>';
+          <div style="flex:1;">
+            <div style="display:flex;align-items:center;gap:8px;margin:0 0 4px;">
+              <span style="font-size:14px;font-weight:500;color:#fff;">${u.title}</span>
+              ${u.category ? `<span style="font-size:10px;background:rgba(79,195,247,0.1);color:#4FC3F7;padding:2px 8px;border-radius:20px;border:1px solid rgba(79,195,247,0.2);">${u.category}</span>` : ''}
+            </div>
+            ${u.content ? `<div style="font-size:13px;color:rgba(148,163,184,0.7);line-height:1.6;">${u.content}</div>` : ''}
+            <div style="font-size:11px;color:rgba(148,163,184,0.35);margin-top:6px;">📅 ${new Date(u.created_at).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})}</div>
+          </div>
+        </div>`).join('') : `
+        <div style="text-align:center;padding:32px 20px;">
+          <div style="font-size:40px;margin:0 0 12px;">📋</div>
+          <div style="font-size:14px;color:rgba(148,163,184,0.6);">No updates yet — we'll post here when work is completed on your site.</div>
+        </div>`;
 
     } catch(e) { console.error(e); }
   }
@@ -329,97 +401,85 @@
   async function loadCFStats(domain) {
     try {
       const res = await api('getCloudflareStats', { domain });
+      
+      // Update CF badge in hero
+      const cfOk = res.ok && res.zone_status === 'active';
+      document.getElementById('cfStatus').innerHTML = statusBadge(cfOk ? '✓ Protected' : '⚠ Check needed', cfOk ? 'green' : 'gold');
+
       if (!res.ok) {
-        document.getElementById('cfStats').innerHTML = `<div class="not-connected">
-          <div class="not-connected-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(148,163,184,0.4)" stroke-width="1.5"><path d="M13 16h-1v-4h-1m1-4h.01"/><circle cx="12" cy="12" r="9"/></svg></div>
-          <p>Domain not yet connected to Cloudflare.</p>
-        </div>`;
+        document.getElementById('cfStats').innerHTML = `
+          <div style="text-align:center;padding:24px;">
+            <div style="font-size:32px;margin:0 0 10px;">🔌</div>
+            <div style="font-size:14px;color:rgba(148,163,184,0.6);">Cloudflare data unavailable for this domain.</div>
+          </div>`;
         return;
       }
 
-      // Show live indicator
       document.getElementById('cfLive').style.display = 'flex';
 
-      // Security level label
-      const secLabels = { off: 'Off', essentially_off: 'Minimal', low: 'Low', medium: 'Medium', high: 'High', under_attack: 'Under Attack Mode' };
-      const secLabel  = secLabels[res.security_level] || res.security_level || 'Medium';
-      const secPips   = { off: 0, essentially_off: 1, low: 1, medium: 2, high: 3, under_attack: 3 };
-      const secCount  = secPips[res.security_level] || 2;
-      const secColor  = secCount === 3 ? 'on-high' : secCount === 2 ? 'on-med' : 'on-low';
-
-      // SSL mode label
-      const sslLabels = { off: 'Off', flexible: 'Flexible', full: 'Full', strict: 'Full (Strict)' };
+      const secLabels = { off:'Off', essentially_off:'Minimal', low:'Low', medium:'Medium', high:'High', under_attack:'Under Attack Mode' };
+      const secLabel  = secLabels[res.security_level] || 'Medium';
+      const sslLabels = { off:'Off', flexible:'Flexible', full:'Full', strict:'Full (Strict)' };
       const sslLabel  = sslLabels[res.ssl_mode] || res.ssl_mode || 'Full';
-      const sslBadge  = res.ssl_mode === 'strict' || res.ssl_mode === 'full' ? 'green' : 'gold';
-
-      // Zone status
-      const zoneOk = res.zone_status === 'active';
+      const secCount  = { off:0, essentially_off:1, low:1, medium:2, high:3, under_attack:3 }[res.security_level] || 2;
+      const secColor  = secCount===3 ? '#22C55E' : secCount===2 ? '#4FC3F7' : '#FBBF24';
 
       document.getElementById('cfStats').innerHTML = `
         <div class="cf-grid">
           <div class="cf-stat">
-            <div class="cf-stat-label">Cloudflare</div>
-            <div class="cf-stat-value" style="font-size:14px;">${badge(zoneOk ? 'Active' : (res.zone_status || 'Pending'), zoneOk ? 'green' : 'gold')}</div>
-            <div class="cf-stat-sub">Zone status</div>
+            <div class="cf-stat-label">🛡️ Zone status</div>
+            <div class="cf-stat-value">${statusBadge(res.zone_status === 'active' ? 'Active' : (res.zone_status||'Pending'), res.zone_status === 'active' ? 'green' : 'gold')}</div>
           </div>
           <div class="cf-stat">
-            <div class="cf-stat-label">SSL mode</div>
-            <div class="cf-stat-value" style="font-size:14px;">${badge(sslLabel, sslBadge)}</div>
-            <div class="cf-stat-sub">Encryption</div>
+            <div class="cf-stat-label">🔒 SSL mode</div>
+            <div class="cf-stat-value">${statusBadge(sslLabel, res.ssl_mode === 'strict' || res.ssl_mode === 'full' ? 'green' : 'gold')}</div>
           </div>
           <div class="cf-stat">
-            <div class="cf-stat-label">HTTPS</div>
-            <div class="cf-stat-value" style="font-size:14px;">${badge(res.always_https === 'on' ? 'Enforced' : 'Optional', res.always_https === 'on' ? 'green' : 'gold')}</div>
-            <div class="cf-stat-sub">Force redirect</div>
+            <div class="cf-stat-label">↔️ Force HTTPS</div>
+            <div class="cf-stat-value">${statusBadge(res.always_https === 'on' ? 'Enforced' : 'Off', res.always_https === 'on' ? 'green' : 'gold')}</div>
           </div>
           <div class="cf-stat">
-            <div class="cf-stat-label">Security</div>
-            <div style="margin:6px 0 4px;">
-              <div class="security-bar">
-                <div class="security-pip ${secCount >= 1 ? secColor : ''}"></div>
-                <div class="security-pip ${secCount >= 2 ? secColor : ''}"></div>
-                <div class="security-pip ${secCount >= 3 ? secColor : ''}"></div>
-              </div>
+            <div class="cf-stat-label">🔥 Security level</div>
+            <div style="display:flex;gap:5px;align-items:center;margin:10px 0 4px;">
+              ${[1,2,3].map(i => `<div style="flex:1;height:6px;border-radius:3px;background:${i<=secCount ? secColor : 'rgba(255,255,255,0.08)'};transition:background 0.3s;"></div>`).join('')}
             </div>
-            <div class="cf-stat-sub">${secLabel}</div>
+            <div style="font-size:12px;color:rgba(148,163,184,0.6);">${secLabel}</div>
           </div>
           ${res.requests_24h !== undefined ? `
           <div class="cf-stat">
-            <div class="cf-stat-label">Requests</div>
-            <div class="cf-stat-value">${(res.requests_24h || 0).toLocaleString()}</div>
+            <div class="cf-stat-label">📊 Requests</div>
+            <div class="cf-stat-value">${(res.requests_24h||0).toLocaleString()}</div>
             <div class="cf-stat-sub">Last 24 hours</div>
           </div>` : ''}
           ${res.pageviews_24h !== undefined ? `
           <div class="cf-stat">
-            <div class="cf-stat-label">Page views</div>
-            <div class="cf-stat-value">${(res.pageviews_24h || 0).toLocaleString()}</div>
+            <div class="cf-stat-label">👁️ Page views</div>
+            <div class="cf-stat-value">${(res.pageviews_24h||0).toLocaleString()}</div>
             <div class="cf-stat-sub">Last 24 hours</div>
           </div>` : ''}
           ${res.threats_24h !== undefined ? `
           <div class="cf-stat">
-            <div class="cf-stat-label">Threats blocked</div>
-            <div class="cf-stat-value" style="color:${res.threats_24h > 0 ? '#FBBF24' : '#22C55E'}">${(res.threats_24h || 0).toLocaleString()}</div>
-            <div class="cf-stat-sub">Last 24 hours</div>
+            <div class="cf-stat-label">⚠️ Threats blocked</div>
+            <div class="cf-stat-value" style="color:${res.threats_24h > 0 ? '#FBBF24' : '#22C55E'}">${(res.threats_24h||0).toLocaleString()}</div>
+            <div class="cf-stat-sub">${res.threats_24h > 0 ? 'Blocked automatically' : 'None detected'}</div>
           </div>` : ''}
           ${res.bandwidth_mb !== undefined ? `
           <div class="cf-stat">
-            <div class="cf-stat-label">Bandwidth</div>
-            <div class="cf-stat-value">${res.bandwidth_mb || 0} <span style="font-size:13px;color:rgba(148,163,184,0.5);">MB</span></div>
+            <div class="cf-stat-label">📡 Bandwidth</div>
+            <div class="cf-stat-value">${res.bandwidth_mb||0} <span style="font-size:13px;color:rgba(148,163,184,0.4);">MB</span></div>
             <div class="cf-stat-sub">Last 24 hours</div>
           </div>` : ''}
           ${res.dns_record_count ? `
           <div class="cf-stat">
-            <div class="cf-stat-label">DNS records</div>
+            <div class="cf-stat-label">📋 DNS records</div>
             <div class="cf-stat-value">${res.dns_record_count}</div>
             <div class="cf-stat-sub">Active records</div>
           </div>` : ''}
           <div class="cf-stat">
-            <div class="cf-stat-label">Plan</div>
-            <div class="cf-stat-value" style="font-size:14px;">${badge(res.plan || 'Free', 'blue')}</div>
-            <div class="cf-stat-sub">Cloudflare tier</div>
+            <div class="cf-stat-label">💎 CF plan</div>
+            <div class="cf-stat-value">${statusBadge(res.plan||'Free', 'blue')}</div>
           </div>
         </div>`;
-
     } catch(e) {
       document.getElementById('cfStats').innerHTML = '<div class="empty">Could not load Cloudflare data.</div>';
     }
