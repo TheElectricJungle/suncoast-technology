@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
   <title>Contracts — Suncoast Technology</title>
-  <!-- Suncoast Technology | contracts.html | v1.0 -->
+  <!-- Suncoast Technology | contracts.html | v1.2 -->
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet"/>
@@ -134,6 +134,7 @@
       <a href="updates.html" class="nav-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6.5"/><path d="M8 4.5v4l2.5 1.5"/></svg>Updates</a>
       <a href="admin-support.html" class="nav-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 10.5a2 2 0 01-2 2H4.5L1.5 15V3.5a2 2 0 012-2h8.5a2 2 0 012 2v7z"/></svg>Support</a>
       <a href="onboarding.html" class="nav-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2.5l-7 7-3-3"/><path d="M8 14A6 6 0 108 2"/></svg>Onboarding</a>
+      <a href="email-log.html" class="nav-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="4" width="14" height="9" rx="1.5"/><path d="M1 4l7 5.5L15 4"/></svg>Email log</a>
     </nav>
     <div class="sidebar-footer">
       <div class="user-row">
@@ -249,6 +250,19 @@
                 <option value="Unlimited revisions included">Unlimited revisions included</option>
                 <option value="1 round of revisions included">1 round of revisions included</option>
               </select>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field"><label>Contract type / term</label>
+              <select id="cTermType" onchange="updateTermFields()">
+                <option value="project">One-time project — ends on delivery</option>
+                <option value="monthly">Monthly retainer — rolls month to month</option>
+                <option value="annual">Annual agreement — fixed 1 year</option>
+                <option value="custom">Custom term length</option>
+              </select>
+            </div>
+            <div class="field" id="termLengthField" style="display:none;"><label>Term length</label>
+              <input type="text" id="cTermLength" placeholder="e.g. 12 months, 6 months"/>
             </div>
           </div>
           <div class="field"><label>Contract expiry (days to sign)</label>
@@ -459,6 +473,19 @@
   }
 
   // ── MODAL ──
+  function updateTermFields() {
+    const t = document.getElementById('cTermType').value;
+    document.getElementById('termLengthField').style.display = (t === 'custom') ? 'block' : 'none';
+    // Auto-set the submit btn text based on type
+    const labels = {
+      project: 'one-time project agreement',
+      monthly: 'month-to-month retainer',
+      annual:  'annual agreement',
+      custom:  'custom term agreement'
+    };
+    document.getElementById('cType').value = document.getElementById('cType').value; // trigger refresh
+  }
+
   function openNewContract() {
     editingId = null;
     document.getElementById('contractModalTitle').textContent = 'New contract';
@@ -469,6 +496,9 @@
     document.getElementById('cPayment').value  = '50% deposit, 50% on completion';
     document.getElementById('cRevisions').value= '2 rounds of revisions included';
     document.getElementById('cExpiry').value   = '14';
+    document.getElementById('cTermType').value  = 'project';
+    document.getElementById('cTermLength').value= '';
+    document.getElementById('termLengthField').style.display = 'none';
     document.getElementById('cLateFee').value  = '1.5% per month on overdue balances';
     document.getElementById('cNotice').value   = '14 days written notice';
     document.getElementById('cIP').value       = 'Full ownership transfers to client upon final payment';
@@ -540,10 +570,20 @@
     const today    = new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
     const client   = allClients.find(c => c.client_id === data.client_id);
     const cname    = client ? (client.business_name||client.client_name) : 'Client';
+    const cfull    = client ? client.client_name : 'Authorized Representative';
     const cemail   = client ? client.contact_email : '';
     const value    = data.value ? '$' + parseFloat(data.value).toLocaleString() : 'as agreed';
-    const scopeList  = (data.scope_items||[]).filter(Boolean).map(s => `• ${s}`).join('\n');
-    const exclList   = (data.exclusions||[]).filter(Boolean).map(s => `• ${s}`).join('\n');
+    const scopeList = (data.scope_items||[]).filter(Boolean).map(s => '    • ' + s).join('\n');
+    const exclList  = (data.exclusions||[]).filter(Boolean).map(s => '    • ' + s).join('\n');
+
+    // Term language
+    const termMap = {
+      project: 'This is a one-time project agreement. It commences on the Effective Date and terminates upon delivery of the final deliverables and expiration of any included support period, unless earlier terminated as provided herein.',
+      monthly: 'This Agreement commences on the Effective Date and continues on a month-to-month basis until terminated by either party with ' + (data.notice||'30 days') + ' written notice. Either party may terminate at any time by providing the required notice period.',
+      annual:  'This Agreement commences on the Effective Date and continues for a period of one (1) year (the "Initial Term"). After the Initial Term, this Agreement will automatically renew for successive one-year periods unless either party provides written notice of non-renewal at least 30 days prior to the end of the then-current term.',
+      custom:  'This Agreement commences on the Effective Date and continues for ' + (data.term_length||'the agreed period') + '. After this period, the Agreement may be renewed by mutual written agreement of both parties.'
+    };
+    const termText = termMap[data.term_type||'project'];
 
     return `WEB SERVICES AGREEMENT
 
@@ -551,127 +591,209 @@ This Web Services Agreement (this "Agreement") is entered into as of ${data.star
 
 SERVICE PROVIDER:
 Suncoast Technology, LLC
-Littleton, Colorado
+Littleton, Colorado 80120
 Email: info@suncoast.technology
+("Service Provider")
 
 CLIENT:
 ${cname}
 Email: ${cemail}
+("Client")
 
-─────────────────────────────────────
+─────────────────────────────────────────────────────────────
+1. SERVICES AND SCOPE OF WORK
+─────────────────────────────────────────────────────────────
 
-1. SCOPE OF SERVICES
+1.1 Services. Service Provider agrees to perform the following services:
 
-Suncoast Technology, LLC agrees to provide the following services under this Agreement:
+    Project: ${data.project_name||data.contract_type||'Web Services'}
+    Agreement type: ${data.contract_type||'Web Services Agreement'}
 
-Project: ${data.project_name||data.contract_type||'Web Services'}
-Contract type: ${data.contract_type||'Web Services Agreement'}
+1.2 Included deliverables:
 
-INCLUDED IN THIS AGREEMENT:
-${scopeList||'• As discussed and agreed upon'}
+${scopeList||'    • As discussed and agreed upon'}
 
-NOT INCLUDED (OUT OF SCOPE):
-${exclList||'• Any items not listed above'}
+1.3 Out of scope. The following are expressly excluded and will require a separate written change order:
 
-Any work outside the agreed scope will require a separate written change order and may incur additional fees.
+${exclList||'    • Any items not listed in Section 1.2 above'}
 
-─────────────────────────────────────
+1.4 Change orders. Any work outside this scope must be agreed to in writing by both parties before work begins. Service Provider reserves the right to charge additional fees for out-of-scope work.
 
-2. PAYMENT TERMS
+─────────────────────────────────────────────────────────────
+2. TERM
+─────────────────────────────────────────────────────────────
 
-Total project value: ${value}
-Payment structure: ${data.payment||'As agreed'}
-Late payments: ${data.late_fee||'1.5% per month on overdue balances'}
+${termText}
 
-All invoices are due within 14 days of issue. Suncoast Technology reserves the right to pause work on any project with an outstanding balance of more than 14 days.
+─────────────────────────────────────────────────────────────
+3. COMPENSATION AND PAYMENT
+─────────────────────────────────────────────────────────────
 
-─────────────────────────────────────
+3.1 Fees. Client agrees to pay Service Provider:
 
-3. TIMELINE AND DELIVERY
+    Total value:       ${value}
+    Payment structure: ${data.payment||'As agreed'}
+    Late payment:      ${data.late_fee||'1.5% per month (18% per annum) on overdue balances'}
 
-Estimated start date: ${data.start_date||today}
-Estimated completion: ${data.timeline||'As agreed'}
-Revisions: ${data.revisions||'2 rounds of revisions included'}
+3.2 Invoicing. Service Provider will issue invoices per the agreed payment structure. Invoices are due within 14 days of issuance.
 
-Additional revision rounds beyond what is included are billed at $75/hour. Timeline estimates are based on timely receipt of all client materials, feedback, and approvals. Delays caused by the client may extend the project timeline accordingly.
+3.3 Suspension. Service Provider may suspend services for accounts more than 14 days past due. Service Provider has no liability for damages arising from a suspension due to non-payment.
 
-─────────────────────────────────────
+3.4 Taxes. Client is responsible for all applicable sales, use, or other taxes on the services. Each party is responsible for its own income taxes.
 
-4. CLIENT RESPONSIBILITIES
+─────────────────────────────────────────────────────────────
+4. TIMELINE AND DELIVERY
+─────────────────────────────────────────────────────────────
 
-The Client agrees to:
-• Provide all required content (text, images, logos) within 5 business days of request
-• Provide timely feedback within 5 business days of each deliverable
-• Designate a single point of contact for all project communication
-• Provide necessary account access (domain registrar, hosting, etc.) promptly
-• Review and approve deliverables in a timely manner
+4.1 Timeline. Estimated start: ${data.start_date||today}. Estimated completion: ${data.timeline||'as agreed'}. These are estimates only, not guarantees.
 
-Failure to provide materials or feedback within the agreed timeframe may result in project delays and does not entitle the Client to a refund or discount.
+4.2 Revisions. ${data.revisions||'2 rounds of revisions are included'}. Additional revision rounds are billed at the then-current hourly rate. A "revision round" means one consolidated set of changes, not a series of individual requests.
 
-─────────────────────────────────────
+4.3 Client delays. Delays caused by Client — including late delivery of content, feedback, approvals, or account access — will extend the timeline accordingly and do not entitle Client to any refund, discount, or claim for damages.
 
-5. INTELLECTUAL PROPERTY
+4.4 Approval. Deliverables not rejected in writing within 5 business days of delivery are deemed approved.
 
-${data.ip||'Full ownership transfers to client upon final payment'}. Until final payment is received in full, all work product remains the property of Suncoast Technology, LLC.
+─────────────────────────────────────────────────────────────
+5. CLIENT RESPONSIBILITIES
+─────────────────────────────────────────────────────────────
 
-Third-party assets (stock photos, fonts, plugins, frameworks) are subject to their respective licenses and are not transferred under this Agreement.
+Client agrees to:
 
-Portfolio: ${data.portfolio||'Suncoast Technology may display this work in its portfolio'} and marketing materials.
+    (a) Provide all required content (text, images, logos, materials) within 5 business days of request;
+    (b) Designate a single authorized point of contact for all project communications;
+    (c) Provide timely feedback and approvals within 5 business days of each deliverable;
+    (d) Provide necessary account access (domain registrar, hosting credentials, third-party platforms) promptly;
+    (e) Ensure that all materials provided to Service Provider do not infringe any third-party intellectual property rights;
+    (f) Be solely responsible for the accuracy, legality, and appropriateness of all Client-provided content.
 
-─────────────────────────────────────
+─────────────────────────────────────────────────────────────
+6. INTELLECTUAL PROPERTY
+─────────────────────────────────────────────────────────────
 
-6. CONFIDENTIALITY
+6.1 Ownership upon payment. ${data.ip||'Upon receipt of full final payment, Service Provider assigns to Client all right, title, and interest in the custom work product created specifically for Client under this Agreement.'} Until full payment is received, all work product remains the sole property of Service Provider.
 
-Both parties agree to keep confidential any proprietary information, trade secrets, or sensitive business information shared during the course of this Agreement. This obligation survives termination of the Agreement.
+6.2 Service Provider IP. Service Provider retains all right, title, and interest in its pre-existing tools, frameworks, libraries, templates, methodologies, and know-how, including any improvements thereto. Nothing in this Agreement grants Client any license to Service Provider's proprietary systems.
 
-─────────────────────────────────────
+6.3 Third-party components. Websites and applications may incorporate open-source software, stock assets, fonts, plugins, or third-party platforms (collectively "Third-Party Components"). Such components are governed by their own licenses and are not transferred under this Agreement. Client is solely responsible for compliance with applicable third-party licenses.
 
-7. TERMINATION
+6.4 Portfolio rights. ${data.portfolio||'Service Provider may display completed work in its portfolio, website, and marketing materials.'} Client grants Service Provider a non-exclusive, royalty-free license to use Client's name and general project description for this purpose.
 
-Either party may terminate this Agreement with ${data.notice||'14 days written notice'}. In the event of termination:
-• The Client is responsible for payment of all work completed to date
-• If the Client terminates after work has begun, the deposit is non-refundable
-• Suncoast Technology will deliver all completed work upon receipt of final payment for work completed
+─────────────────────────────────────────────────────────────
+7. DATA, SECURITY, AND PRIVACY
+─────────────────────────────────────────────────────────────
 
-─────────────────────────────────────
+7.1 Scope of data handling. Service Provider may have access to Client's website infrastructure, domain credentials, hosting accounts, and any data submitted through website forms ("Client Data"). Service Provider will use Client Data solely for the purpose of performing services under this Agreement.
 
-8. LIMITATION OF LIABILITY
+7.2 Client's data responsibility. CLIENT IS SOLELY RESPONSIBLE FOR THE DATA COLLECTED, STORED, OR PROCESSED THROUGH CLIENT'S WEBSITE, INCLUDING COMPLIANCE WITH ALL APPLICABLE PRIVACY LAWS (INCLUDING WITHOUT LIMITATION GDPR, CCPA, AND COLORADO'S PRIVACY ACT, C.R.S. § 6-1-1301 ET SEQ.). SERVICE PROVIDER DOES NOT PROVIDE LEGAL COMPLIANCE SERVICES AND MAKES NO WARRANTY THAT ANY WEBSITE BUILT OR MANAGED HEREUNDER COMPLIES WITH ANY PRIVACY LAW OR REGULATION.
 
-Suncoast Technology's total liability under this Agreement shall not exceed the total amount paid by the Client in the 3 months preceding the claim. Suncoast Technology is not liable for indirect, incidental, or consequential damages including lost profits or business interruption.
+7.3 Third-party infrastructure. Client's website is hosted on third-party infrastructure, including without limitation GitHub Pages, Cloudflare, and Stripe. Service Provider makes no representations or warranties regarding the security, uptime, or data practices of these third-party platforms. Client acknowledges that such platforms' own terms of service and privacy policies govern their handling of Client Data.
 
-─────────────────────────────────────
+7.4 Security limitations. Service Provider will implement reasonable technical measures consistent with industry standard practices for websites of similar scope. However, SERVICE PROVIDER DOES NOT WARRANT THAT ANY WEBSITE OR SYSTEM WILL BE FREE FROM UNAUTHORIZED ACCESS, HACKING, MALWARE, DATA BREACHES, OR OTHER SECURITY INCIDENTS. No security measure is foolproof. Client is solely responsible for (a) maintaining appropriate backup copies of all Client Data; (b) implementing its own security policies for any sensitive customer data it collects; and (c) compliance with applicable data breach notification laws in the event of a security incident.
 
-9. WARRANTIES
+7.5 Credential security. Client is responsible for maintaining the confidentiality of all login credentials. Service Provider has no liability for unauthorized access resulting from Client's failure to safeguard credentials.
 
-Suncoast Technology warrants that all work will be performed in a professional and workmanlike manner. Suncoast Technology does not warrant uninterrupted or error-free operation of any website or service, or that any third-party services (hosting, domain registrars, payment processors) will remain available.
+7.6 Payment processing. Payment processing is provided by Stripe, Inc., a third-party payment processor. Service Provider does not store, process, or have access to Client's customers' payment card information. Stripe's terms and privacy policy govern all payment transactions.
 
-─────────────────────────────────────
+─────────────────────────────────────────────────────────────
+8. CONFIDENTIALITY
+─────────────────────────────────────────────────────────────
 
-10. INDEPENDENT CONTRACTOR
+8.1 Each party agrees to hold in strict confidence any Confidential Information of the other party and not to disclose it to any third party without prior written consent. "Confidential Information" means any non-public business, technical, financial, or other information disclosed under this Agreement that is marked confidential or that a reasonable person would understand to be confidential given the nature of the information.
 
-Suncoast Technology, LLC is an independent contractor and not an employee of the Client. Nothing in this Agreement shall be construed to create a partnership, joint venture, or employment relationship. Suncoast Technology is responsible for all applicable taxes on amounts earned under this Agreement.
+8.2 Exceptions. Confidentiality obligations do not apply to information that: (a) is or becomes publicly known through no breach of this Agreement; (b) was rightfully known before disclosure; (c) is independently developed without use of Confidential Information; or (d) must be disclosed by law or court order.
 
-─────────────────────────────────────
+8.3 Survival. Confidentiality obligations survive termination of this Agreement for 3 years.
 
-11. DISPUTE RESOLUTION
+─────────────────────────────────────────────────────────────
+9. DISCLAIMER OF WARRANTIES
+─────────────────────────────────────────────────────────────
 
-The parties agree to attempt to resolve any dispute through good faith negotiation before pursuing formal legal action. If negotiation fails, disputes shall be resolved through binding arbitration in Denver, Colorado under the rules of the American Arbitration Association.
+9.1 SERVICE PROVIDER WARRANTS THAT SERVICES WILL BE PERFORMED IN A PROFESSIONAL AND WORKMANLIKE MANNER CONSISTENT WITH GENERALLY ACCEPTED INDUSTRY STANDARDS.
 
-─────────────────────────────────────
+9.2 EXCEPT AS EXPRESSLY SET FORTH IN SECTION 9.1, ALL SERVICES AND DELIVERABLES ARE PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT, ACCURACY, OR UNINTERRUPTED OPERATION.
 
-12. GOVERNING LAW
+9.3 SERVICE PROVIDER MAKES NO WARRANTY REGARDING (A) WEBSITE UPTIME, AVAILABILITY, OR PERFORMANCE; (B) SEARCH ENGINE RANKINGS OR RESULTS; (C) REVENUE, TRAFFIC, OR BUSINESS OUTCOMES; (D) COMPATIBILITY WITH ALL BROWSERS, DEVICES, OR OPERATING SYSTEMS; OR (E) THE SECURITY, AVAILABILITY, OR CONTINUED OPERATION OF ANY THIRD-PARTY PLATFORMS OR SERVICES.
 
-This Agreement shall be governed by and construed in accordance with the laws of the State of Colorado, without regard to its conflict of laws principles. Any legal proceedings shall be conducted in Denver County, Colorado.
+─────────────────────────────────────────────────────────────
+10. LIMITATION OF LIABILITY
+─────────────────────────────────────────────────────────────
 
-─────────────────────────────────────
+10.1 EXCLUSION OF CONSEQUENTIAL DAMAGES. IN NO EVENT WILL EITHER PARTY BE LIABLE TO THE OTHER FOR ANY INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, PUNITIVE, OR CONSEQUENTIAL DAMAGES, INCLUDING WITHOUT LIMITATION LOSS OF PROFITS, LOSS OF REVENUE, LOSS OF BUSINESS OPPORTUNITY, LOSS OF DATA, COST OF SUBSTITUTE SERVICES, OR BUSINESS INTERRUPTION, HOWEVER CAUSED AND UNDER ANY THEORY OF LIABILITY (INCLUDING CONTRACT, TORT, STRICT LIABILITY, OR OTHERWISE), EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
 
-13. ENTIRE AGREEMENT
+10.2 LIABILITY CAP. SERVICE PROVIDER'S TOTAL CUMULATIVE LIABILITY UNDER OR RELATED TO THIS AGREEMENT, REGARDLESS OF THE FORM OF ACTION, WILL NOT EXCEED THE GREATER OF (A) THE TOTAL FEES ACTUALLY PAID BY CLIENT TO SERVICE PROVIDER IN THE THREE (3) MONTHS IMMEDIATELY PRECEDING THE EVENT GIVING RISE TO THE CLAIM, OR (B) ONE HUNDRED DOLLARS ($100.00).
 
-This Agreement constitutes the entire agreement between the parties and supersedes all prior discussions, representations, or agreements. Any modifications must be in writing and signed by both parties.
+10.3 DATA BREACH. WITHOUT LIMITING THE FOREGOING, SERVICE PROVIDER'S TOTAL LIABILITY ARISING FROM ANY DATA SECURITY INCIDENT, BREACH, UNAUTHORIZED ACCESS, OR LOSS OF DATA — WHETHER CAUSED BY SERVICE PROVIDER'S NEGLIGENCE, OMISSION, OR BREACH — SHALL IN NO EVENT EXCEED THE AMOUNT PAID BY CLIENT TO SERVICE PROVIDER IN THE ONE (1) MONTH PRECEDING THE INCIDENT. CLIENT ACKNOWLEDGES THAT SERVICE PROVIDER IS A SMALL BUSINESS AND THAT THIS ALLOCATION OF RISK IS REASONABLE IN LIGHT OF THE FEES CHARGED AND THE PARTIES' RELATIVE ABILITY TO BEAR SUCH RISK.
 
-${data.notes ? `\n14. ADDITIONAL TERMS\n\n${data.notes}\n\n─────────────────────────────────────` : ''}
+10.4 ESSENTIAL BASIS. CLIENT ACKNOWLEDGES THAT THE LIMITATIONS OF LIABILITY IN THIS SECTION 10 ARE AN ESSENTIAL ELEMENT OF THE BARGAIN BETWEEN THE PARTIES, WITHOUT WHICH SERVICE PROVIDER WOULD NOT HAVE ENTERED INTO THIS AGREEMENT. THE FEES CHARGED BY SERVICE PROVIDER REFLECT THIS ALLOCATION OF RISK.
 
+10.5 EXCEPTIONS. Nothing in this Agreement limits liability that cannot be limited under applicable law.
+
+─────────────────────────────────────────────────────────────
+11. INDEMNIFICATION
+─────────────────────────────────────────────────────────────
+
+11.1 Client indemnification. Client agrees to defend, indemnify, and hold harmless Service Provider and its members, managers, employees, and agents from and against any claims, damages, losses, liabilities, costs, and expenses (including reasonable attorneys' fees) arising from or relating to: (a) Client's breach of this Agreement; (b) Client's negligence or willful misconduct; (c) Client-provided content that infringes any third-party intellectual property right or violates any law; (d) any data collected by Client's website from Client's customers; or (e) Client's failure to comply with applicable privacy, data protection, or consumer protection laws.
+
+11.2 Service Provider indemnification. Service Provider agrees to defend, indemnify, and hold harmless Client from claims arising from Service Provider's gross negligence or willful misconduct in performing services under this Agreement.
+
+─────────────────────────────────────────────────────────────
+12. TERMINATION
+─────────────────────────────────────────────────────────────
+
+12.1 Termination for convenience. Either party may terminate this Agreement by providing ${data.notice||'30 days'} written notice to the other party.
+
+12.2 Termination for cause. Either party may terminate this Agreement immediately upon written notice if the other party materially breaches this Agreement and fails to cure such breach within 10 business days of written notice.
+
+12.3 Effect of termination. Upon termination: (a) Client will pay for all work completed and expenses incurred through the termination date; (b) any deposit paid for work already begun is non-refundable; (c) Service Provider will deliver all completed work product upon receipt of payment for work completed; (d) each party will return or destroy the other's Confidential Information.
+
+12.4 Suspension of hosting. If Client terminates a monthly maintenance agreement, Service Provider has no obligation to continue hosting, domain management, or security monitoring after the final paid period. Client is solely responsible for transitioning services prior to the termination date.
+
+─────────────────────────────────────────────────────────────
+13. INDEPENDENT CONTRACTOR
+─────────────────────────────────────────────────────────────
+
+13.1 Service Provider is an independent contractor, not an employee, partner, or agent of Client. Nothing in this Agreement creates an employment, partnership, or joint venture relationship. Service Provider has sole control over the manner and means of performing the services.
+
+13.2 Service Provider is solely responsible for all federal, state, and local taxes on amounts earned under this Agreement, including self-employment taxes under applicable law.
+
+─────────────────────────────────────────────────────────────
+14. DISPUTE RESOLUTION
+─────────────────────────────────────────────────────────────
+
+14.1 Informal resolution. The parties agree to attempt to resolve any dispute in good faith through direct negotiation before pursuing formal proceedings.
+
+14.2 Mediation. If informal negotiation fails within 30 days, the parties agree to attempt mediation with a mutually agreed neutral mediator before proceeding to arbitration or litigation.
+
+14.3 Binding arbitration. If mediation is unsuccessful, disputes shall be resolved by binding arbitration in Denver, Colorado, administered by the American Arbitration Association under its Commercial Arbitration Rules. The arbitrator's award will be final and binding.
+
+14.4 Small claims exception. Either party may pursue claims within the jurisdiction of small claims court (currently up to $25,000 in Colorado) without first submitting to arbitration.
+
+14.5 Attorneys' fees. In any dispute resolution proceeding, the prevailing party will be entitled to recover reasonable attorneys' fees and costs.
+
+─────────────────────────────────────────────────────────────
+15. GENERAL PROVISIONS
+─────────────────────────────────────────────────────────────
+
+15.1 Governing law. This Agreement is governed by the laws of the State of Colorado, without regard to conflict of laws principles. Any legal proceedings not subject to arbitration shall be brought in Denver County, Colorado.
+
+15.2 Entire agreement. This Agreement, including any attached exhibits, constitutes the entire agreement between the parties regarding its subject matter and supersedes all prior discussions, representations, proposals, and agreements, whether written or oral.
+
+15.3 Amendments. Any modification to this Agreement must be in writing and signed by authorized representatives of both parties.
+
+15.4 Severability. If any provision is held invalid or unenforceable, the remaining provisions will remain in full force and effect.
+
+15.5 Waiver. Failure to enforce any provision will not constitute a waiver of future enforcement rights.
+
+15.6 Force majeure. Neither party is liable for delays or failures caused by circumstances beyond its reasonable control, including acts of God, natural disasters, pandemics, government actions, or third-party platform outages.
+
+15.7 Notices. All notices must be in writing and delivered by email with confirmation of receipt, or by certified mail to the addresses above.
+
+15.8 Counterparts / electronic signature. This Agreement may be executed electronically. Electronic signatures are binding under the Electronic Signatures in Global and National Commerce Act (ESIGN, 15 U.S.C. § 7001) and the Colorado Uniform Electronic Transactions Act (C.R.S. § 24-71.3-101).
+
+${data.notes ? '─────────────────────────────────────────────────────────────\n16. ADDITIONAL TERMS\n─────────────────────────────────────────────────────────────\n\n' + data.notes + '\n' : ''}
+─────────────────────────────────────────────────────────────
 SIGNATURES
+─────────────────────────────────────────────────────────────
 
 By signing below, both parties agree to be bound by the terms of this Agreement.
 
@@ -679,21 +801,22 @@ SERVICE PROVIDER:
 Suncoast Technology, LLC
 
 _______________________________
-Justin Riesenberg
-Founder, Suncoast Technology, LLC
+Justin Riesenberg, Founder
+Suncoast Technology, LLC
 Date: ${today}
+
 
 CLIENT:
 ${cname}
 
 _______________________________
 Authorized Signature
-Printed Name: _________________
-Title: ________________________
+Printed Name: ${cfull}
+Title: _________________________
 Date: _________________________`;
   }
 
-  function generatePreview() {
+    function generatePreview() {
     const data = getFormData();
     document.getElementById('contractPreviewContent').innerHTML =
       generateContractText(data).replace(/\n/g,'<br>').replace(/─+/g,'<hr style="border:none;border-top:1px solid rgba(255,255,255,0.08);margin:12px 0;">');
@@ -703,6 +826,8 @@ Date: _________________________`;
     return {
       client_id:     document.getElementById('cClient').value,
       contract_type: document.getElementById('cType').value,
+      term_type:     document.getElementById('cTermType').value,
+      term_length:   document.getElementById('cTermLength').value.trim(),
       project_name:  document.getElementById('cProject').value.trim(),
       value:         document.getElementById('cValue').value,
       payment:       document.getElementById('cPayment').value,
@@ -783,6 +908,9 @@ Date: _________________________`;
     document.getElementById('cTimeline').value  = c.timeline || '';
     document.getElementById('cRevisions').value = c.revisions || '2 rounds of revisions included';
     document.getElementById('cExpiry').value    = c.expiry_days || '14';
+    document.getElementById('cTermType').value  = c.term_type    || 'project';
+    document.getElementById('cTermLength').value= c.term_length  || '';
+    updateTermFields();
     document.getElementById('cLateFee').value   = c.late_fee || '1.5% per month on overdue balances';
     document.getElementById('cNotice').value    = c.notice || '14 days written notice';
     document.getElementById('cIP').value        = c.ip || 'Full ownership transfers to client upon final payment';
