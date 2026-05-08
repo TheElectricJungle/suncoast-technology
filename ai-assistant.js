@@ -4,8 +4,7 @@
 (function() {
   'use strict';
 
-  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyxg5LlS9eUx6VSiD_VSzE0RD94STkBAK4Hc-h14T_YU5ikqXGE3dz-Fvt1kCAE-9XRLw/exec';
-
+const APPS_SCRIPT_URL = 'https://score-proxy.j-riesenberg.workers.dev/';
   // ── DEEP PAGE CONTEXTS ──
   const PAGE_CONTEXTS = {
     'dashboard.html': `You are the Suncoast Technology AI assistant helping a CLIENT on their Dashboard.
