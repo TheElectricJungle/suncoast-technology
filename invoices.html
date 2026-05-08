@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
   <title>Invoices — Suncoast Technology</title>
-  <!-- Suncoast Technology | invoices.html | v2.3 -->
+  <!-- Suncoast Technology | invoices.html | v3.0 -->
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet"/>
@@ -236,24 +236,79 @@
       <div id="invoiceTable"><div class="empty">Loading...</div></div>
     </div>
     <!-- New Invoice Modal -->
+    <!-- FULL INVOICE BUILDER MODAL -->
     <div class="modal-overlay" id="invoiceModal" onclick="if(event.target===this)closeModal()">
-      <div class="modal">
+      <div class="modal" style="max-width:680px;">
         <div class="modal-head">
           <div class="modal-title" id="modalTitle">New invoice</div>
           <button class="modal-close" onclick="closeModal()"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
         </div>
         <div class="modal-body">
-          <div class="alert alert-success" id="invoiceSaveSuccess">Invoice saved successfully.</div>
+          <div class="alert alert-success" id="invoiceSaveSuccess">Invoice saved.</div>
           <div class="alert alert-error" id="invoiceSaveError">Error saving invoice.</div>
-          <div class="field"><label>Client</label><select id="invClient"><option value="">Select client...</option></select></div>
-          <div class="grid2">
-            <div class="field"><label>Amount ($)</label><input type="number" id="invAmount" placeholder="0.00" /></div>
-            <div class="field"><label>Due date</label><input type="date" id="invDue" /></div>
+
+          <!-- Client + dates -->
+          <div class="grid2" style="margin:0 0 14px;">
+            <div class="field" style="margin:0;"><label>Client *</label><select id="invClient" onchange="onClientChange()"><option value="">Select client...</option></select></div>
+            <div class="field" style="margin:0;"><label>Due date</label><input type="date" id="invDue"/></div>
           </div>
-          <div class="field"><label>Period</label><input type="text" id="invPeriod" placeholder="e.g. May 2026" /></div>
-          <div class="field"><label>Description</label><input type="text" id="invDesc" placeholder="e.g. Pro Care — May 2026" /></div>
-          <div class="field"><label>Status</label><select id="invStatus"><option>Unpaid</option><option>Paid</option><option>Overdue</option></select></div>
-          <button class="btn btn-primary" onclick="handleSaveInvoice()" style="width:100%;justify-content:center;">Save invoice</button>
+          <div class="grid2" style="margin:0 0 20px;">
+            <div class="field" style="margin:0;"><label>Period / description</label><input type="text" id="invPeriod" placeholder="e.g. May 2026 — Pro Care"/></div>
+            <div class="field" style="margin:0;"><label>Status</label><select id="invStatus"><option>Unpaid</option><option>Paid</option><option>Overdue</option></select></div>
+          </div>
+
+          <!-- Line items -->
+          <div style="margin:0 0 8px;display:flex;align-items:center;justify-content:space-between;">
+            <div style="font-size:11px;font-weight:600;color:rgba(148,163,184,0.6);text-transform:uppercase;letter-spacing:0.08em;">Line items</div>
+            <div style="display:flex;gap:8px;">
+              <select id="svcPicker" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:7px;padding:6px 10px;font-size:12px;font-family:'DM Sans',sans-serif;color:rgba(148,163,184,0.8);outline:none;">
+                <option value="">Add from catalog...</option>
+              </select>
+              <button onclick="addLineFromCatalog()" style="padding:6px 12px;background:rgba(249,115,22,0.1);border:1px solid rgba(249,115,22,0.2);border-radius:7px;color:var(--orange);font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;">+ Add</button>
+              <button onclick="addBlankLine()" style="padding:6px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:7px;color:rgba(148,163,184,0.7);font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;">+ Custom</button>
+            </div>
+          </div>
+
+          <!-- Line items table -->
+          <div id="lineItemsContainer" style="margin:0 0 16px;border:1px solid rgba(255,255,255,0.07);border-radius:10px;overflow:hidden;">
+            <div style="display:grid;grid-template-columns:1fr 70px 90px 90px 32px;gap:0;background:rgba(255,255,255,0.03);padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.06);">
+              <div style="font-size:10px;color:rgba(148,163,184,0.5);text-transform:uppercase;letter-spacing:0.06em;">Description</div>
+              <div style="font-size:10px;color:rgba(148,163,184,0.5);text-transform:uppercase;letter-spacing:0.06em;">Qty</div>
+              <div style="font-size:10px;color:rgba(148,163,184,0.5);text-transform:uppercase;letter-spacing:0.06em;">Unit price</div>
+              <div style="font-size:10px;color:rgba(148,163,184,0.5);text-transform:uppercase;letter-spacing:0.06em;">Total</div>
+              <div></div>
+            </div>
+            <div id="lineItemsList"></div>
+            <div id="lineItemsEmpty" style="padding:20px;text-align:center;font-size:13px;color:rgba(148,163,184,0.4);">No items yet — add from catalog or add a custom item</div>
+          </div>
+
+          <!-- Discount -->
+          <div style="display:flex;align-items:center;gap:10px;margin:0 0 16px;padding:12px 14px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.07);border-radius:10px;">
+            <div style="font-size:13px;color:#fff;font-weight:500;flex:1;">Discount</div>
+            <select id="discountType" onchange="recalc()" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:7px;padding:6px 10px;font-size:13px;font-family:'DM Sans',sans-serif;color:#fff;outline:none;">
+              <option value="none">No discount</option>
+              <option value="percent">Percentage (%)</option>
+              <option value="dollar">Fixed amount ($)</option>
+            </select>
+            <input type="number" id="discountValue" placeholder="0" oninput="recalc()" min="0" style="width:80px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:7px;padding:6px 10px;font-size:13px;font-family:'DM Sans',sans-serif;color:#fff;outline:none;"/>
+            <div id="discountLabel" style="font-size:13px;color:rgba(34,197,94,0.8);min-width:70px;text-align:right;"></div>
+          </div>
+
+          <!-- Totals -->
+          <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:14px 16px;margin:0 0 20px;">
+            <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:13px;color:rgba(148,163,184,0.6);">
+              <span>Subtotal</span><span id="subtotalDisplay">$0.00</span>
+            </div>
+            <div id="discountRow" style="display:none;justify-content:space-between;padding:4px 0;font-size:13px;color:rgba(34,197,94,0.8);">
+              <span id="discountRowLabel">Discount</span><span id="discountDisplay">-$0.00</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:8px 0 0;border-top:1px solid rgba(255,255,255,0.07);margin-top:6px;">
+              <span style="font-size:15px;font-weight:600;color:#fff;">Total</span>
+              <span style="font-size:20px;font-weight:700;color:#fff;" id="totalDisplay">$0.00</span>
+            </div>
+          </div>
+
+          <button onclick="handleSaveInvoice()" id="invoiceSaveBtn" style="width:100%;padding:13px;background:linear-gradient(135deg,#A78BFA,#6D28D9);border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;">Save &amp; send invoice</button>
         </div>
       </div>
     </div>
@@ -279,7 +334,7 @@
 
   async function load() {
     try {
-      if (!isAdmin(token)) { window.location.href = 'login.html'; return; }
+      // admin check via response
       const [clientsRes] = await Promise.all([
         fetch(API,{method:'POST',body:JSON.stringify({action:'adminGetClients',token,client_id:clientId})}).then(r=>r.json())
       ]);
@@ -349,59 +404,245 @@
     </table>`;
   }
 
-  function openNewInvoice() {
-    document.getElementById('modalTitle').textContent = 'New invoice';
-    document.getElementById('invoiceModal').classList.add('open');
-    document.getElementById('invoiceModal')._invoiceId = null;
-    ['invAmount','invDue','invPeriod','invDesc'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
-    const s = document.getElementById('invStatus'); if(s) s.value='Unpaid';
+  let lineItems    = [];
+  let allServices  = [];
+
+  // Load services for catalog picker
+  async function loadServices() {
+    try {
+      const res = await api('adminGetServices');
+      if (res.ok) {
+        allServices = (res.services || []).filter(s => s.active !== false && s.active !== 'FALSE');
+        const picker = document.getElementById('svcPicker');
+        if (picker) {
+          picker.innerHTML = '<option value="">Add from catalog...</option>' +
+            allServices.map(s => `<option value="${s.service_id}">${s.name} — $${parseFloat(s.price||0).toFixed(2)}${s.type==='recurring'?'/mo':''}</option>`).join('');
+        }
+      }
+    } catch(e) {}
   }
 
-  function filterInvoices() {
-    const status = document.getElementById('filterStatus').value;
-    const filtered = status === 'All' ? allInvoices : allInvoices.filter(i => (i.status||'Unpaid') === status);
-    renderInvoices(filtered);
+  function openNewInvoice() {
+    document.getElementById('modalTitle').textContent = 'New invoice';
+    document.getElementById('invoiceModal')._invoiceId = null;
+    document.getElementById('invDue').value    = '';
+    document.getElementById('invPeriod').value = '';
+    document.getElementById('invStatus').value = 'Unpaid';
+    document.getElementById('invClient').value = '';
+    document.getElementById('discountType').value  = 'none';
+    document.getElementById('discountValue').value = '';
+    lineItems = [];
+    renderLineItems();
+    recalc();
+    ['invoiceSaveSuccess','invoiceSaveError'].forEach(id => document.getElementById(id).classList.remove('show'));
+    document.getElementById('invoiceModal').classList.add('open');
+    loadServices();
+  }
+
+  function closeModal() {
+    document.getElementById('invoiceModal').classList.remove('open');
+  }
+
+  function onClientChange() {
+    const cid = document.getElementById('invClient').value;
+    const c   = allClients.find(x => x.client_id === cid);
+    if (c && c.plan_name) {
+      if (!document.getElementById('invPeriod').value) {
+        const now = new Date();
+        document.getElementById('invPeriod').value = c.plan_name + ' — ' + now.toLocaleDateString('en-US',{month:'long',year:'numeric'});
+      }
+    }
+  }
+
+  function addLineFromCatalog() {
+    const picker  = document.getElementById('svcPicker');
+    const svcId   = picker.value;
+    if (!svcId) return;
+    const svc = allServices.find(s => s.service_id === svcId);
+    if (!svc) return;
+    lineItems.push({
+      id:          Date.now(),
+      name:        svc.name,
+      service_id:  svc.service_id,
+      qty:         1,
+      unit_price:  parseFloat(svc.price || 0),
+      discount_pct: 0
+    });
+    picker.value = '';
+    renderLineItems();
+    recalc();
+  }
+
+  function addBlankLine() {
+    lineItems.push({ id: Date.now(), name: '', qty: 1, unit_price: 0, discount_pct: 0 });
+    renderLineItems();
+    recalc();
+  }
+
+  function removeLine(id) {
+    lineItems = lineItems.filter(l => l.id !== id);
+    renderLineItems();
+    recalc();
+  }
+
+  function updateLine(id, field, value) {
+    const item = lineItems.find(l => l.id === id);
+    if (!item) return;
+    if (field === 'qty')          item.qty          = parseFloat(value) || 0;
+    if (field === 'unit_price')   item.unit_price   = parseFloat(value) || 0;
+    if (field === 'discount_pct') item.discount_pct = parseFloat(value) || 0;
+    if (field === 'name')         item.name         = value;
+    recalc();
+  }
+
+  function renderLineItems() {
+    const list  = document.getElementById('lineItemsList');
+    const empty = document.getElementById('lineItemsEmpty');
+    if (!lineItems.length) {
+      list.innerHTML  = '';
+      empty.style.display = 'block';
+      return;
+    }
+    empty.style.display = 'none';
+    list.innerHTML = lineItems.map(item => {
+      const lineTotal = (item.qty * item.unit_price * (1 - (item.discount_pct||0)/100));
+      return `<div style="display:grid;grid-template-columns:1fr 70px 90px 90px 32px;gap:4px;padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.04);align-items:center;">
+        <input value="${item.name}" placeholder="Item description" oninput="updateLine(${item.id},'name',this.value)"
+          style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:6px;padding:5px 8px;font-size:12px;font-family:'DM Sans',sans-serif;color:#fff;outline:none;width:100%;"/>
+        <input type="number" value="${item.qty}" min="0" oninput="updateLine(${item.id},'qty',this.value)"
+          style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:6px;padding:5px 8px;font-size:12px;font-family:'DM Sans',sans-serif;color:#fff;outline:none;width:100%;text-align:center;"/>
+        <input type="number" value="${item.unit_price.toFixed(2)}" min="0" step="0.01" oninput="updateLine(${item.id},'unit_price',this.value)"
+          style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:6px;padding:5px 8px;font-size:12px;font-family:'DM Sans',sans-serif;color:#fff;outline:none;width:100%;text-align:right;"/>
+        <div style="font-size:13px;font-weight:500;color:#fff;text-align:right;padding-right:4px;">$${lineTotal.toFixed(2)}</div>
+        <button onclick="removeLine(${item.id})" style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);border-radius:6px;color:#FCA5A5;font-size:14px;cursor:pointer;width:28px;height:28px;display:flex;align-items:center;justify-content:center;padding:0;">×</button>
+      </div>`;
+    }).join('');
+  }
+
+  function recalc() {
+    const subtotal     = lineItems.reduce((s,i) => s + (i.qty * i.unit_price * (1 - (i.discount_pct||0)/100)), 0);
+    const dtype        = document.getElementById('discountType').value;
+    const dval         = parseFloat(document.getElementById('discountValue').value) || 0;
+    let discountAmt    = 0;
+    if (dtype === 'percent' && dval > 0) discountAmt = subtotal * (dval / 100);
+    if (dtype === 'dollar'  && dval > 0) discountAmt = Math.min(dval, subtotal);
+    const total = Math.max(0, subtotal - discountAmt);
+
+    document.getElementById('subtotalDisplay').textContent = '$' + subtotal.toFixed(2);
+    document.getElementById('totalDisplay').textContent    = '$' + total.toFixed(2);
+
+    const discRow   = document.getElementById('discountRow');
+    const discLabel = document.getElementById('discountRowLabel');
+    const discDisp  = document.getElementById('discountDisplay');
+    const discLbl   = document.getElementById('discountLabel');
+
+    if (discountAmt > 0) {
+      discRow.style.display = 'flex';
+      discLabel.textContent = dtype === 'percent' ? 'Discount (' + dval + '%)' : 'Discount';
+      discDisp.textContent  = '-$' + discountAmt.toFixed(2);
+      discLbl.textContent   = 'Saving $' + discountAmt.toFixed(2);
+    } else {
+      discRow.style.display = 'none';
+      discLbl.textContent   = '';
+    }
   }
 
   function openInvoiceModal(invoiceId) {
     const inv = allInvoices.find(i => i.invoice_id === invoiceId);
     if (!inv) return;
     document.getElementById('modalTitle').textContent = 'Edit ' + invoiceId;
-    document.getElementById('invAmount').value  = inv.amount || '';
-    document.getElementById('invDue').value     = inv.due_date ? inv.due_date.split('T')[0] : '';
-    document.getElementById('invPeriod').value  = inv.period ? inv.period.split('T')[0] : '';
-    document.getElementById('invDesc').value    = inv.description || '';
-    document.getElementById('invStatus').value  = inv.status || 'Unpaid';
-    document.getElementById('invClient').value  = inv.client_id || '';
-    document.getElementById('invoiceModal').classList.add('open');
+    document.getElementById('invDue').value    = inv.due_date ? inv.due_date.split('T')[0] : '';
+    document.getElementById('invPeriod').value = inv.period || inv.description || '';
+    document.getElementById('invStatus').value = inv.status || 'Unpaid';
+    document.getElementById('invClient').value = inv.client_id || '';
+    document.getElementById('discountType').value  = inv.discount_type  || 'none';
+    document.getElementById('discountValue').value = inv.discount_value || '';
+
+    // Load line items if they exist
+    try {
+      lineItems = inv.line_items ? JSON.parse(inv.line_items).map((l,i) => ({...l, id: Date.now()+i})) : [];
+    } catch(e) {
+      lineItems = inv.amount ? [{ id: Date.now(), name: inv.description||'Service', qty: 1, unit_price: parseFloat(inv.amount), discount_pct: 0 }] : [];
+    }
+    renderLineItems();
+    recalc();
+    ['invoiceSaveSuccess','invoiceSaveError'].forEach(id => document.getElementById(id).classList.remove('show'));
     document.getElementById('invoiceModal')._invoiceId = invoiceId;
+    document.getElementById('invoiceModal').classList.add('open');
+    loadServices();
   }
 
-  async function saveInvoice() {
-    const modal = document.getElementById('invoiceModal');
+  async function handleSaveInvoice() {
+    const btn       = document.getElementById('invoiceSaveBtn');
+    const modal     = document.getElementById('invoiceModal');
     const invoiceId = modal._invoiceId;
-    const inv = allInvoices.find(i => i.invoice_id === invoiceId) || {};
+    const cid       = document.getElementById('invClient').value;
+    ['invoiceSaveSuccess','invoiceSaveError'].forEach(id => document.getElementById(id).classList.remove('show'));
+
+    if (!cid) {
+      document.getElementById('invoiceSaveError').textContent = 'Please select a client.';
+      document.getElementById('invoiceSaveError').classList.add('show'); return;
+    }
+    if (!lineItems.length) {
+      document.getElementById('invoiceSaveError').textContent = 'Please add at least one line item.';
+      document.getElementById('invoiceSaveError').classList.add('show'); return;
+    }
+
+    const dtype    = document.getElementById('discountType').value;
+    const dval     = parseFloat(document.getElementById('discountValue').value) || 0;
+    const subtotal = lineItems.reduce((s,i) => s + (i.qty * i.unit_price * (1 - (i.discount_pct||0)/100)), 0);
+    let discAmt    = 0;
+    if (dtype === 'percent' && dval > 0) discAmt = subtotal * (dval/100);
+    if (dtype === 'dollar'  && dval > 0) discAmt = Math.min(dval, subtotal);
+    const total    = Math.max(0, subtotal - discAmt);
+
+    btn.disabled = true; btn.textContent = 'Saving...';
+
     try {
-      const res = await fetch(API,{method:'POST',body:JSON.stringify({
-        action:'adminSaveInvoice', token, client_id: clientId,
+      const res = await api('adminSaveInvoice', {
         invoice: {
-          invoice_id:  invoiceId || '',
-          client_id:   document.getElementById('invClient').value,
-          amount:      document.getElementById('invAmount').value,
-          due_date:    document.getElementById('invDue').value,
-          period:      document.getElementById('invPeriod').value,
-          description: document.getElementById('invDesc').value,
-          status:      document.getElementById('invStatus').value,
+          invoice_id:     invoiceId || '',
+          client_id:      cid,
+          amount:         total.toFixed(2),
+          due_date:       document.getElementById('invDue').value,
+          period:         document.getElementById('invPeriod').value,
+          description:    document.getElementById('invPeriod').value,
+          status:         document.getElementById('invStatus').value,
+          line_items:     JSON.stringify(lineItems.map(l => ({
+            service_id:   l.service_id || '',
+            name:         l.name,
+            qty:          l.qty,
+            unit_price:   l.unit_price,
+            discount_pct: l.discount_pct || 0,
+            line_total:   l.qty * l.unit_price * (1 - (l.discount_pct||0)/100)
+          }))),
+          discount_type:  dtype,
+          discount_value: dval,
+          subtotal:       subtotal.toFixed(2)
         }
-      })}).then(r=>r.json());
+      });
       if (res.ok) {
+        document.getElementById('invoiceSaveSuccess').textContent = 'Invoice saved successfully.';
         document.getElementById('invoiceSaveSuccess').classList.add('show');
-        modal.classList.remove('open');
-        load();
+        btn.textContent = 'Saved ✓';
+        await load();
+        setTimeout(() => { closeModal(); btn.disabled=false; btn.textContent='Save & send invoice'; }, 1500);
       } else {
+        document.getElementById('invoiceSaveError').textContent = res.error || 'Error saving.';
         document.getElementById('invoiceSaveError').classList.add('show');
+        btn.disabled = false; btn.textContent = 'Save & send invoice';
       }
-    } catch(e) { console.error(e); }
+    } catch(e) {
+      document.getElementById('invoiceSaveError').textContent = 'Connection error.';
+      document.getElementById('invoiceSaveError').classList.add('show');
+      btn.disabled = false; btn.textContent = 'Save & send invoice';
+    }
+  }
+
+  function filterInvoices() {
+    const status  = document.getElementById('filterStatus').value;
+    const filtered = status === 'All' ? allInvoices : allInvoices.filter(i => (i.status||'Unpaid') === status);
+    renderInvoices(filtered);
   }
 
   function isAdmin(t) { return localStorage.getItem('sc_is_admin') === 'true'; }
