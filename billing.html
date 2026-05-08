@@ -4,7 +4,308 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
   <title>Billing — Suncoast Technology</title>
-  <!-- Suncoast Technology | billing.html | v2.0 -->
+  <!-- Suncoast Technology | billing.html | v3.0 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet"/>
+  <script src="https://js.stripe.com/v3/"></script>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{--navy:#04080F;--border:rgba(255,255,255,0.07);--muted:rgba(148,163,184,0.7);--light:#E8F0FF;--orange:#F97316;--gold:#FBBF24;--green:#22C55E;--red:#EF4444;--blue:#4FC3F7;--purple:#A78BFA;--teal:#2DD4BF;}
+    html,body{height:100%;font-family:'DM Sans',sans-serif;background:#04080F;color:var(--light);overflow-x:hidden;max-width:100vw;}
+    canvas#aurora{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;}
+    .grid{position:fixed;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none;background-image:linear-gradient(rgba(79,195,247,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(79,195,247,0.02) 1px,transparent 1px);background-size:80px 80px;}
+    .shell{position:relative;z-index:10;display:grid;grid-template-columns:220px 1fr;min-height:100vh;}
+    .sidebar{background:rgba(4,8,15,0.82);backdrop-filter:blur(24px);border-right:1px solid rgba(255,255,255,0.07);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;}
+    .sidebar-brand{padding:22px 20px 18px;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:10px;}
+    .brand-mark{width:34px;height:34px;flex-shrink:0;}
+    .brand-name{font-family:'Playfair Display',serif;font-size:14px;color:#fff;line-height:1.2;}
+    .brand-name em{color:var(--orange);font-style:normal;}
+    .brand-sub{font-size:9px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-top:2px;}
+    .nav{padding:14px 10px;flex:1;display:flex;flex-direction:column;gap:2px;overflow-y:auto;}
+    .nav-label{font-size:9px;font-weight:500;color:rgba(148,163,184,0.35);letter-spacing:0.12em;text-transform:uppercase;padding:10px 10px 5px;}
+    .nav-item{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:8px;font-size:13px;color:var(--muted);text-decoration:none;transition:background 0.15s,color 0.15s;}
+    .nav-item:hover{background:rgba(255,255,255,0.05);color:#fff;}
+    .nav-item.active{background:rgba(249,115,22,0.1);color:var(--orange);}
+    .nav-item svg{width:15px;height:15px;flex-shrink:0;}
+    .sidebar-footer{padding:14px 16px;border-top:1px solid rgba(255,255,255,0.06);}
+    .user-row{display:flex;align-items:center;gap:10px;}
+    .user-avatar{width:30px;height:30px;border-radius:50%;background:rgba(249,115,22,0.15);border:1px solid rgba(249,115,22,0.25);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--orange);flex-shrink:0;}
+    .user-name{font-size:12px;color:#fff;font-weight:500;flex:1;}
+    .logout-btn{background:none;border:none;color:var(--muted);cursor:pointer;padding:4px;display:flex;border-radius:4px;transition:color 0.15s;}
+    .logout-btn:hover{color:#fff;}
+    .main{padding:32px 36px;display:flex;flex-direction:column;gap:20px;min-width:0;}
+    .page-label{font-size:11px;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:4px;}
+    .page-title{font-family:'Playfair Display',serif;font-size:28px;font-weight:400;color:#fff;line-height:1.1;margin-bottom:4px;}
+    .page-title em{color:var(--orange);font-style:normal;}
+    .card{background:rgba(8,16,28,0.8);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:24px;position:relative;}
+    .card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.07),transparent);border-radius:16px 16px 0 0;pointer-events:none;}
+    .card-title{font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin:0 0 16px;}
+    .card-value{font-size:28px;font-weight:600;color:#fff;line-height:1.1;margin:0 0 4px;}
+    .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;}
+    .stat{background:rgba(8,16,28,0.8);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:18px 20px;}
+    .stat-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin:0 0 8px;}
+    .stat-value{font-size:22px;font-weight:600;color:#fff;}
+    .badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:500;}
+    .badge-green{background:rgba(34,197,94,0.12);color:#86EFAC;border:1px solid rgba(34,197,94,0.2);}
+    .badge-gold{background:rgba(251,191,36,0.1);color:var(--gold);border:1px solid rgba(251,191,36,0.2);}
+    .badge-red{background:rgba(239,68,68,0.1);color:#FCA5A5;border:1px solid rgba(239,68,68,0.2);}
+    .badge-blue{background:rgba(79,195,247,0.1);color:var(--blue);border:1px solid rgba(79,195,247,0.2);}
+    .badge-muted{background:rgba(148,163,184,0.08);color:var(--muted);border:1px solid rgba(148,163,184,0.15);}
+    .btn{display:inline-flex;align-items:center;gap:7px;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;border:none;transition:opacity 0.2s,transform 0.1s;text-decoration:none;}
+    .btn:active{transform:scale(0.98);}
+    .btn-primary{background:linear-gradient(135deg,var(--orange),#ea580c);color:#fff;}
+    .btn-primary:hover{opacity:0.9;}
+    .btn-primary:disabled{opacity:0.6;cursor:not-allowed;}
+    .btn-ghost{background:rgba(255,255,255,0.05);color:var(--muted);border:1px solid rgba(255,255,255,0.09);}
+    .btn-ghost:hover{background:rgba(255,255,255,0.09);color:#fff;}
+    .btn-green{background:rgba(34,197,94,0.12);color:#86EFAC;border:1px solid rgba(34,197,94,0.2);}
+    .field{display:flex;flex-direction:column;gap:5px;margin:0 0 14px;}
+    .field label{font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;}
+    .field input,.field textarea,.field select{width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:10px 13px;font-size:13px;font-family:'DM Sans',sans-serif;color:#fff;outline:none;transition:border-color 0.2s;}
+    .field input:focus,.field textarea:focus,.field select:focus{border-color:rgba(249,115,22,0.4);background:rgba(249,115,22,0.02);}
+    .field textarea{resize:vertical;min-height:80px;}
+    .field select option{background:#0D1B2A;}
+    .alert{display:none;padding:10px 14px;border-radius:8px;font-size:13px;margin:0 0 14px;align-items:center;gap:8px;}
+    .alert.show{display:flex;}
+    .alert-success{background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);color:#86EFAC;}
+    .alert-error{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#FCA5A5;}
+    .alert-info{background:rgba(79,195,247,0.08);border:1px solid rgba(79,195,247,0.2);color:var(--blue);}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+    .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+    table{width:100%;border-collapse:collapse;font-size:13px;}
+    thead th{padding:8px 12px;text-align:left;font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;border-bottom:1px solid rgba(255,255,255,0.06);background:transparent;}
+    tbody td{padding:11px 12px;border-bottom:1px solid rgba(255,255,255,0.04);color:rgba(255,255,255,0.85);background:transparent;}
+    tbody tr:last-child td{border-bottom:none;}
+    tbody tr:hover td{background:rgba(255,255,255,0.02);}
+    .empty{padding:40px;text-align:center;color:var(--muted);font-size:13px;}
+    @media(max-width:768px){.shell{grid-template-columns:1fr}.sidebar{display:none}.main{padding:20px 16px}.grid2,.grid3{grid-template-columns:1fr}}
+
+    .invoice-hero{background:rgba(249,115,22,0.06);border:1px solid rgba(249,115,22,0.15);border-radius:14px;padding:28px 32px;text-align:center;}
+    .invoice-amount{font-size:52px;font-weight:600;color:#fff;line-height:1;font-family:'Playfair Display',serif;}
+    .invoice-period{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px;}
+    .invoice-due{font-size:13px;color:var(--gold);margin-top:6px;}
+  
+    /* ── MOBILE LOCK ── */
+    html, body {
+      overflow-x: hidden;
+      max-width: 100vw;
+    }
+    * {
+      max-width: 100%;
+    }
+  </style>
+
+<script>
+  // Prevent pinch zoom
+  document.addEventListener('touchmove', function(e) {
+    if (e.touches.length > 1) e.preventDefault();
+  }, { passive: false });
+  document.addEventListener('gesturestart', function(e) {
+    e.preventDefault();
+  });
+  // Reset zoom on load/refresh
+  document.addEventListener('DOMContentLoaded', function() {
+    var meta = document.querySelector('meta[name="viewport"]');
+    if (meta) {
+      meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
+    }
+  });
+</script>
+</head>
+<body>
+<canvas id="aurora"></canvas>
+<div class="grid"></div>
+<div class="shell">
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <svg class="brand-mark" viewBox="0 0 36 36" fill="none">
+        <circle cx="18" cy="18" r="17" fill="#0D1B2A" stroke="rgba(249,115,22,0.3)" stroke-width="1"/>
+        <path d="M7 22 Q18 10 29 22" stroke="#F97316" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+        <path d="M5 25 Q18 7 31 25" stroke="#FBBF24" stroke-width="1.2" stroke-linecap="round" fill="none" opacity="0.5"/>
+        <circle cx="18" cy="27" r="3" fill="#F97316"/>
+      </svg>
+      <div>
+        <div class="brand-name">Suncoast <em>Technology</em></div>
+        <div class="brand-sub">Client Portal</div>
+      </div>
+    </div>
+    <nav class="nav">
+      <a href="dashboard.html" class="nav-item"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="9" y="1" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="1" y="9" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="9" y="9" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.3"/></svg>Dashboard</a>
+      <a href="billing.html" class="nav-item active"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="1" y="4" width="14" height="9" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M1 7h14" stroke="currentColor" stroke-width="1.3"/></svg>Billing</a>
+      <a href="my-site.html" class="nav-item"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.3"/><path d="M8 1.5C8 1.5 5.5 4 5.5 8s2.5 6.5 2.5 6.5M8 1.5C8 1.5 10.5 4 10.5 8s-2.5 6.5-2.5 6.5M1.5 8h13" stroke="currentColor" stroke-width="1.3"/></svg>My site</a>
+      <a href="support.html" class="nav-item"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M14 10.5a2 2 0 01-2 2H4.5L1.5 15V3.5a2 2 0 012-2h8.5a2 2 0 012 2v7z" stroke="currentColor" stroke-width="1.3"/></svg>Support</a>
+      <a href="settings.html" class="nav-item"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="2.5" stroke="currentColor" stroke-width="1.3"/><path d="M8 1v1.5M8 13.5V15M1 8h1.5M13.5 8H15M2.6 2.6l1 1M12.4 12.4l1 1M12.4 2.6l-1 1M3.6 12.4l-1 1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>Settings</a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-row">
+        <div class="user-avatar"><span id='userInitials'>?</span></div>
+        <div class="user-name"><span id='userName'>Loading...</span></div>
+        <button class="logout-btn" onclick="handleLogout()">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3"/><path d="M11 11l3-3-3-3M14 8H6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+  </aside>
+  <main class="main">
+    <div>
+      <div class="page-label">Account</div>
+      <div class="page-title">Billing &amp; <em>payments</em></div>
+    </div>
+    <div class="alert alert-success" id="paidAlert">Payment received — your invoice has been marked as paid.</div>
+    <div class="grid2">
+      <div class="card" id="currentInvoiceCard">
+        <div class="card-title">Current invoice</div>
+        <div id="currentInvoice"><div class="empty">Loading...</div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Subscription</div>
+        <div id="subscriptionCard"><div class="empty">Loading...</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Invoice history</div>
+      <div id="invoiceHistory"><div class="empty">Loading...</div></div>
+    </div>
+  </main>
+</div>
+<script>
+  const API='https://script.google.com/macros/s/AKfycbyxg5LlS9eUx6VSiD_VSzE0RD94STkBAK4Hc-h14T_YU5ikqXGE3dz-Fvt1kCAE-9XRLw/exec';
+  const token=localStorage.getItem('sc_token');
+  const clientId=localStorage.getItem('sc_client_id');
+  if(!token) window.location.href='login.html';
+  async function api(action,extra={}){
+    const res=await fetch(API,{method:'POST',body:JSON.stringify({action,token,client_id:clientId,...extra})});
+    return res.json();
+  }
+  function handleLogout(){
+    fetch(API,{method:'POST',body:JSON.stringify({action:'logout',token})});
+    localStorage.clear();
+    window.location.href='login.html';
+  }
+
+          const stripe = Stripe('pk_test_YOUR_KEY');
+
+  
+
+  async function handleManageSub() {
+    const btn = document.getElementById('manageSubBtnEl');
+    if(btn) { btn.disabled=true; btn.textContent='Loading...'; }
+    try {
+      const res = await api('getPortalLink');
+      if(res.ok && res.url) window.location.href = res.url;
+    } catch(e) { console.error(e); }
+  }
+
+  async function load() {
+    // Check if returning from Stripe
+    const hash = window.location.hash;
+    if (hash.startsWith('#paid=')) {
+      const invoiceId = hash.replace('#paid=', '');
+      try { await api('clientMarkPaid', { invoice_id: invoiceId }); } catch(e) {}
+      document.getElementById('paidAlert').classList.add('show');
+      window.location.hash = '';
+    }
+
+    try {
+      const [clientRes, invoicesRes] = await Promise.all([api('getClient'), api('getInvoices')]);
+      if (!clientRes.ok) { window.location.href = 'login.html'; return; }
+      const c = clientRes.client;
+      const invoices = (invoicesRes.invoices || []).sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
+
+      // Sidebar user
+      const parts = (c.client_name||'').trim().split(' ');
+      document.getElementById('userInitials').textContent = parts.map(p=>p[0]).join('').slice(0,2).toUpperCase() || '—';
+      document.getElementById('userName').textContent = c.client_name || '';
+
+      // Current invoice
+      const unpaid = invoices.filter(i => (i.status||'').toLowerCase() !== 'paid');
+      const current = unpaid[0];
+      if (current) {
+        const period = current.period ? new Date(current.period).toLocaleDateString('en-US',{month:'long',year:'numeric'}) : (current.description||'Invoice');
+        const due = current.due_date ? new Date(current.due_date).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}) : '';
+        document.getElementById('currentInvoice').innerHTML = `
+          <div style="text-align:center;padding:20px 0 24px;">
+            <div style="font-size:11px;color:rgba(148,163,184,0.5);text-transform:uppercase;letter-spacing:0.1em;margin:0 0 6px;">${period}</div>
+            <div style="font-size:52px;font-weight:700;color:#fff;line-height:1;margin:0 0 6px;">$${parseFloat(current.amount||0).toFixed(2)}</div>
+            ${due ? `<div style="font-size:13px;color:#FBBF24;">Due ${due}</div>` : ''}
+            ${current.description ? `<div style="font-size:12px;color:rgba(148,163,184,0.5);margin-top:4px;">${current.description}</div>` : ''}
+          </div>
+          <button class="btn btn-primary" style="width:100%;justify-content:center;" id="payNowBtn" onclick="handlePay('${current.invoice_id}')">Pay with card</button>`;
+      } else {
+        document.getElementById('currentInvoice').innerHTML = `
+          <div style="text-align:center;padding:24px 0;">
+            <div style="font-size:36px;margin:0 0 8px;">✓</div>
+            <div style="font-size:15px;font-weight:500;color:#22C55E;margin:0 0 4px;">All paid up</div>
+            <div style="font-size:13px;color:rgba(148,163,184,0.5);">No outstanding balance</div>
+          </div>`;
+      }
+
+      // Subscription card
+      document.getElementById('subscriptionCard').innerHTML = `
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          ${rowItem('Plan', c.plan_name || '—')}
+          ${rowItem('Monthly rate', c.monthly_rate ? '$' + parseFloat(c.monthly_rate).toFixed(2) + '/mo' : '—')}
+          ${rowItem('Billing day', c.billing_day ? c.billing_day + (c.billing_day==1?'st':c.billing_day==2?'nd':c.billing_day==3?'rd':'th') + ' of month' : '—')}
+          ${rowItem('Subscription', c.stripe_subscription_id ? '<span style="background:rgba(34,197,94,0.12);color:#86EFAC;padding:3px 10px;border-radius:20px;font-size:11px;">Active</span>' : '<span style="background:rgba(255,255,255,0.06);color:rgba(148,163,184,0.6);padding:3px 10px;border-radius:20px;font-size:11px;">None</span>')}
+        </div>
+        ${c.stripe_subscription_id ? '<button class="btn btn-ghost" onclick="handleManageSub()" style="width:100%;justify-content:center;margin-top:16px;">Manage subscription</button>' : ''}`;
+
+      // Invoice history
+      document.getElementById('invoiceHistory').innerHTML = invoices.length ? `
+        <table style="width:100%;border-collapse:collapse;">
+          <thead><tr>
+            <th style="padding:8px 10px;text-align:left;font-size:10px;color:rgba(148,163,184,0.5);text-transform:uppercase;letter-spacing:0.06em;border-bottom:1px solid rgba(255,255,255,0.06);">Invoice</th>
+            <th style="padding:8px 10px;text-align:left;font-size:10px;color:rgba(148,163,184,0.5);text-transform:uppercase;letter-spacing:0.06em;border-bottom:1px solid rgba(255,255,255,0.06);">Period</th>
+            <th style="padding:8px 10px;text-align:right;font-size:10px;color:rgba(148,163,184,0.5);text-transform:uppercase;letter-spacing:0.06em;border-bottom:1px solid rgba(255,255,255,0.06);">Amount</th>
+            <th style="padding:8px 10px;text-align:left;font-size:10px;color:rgba(148,163,184,0.5);text-transform:uppercase;letter-spacing:0.06em;border-bottom:1px solid rgba(255,255,255,0.06);">Status</th>
+          </tr></thead>
+          <tbody>${invoices.map(inv => {
+            const st = (inv.status||'Unpaid').toLowerCase();
+            const badge = st==='paid' ? 'rgba(34,197,94,0.12);color:#86EFAC' : st==='overdue' ? 'rgba(239,68,68,0.12);color:#FCA5A5' : 'rgba(251,191,36,0.12);color:#FBBF24';
+            const due = inv.due_date ? new Date(inv.due_date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '—';
+            return `<tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+              <td style="padding:10px;font-size:12px;color:rgba(148,163,184,0.5);">${inv.invoice_id}</td>
+              <td style="padding:10px;font-size:13px;color:#fff;">${inv.period || inv.description || '—'}</td>
+              <td style="padding:10px;font-size:13px;font-weight:500;color:#fff;text-align:right;">$${parseFloat(inv.amount||0).toFixed(2)}</td>
+              <td style="padding:10px;"><span style="background:${badge};padding:3px 10px;border-radius:20px;font-size:11px;">${inv.status||'Unpaid'}</span></td>
+            </tr>`;
+          }).join('')}</tbody>
+        </table>` : '<div class="empty">No invoices yet.</div>';
+
+    } catch(e) { console.error(e); }
+  }
+
+  function rowItem(label, value) {
+    return `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);">
+      <span style="font-size:12px;color:rgba(148,163,184,0.6);">${label}</span>
+      <span style="font-size:13px;color:#fff;font-weight:500;">${value}</span>
+    </div>`;
+  }
+
+  async function handlePay(invoiceId) {
+    const btn = document.getElementById('payNowBtn');
+    if (btn) { btn.disabled=true; btn.textContent='Loading...'; }
+    try {
+      const res = await api('createCheckoutSession', { invoice_id: invoiceId });
+      if (res.url) window.location.href = res.url;
+    } catch(e) { if(btn) { btn.disabled=false; btn.textContent='Pay with card'; } }
+  }
+
+  async function handleManageSub() {
+    try {
+      const res = await api('getPortalLink');
+      if (res.ok && res.url) window.location.href = res.url;
+    } catch(e) { console.error(e); }
+  }
+
+  load();
+</script>tml lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+  <title>Billing — Suncoast Technology</title>
+  <!-- Suncoast Technology | billing.html | v3.0 -->
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet"/>

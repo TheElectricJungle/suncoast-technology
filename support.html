@@ -235,22 +235,46 @@
     return `<span class="badge badge-gold">${p}</span>`;
   }
 
+  function badge(text, type) {
+    const colors = {
+      green: 'background:rgba(34,197,94,0.12);color:#86EFAC;border:1px solid rgba(34,197,94,0.2)',
+      red:   'background:rgba(239,68,68,0.12);color:#FCA5A5;border:1px solid rgba(239,68,68,0.2)',
+      gold:  'background:rgba(251,191,36,0.12);color:#FBBF24;border:1px solid rgba(251,191,36,0.2)',
+      blue:  'background:rgba(79,195,247,0.12);color:#4FC3F7;border:1px solid rgba(79,195,247,0.2)',
+      muted: 'background:rgba(255,255,255,0.06);color:rgba(148,163,184,0.7);border:1px solid rgba(255,255,255,0.08)'
+    };
+    const map = { open:'blue', 'in progress':'gold', resolved:'green', closed:'muted', high:'red', urgent:'red', normal:'gold', low:'muted' };
+    const t = map[(text||'').toLowerCase()] || type || 'muted';
+    return `<span style="display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;${colors[t]}">${text}</span>`;
+  }
+
+  function setUser(name) {
+    const initials = (name||'').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+    document.getElementById('userInitials').textContent = initials || '?';
+    document.getElementById('userName').textContent = name || '';
+  }
+
   async function load() {
     try {
       const [clientRes, reqRes] = await Promise.all([api('getClient'), api('getRequests')]);
-      if(!clientRes.ok){ window.location.href='login.html'; return; }
+      if (!clientRes.ok) { window.location.href = 'login.html'; return; }
       setUser(clientRes.client.client_name);
 
-      const reqs = (reqRes.requests||[]).sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
-      document.getElementById('requestsBody').innerHTML = reqs.length ? `
-        <table><thead><tr><th>Subject</th><th>Priority</th><th>Status</th><th>Date</th></tr></thead>
-        <tbody>${reqs.map(r=>`<tr>
-          <td><div style="font-weight:500;font-size:13px;">${r.subject||'—'}</div>${r.reply?`<div style="font-size:12px;color:var(--muted);margin-top:3px;">Reply: ${r.reply}</div>`:''}</td>
-          <td>${priorityBadge(r.priority)}</td>
-          <td>${badge(r.status||'Open')}</td>
-          <td style="color:var(--muted);font-size:12px;">${r.created_at?new Date(r.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric'}):'—'}</td>
-        </tr>`).join('')}</tbody></table>` : '<div class="empty">No requests yet. Submit one above if you need help.</div>';
-    } catch(e){ console.error(e); }
+      const reqs = (reqRes.requests||[]).sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
+      document.getElementById('requestsList').innerHTML = reqs.length ? reqs.map(r => `
+        <div style="padding:16px 0;border-bottom:1px solid rgba(255,255,255,0.05);">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin:0 0 6px;">
+            <div style="font-size:14px;font-weight:500;color:#fff;">${r.subject||'—'}</div>
+            <div style="display:flex;gap:6px;flex-shrink:0;">
+              ${badge(r.priority||'Normal')}
+              ${badge(r.status||'Open')}
+            </div>
+          </div>
+          ${r.description ? `<div style="font-size:13px;color:rgba(148,163,184,0.65);line-height:1.6;margin:0 0 6px;">${r.description}</div>` : ''}
+          ${r.reply ? `<div style="background:rgba(249,115,22,0.06);border-left:2px solid #F97316;padding:10px 14px;border-radius:0 8px 8px 0;margin:8px 0 0;"><div style="font-size:10px;color:#F97316;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin:0 0 4px;">Reply from us</div><div style="font-size:13px;color:rgba(255,255,255,0.8);">${r.reply}</div></div>` : ''}
+          <div style="font-size:11px;color:rgba(148,163,184,0.4);margin-top:8px;">${r.created_at ? new Date(r.created_at).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}) : '—'}</div>
+        </div>`).join('') : '<div class="empty">No requests yet. Submit one above if you need help.</div>';
+    } catch(e) { console.error(e); }
   }
   load();
 </script>

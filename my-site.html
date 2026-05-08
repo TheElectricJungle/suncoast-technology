@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
   <title>My Site — Suncoast Technology</title>
-  <!-- Suncoast Technology | my-site.html | v3.0 -->
+  <!-- Suncoast Technology | my-site.html | v3.1 -->
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet"/>
@@ -92,10 +92,10 @@
     }
   
     /* CF Stats */
-    .cf-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin:0 0 4px;}
-    .cf-stat{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:14px 16px;}
+    .cf-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;margin:0 0 4px;}
+    .cf-stat{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:18px 20px;transition:border-color 0.2s;}
     .cf-stat-label{font-size:10px;color:rgba(148,163,184,0.5);text-transform:uppercase;letter-spacing:0.08em;margin:0 0 6px;}
-    .cf-stat-value{font-size:20px;font-weight:600;color:#fff;}
+    .cf-stat-value{font-size:22px;font-weight:600;color:#fff;margin:6px 0 4px;}
     .cf-stat-sub{font-size:11px;color:rgba(148,163,184,0.5);margin-top:2px;}
     .cf-live{display:flex;align-items:center;gap:5px;font-size:10px;color:rgba(45,212,191,0.7);margin:0 0 16px;}
     .cf-live-dot{width:5px;height:5px;border-radius:50%;background:#2DD4BF;animation:pulse 2s ease-in-out infinite;}
@@ -303,7 +303,9 @@
 
       // Load Cloudflare stats if domain exists
       if (c.domain) {
-        loadCFStats(c.domain);
+        // Clean domain before passing to CF
+        const cleanDomain = c.domain.replace(/^https?:\/\//,'').replace(/^www\./,'').replace(/\/$/,'').toLowerCase().trim();
+        loadCFStats(cleanDomain);
       } else {
         document.getElementById('cfStats').innerHTML = '<div class="not-connected"><div class="not-connected-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(148,163,184,0.4)" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg></div><p>No domain configured for this account.</p></div>';
       }
