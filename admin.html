@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
   <title>Admin Dashboard — Suncoast Technology</title>
-  <!-- Suncoast Technology | admin.html | v2.1 -->
+  <!-- Suncoast Technology | admin.html | v2.2 -->
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet"/>
@@ -218,6 +218,24 @@
       <div class="stat"><div class="stat-label">Outstanding</div><div class="stat-value" id="outstanding">—</div></div>
       <div class="stat"><div class="stat-label">Monthly revenue</div><div class="stat-value" id="monthlyRevenue">—</div></div>
     </div>
+    <!-- SITE HEALTH ALERT BANNER -->
+    <div id="alertBanner" style="display:none;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:12px;padding:16px 20px;">
+      <div style="display:flex;align-items:center;gap:10px;margin:0 0 10px;">
+        <span style="font-size:18px;">⚠️</span>
+        <span style="font-size:14px;font-weight:500;color:#FCA5A5;">Site issues detected</span>
+      </div>
+      <div id="alertList"></div>
+    </div>
+
+    <!-- SITE STATUS GRID -->
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin:0 0 16px;">
+        <div class="card-title" style="margin:0;">🌐 Client site status</div>
+        <span style="font-size:11px;color:rgba(148,163,184,0.4);">All managed sites</span>
+      </div>
+      <div id="siteStatusGrid"><div style="color:var(--muted);font-size:13px;padding:10px 0;">Loading...</div></div>
+    </div>
+
     <div class="grid2">
       <div class="card">
         <div class="card-title">Recent activity</div>
@@ -231,10 +249,13 @@
     <div class="card">
       <div class="card-title">Quick actions</div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;">
-        <a href="clients.html" class="btn btn-ghost">Manage clients</a>
-        <a href="invoices.html" class="btn btn-ghost">Create invoice</a>
-        <a href="updates.html" class="btn btn-ghost">Post update</a>
-        <a href="admin-support.html" class="btn btn-ghost">Support queue</a>
+        <a href="clients.html" class="btn btn-ghost">➕ Add client</a>
+        <a href="clients.html" class="btn btn-ghost">👥 All clients</a>
+        <a href="invoices.html" class="btn btn-ghost">🧾 Create invoice</a>
+        <a href="updates.html" class="btn btn-ghost">📢 Post update</a>
+        <a href="admin-support.html" class="btn btn-ghost">💬 Support queue</a>
+        <a href="services.html" class="btn btn-ghost">⭐ Services</a>
+        <a href="onboarding.html" class="btn btn-ghost">✅ Onboarding</a>
       </div>
     </div>
   </main>
@@ -256,10 +277,7 @@
 
   async function load() {
     try {
-      const [clientsRes, invoicesRes] = await Promise.all([
-        fetch(API,{method:'POST',body:JSON.stringify({action:'adminGetClients',token,client_id:clientId})}).then(r=>r.json()),
-        fetch(API,{method:'POST',body:JSON.stringify({action:'adminGetClients',token,client_id:clientId})}).then(r=>r.json())
-      ]);
+      const clientsRes = await fetch(API,{method:'POST',body:JSON.stringify({action:'adminGetClients',token,client_id:clientId})}).then(r=>r.json());
       if (!clientsRes.ok) { window.location.href='login.html'; return; }
       const clients  = clientsRes.clients || [];
       const active   = clients.filter(c => (c.status||'Active').toLowerCase() === 'active');
@@ -267,24 +285,58 @@
       document.getElementById('totalClients').textContent   = clients.length;
       document.getElementById('activeClients').textContent  = active.length;
 
-      // Get invoices for financial stats
+      // Financial stats
       const allInvoices = [];
-      for (const c of clients.slice(0,20)) {
+      for (const c of clients.slice(0,30)) {
         try {
           const ir = await fetch(API,{method:'POST',body:JSON.stringify({action:'getInvoices',token,client_id:c.client_id})}).then(r=>r.json());
           if (ir.invoices) allInvoices.push(...ir.invoices);
         } catch(e) {}
       }
-      const unpaid = allInvoices.filter(i => (i.status||'').toLowerCase() !== 'paid');
+      const unpaid      = allInvoices.filter(i => (i.status||'').toLowerCase() !== 'paid');
       const outstanding = unpaid.reduce((s,i) => s + parseFloat(i.amount||0), 0);
-      const monthly = active.reduce((s,c) => s + parseFloat(c.monthly_rate||0), 0);
-
+      const monthly     = active.reduce((s,c) => s + parseFloat(c.monthly_rate||0), 0);
       document.getElementById('outstanding').textContent    = '$' + outstanding.toFixed(2);
       document.getElementById('monthlyRevenue').textContent = '$' + monthly.toFixed(2);
 
-      // Recent activity
-      document.getElementById('recentActivity').innerHTML = clients.slice(0,5).map(c => `
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05);">
+      // ── SITE STATUS GRID ──
+      const clientsWithDomain = clients.filter(c => c.domain);
+      const issues = [];
+      
+      document.getElementById('siteStatusGrid').innerHTML = clientsWithDomain.length ?
+        `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;">
+          ${clientsWithDomain.map(c => {
+            const siteOk = (c.site_status||'Online').toLowerCase() === 'online';
+            const sslOk  = (c.ssl_status||'Active').toLowerCase() === 'active';
+            const allOk  = siteOk && sslOk;
+            if (!allOk) issues.push(c);
+            return `<div style="background:rgba(255,255,255,0.02);border:1px solid ${allOk?'rgba(255,255,255,0.06)':'rgba(239,68,68,0.2)'};border-radius:10px;padding:12px 14px;cursor:pointer;" onclick="window.location.href='clients.html'">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin:0 0 6px;">
+                <div style="font-size:13px;font-weight:500;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:140px;">${c.business_name||c.client_name}</div>
+                <span style="font-size:18px;">${allOk?'✅':'⚠️'}</span>
+              </div>
+              <div style="font-size:11px;color:rgba(148,163,184,0.5);margin:0 0 8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${c.domain}</div>
+              <div style="display:flex;gap:6px;">
+                <span style="font-size:10px;padding:2px 7px;border-radius:20px;background:${siteOk?'rgba(34,197,94,0.1)':'rgba(239,68,68,0.1)'};color:${siteOk?'#86EFAC':'#FCA5A5'};">Site ${c.site_status||'Online'}</span>
+                <span style="font-size:10px;padding:2px 7px;border-radius:20px;background:${sslOk?'rgba(34,197,94,0.1)':'rgba(251,191,36,0.1)'};color:${sslOk?'#86EFAC':'#FBBF24'};">SSL ${c.ssl_status||'Active'}</span>
+              </div>
+            </div>`;
+          }).join('')}
+        </div>` : '<div style="color:var(--muted);font-size:13px;padding:10px 0;">No clients with domains yet.</div>';
+
+      // Show alert banner if any issues
+      if (issues.length > 0) {
+        document.getElementById('alertBanner').style.display = 'block';
+        document.getElementById('alertList').innerHTML = issues.map(c =>
+          `<div style="font-size:13px;color:rgba(252,165,165,0.8);padding:3px 0;">
+            ⚡ ${c.business_name||c.client_name} — ${c.domain} — Site: ${c.site_status||'Unknown'} / SSL: ${c.ssl_status||'Unknown'}
+          </div>`
+        ).join('');
+      }
+
+      // Recent clients
+      document.getElementById('recentActivity').innerHTML = clients.slice(0,6).map(c => `
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05);cursor:pointer;" onclick="window.location.href='clients.html'">
           <div>
             <div style="font-size:13px;font-weight:500;color:#fff;">${c.business_name||c.client_name}</div>
             <div style="font-size:11px;color:rgba(148,163,184,0.5);">${c.domain||c.contact_email||''}</div>
@@ -293,7 +345,7 @@
         </div>`).join('') || '<div style="color:rgba(148,163,184,0.5);font-size:13px;padding:10px 0;">No clients yet.</div>';
 
       // Unpaid invoices
-      document.getElementById('unpaidInvoices').innerHTML = unpaid.slice(0,5).map(i => `
+      document.getElementById('unpaidInvoices').innerHTML = unpaid.slice(0,6).map(i => `
         <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05);">
           <div>
             <div style="font-size:13px;font-weight:500;color:#fff;">${i.invoice_id}</div>
