@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
   <title>Invoices — Suncoast Technology</title>
-  <!-- Suncoast Technology | invoices.html | v2.1 -->
+  <!-- Suncoast Technology | invoices.html | v2.2 -->
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet"/>
@@ -347,6 +347,14 @@
         </tr>`;
       }).join('')}</tbody>
     </table>`;
+  }
+
+  function openNewInvoice() {
+    document.getElementById('modalTitle').textContent = 'New invoice';
+    document.getElementById('invoiceModal').classList.add('open');
+    document.getElementById('invoiceModal')._invoiceId = null;
+    ['invAmount','invDue','invPeriod','invDesc'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+    const s = document.getElementById('invStatus'); if(s) s.value='Unpaid';
   }
 
   function filterInvoices() {
