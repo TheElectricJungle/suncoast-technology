@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
   <title>Clients — Suncoast Technology</title>
-  <!-- Suncoast Technology | clients.html | v2.0 -->
+  <!-- Suncoast Technology | clients.html | v2.1 -->
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet"/>
@@ -261,17 +261,33 @@
     </div>
   </aside>
   <main class="main">
-    <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
       <div>
         <div class="page-label">Admin</div>
         <div class="page-title">Client <em>profiles</em></div>
       </div>
-      <div class="search-bar">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6.5" cy="6.5" r="5"/><path d="M10.5 10.5L14 14" stroke-linecap="round"/></svg>
-        <input type="text" id="searchInput" placeholder="Search clients..." oninput="filterClients(this.value)" />
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+        <div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:9px 14px;width:200px;">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6.5" cy="6.5" r="5"/><path d="M10.5 10.5L14 14" stroke-linecap="round"/></svg>
+          <input type="text" id="searchInput" placeholder="Search..." oninput="filterClients(this.value)" style="background:none;border:none;outline:none;font-size:13px;color:#fff;font-family:'DM Sans',sans-serif;width:100%;"/>
+        </div>
+        <div class="view-toggle">
+          <button class="view-btn active" id="tileBtn" onclick="setView('tile')">
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>
+            Tile
+          </button>
+          <button class="view-btn" id="listBtn" onclick="setView('list')">
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 4h9M5 8h9M5 12h9M2 4h.01M2 8h.01M2 12h.01"/></svg>
+            List
+          </button>
+        </div>
+        <button class="add-client-btn" onclick="openAddClient()">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2v12M2 8h12" stroke-linecap="round"/></svg>
+          Add client
+        </button>
       </div>
     </div>
-    <div class="client-grid" id="clientGrid">
+    <div id="clientGrid" class="client-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;">
       <div class="empty" style="grid-column:1/-1;">Loading clients...</div>
     </div>
     <!-- Profile Drawer -->

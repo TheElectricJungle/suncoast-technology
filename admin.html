@@ -357,11 +357,15 @@
     } catch(e) { console.error(e); }
   }
 
-load();alse });
+load();
+</script>
+
+<script>
+  document.addEventListener('touchstart', function(e) { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
   document.body.style.overflowX = 'hidden';
   document.documentElement.style.overflowX = 'hidden';
 </script>
 
-<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.25);">Suncoast Technology · admin.html · v2.0</div>
+<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.25);">Suncoast Technology · admin.html · v2.2</div>
 </body>
 </html>
