@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
   <title>Billing — Suncoast Technology</title>
-  <!-- Suncoast Technology | billing.html | v3.2 -->
+  <!-- Suncoast Technology | billing.html | v3.3 -->
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet"/>
@@ -170,8 +170,12 @@
   </main>
 </div>
 <script>
-  const API = 'https://script.google.com/macros/s/AKfycbyxg5LlS9eUx6VSiD_VSzE0RD94STkBAK4Hc-h14T_YU5ikqXGE3dz-Fvt1kCAE-9XRLw/exec';
+  const API      = 'https://script.google.com/macros/s/AKfycbyxg5LlS9eUx6VSiD_VSzE0RD94STkBAK4Hc-h14T_YU5ikqXGE3dz-Fvt1kCAE-9XRLw/exec';
   const token    = localStorage.getItem('sc_token');
+  const clientId = localStorage.getItem('sc_client_id');
+  if (!token) window.location.href = 'login.html';
+  let stripe;
+  try { stripe = Stripe('pk_test_YOUR_KEY'); } catch(e) { console.warn('Stripe not loaded'); }
   async function api(action, extra = {}) {
     const res = await fetch(API, { method: 'POST', body: JSON.stringify({ action, token, client_id: clientId, ...extra }) });
     return res.json();
@@ -181,8 +185,6 @@
     localStorage.clear();
     window.location.href = 'login.html';
   }
-  let stripe;
-  try { stripe = Stripe('pk_test_YOUR_KEY'); } catch(e) {}
 
   
 
@@ -303,11 +305,10 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
   <title>Billing — Suncoast Technology</title>
-  <!-- Suncoast Technology | billing.html | v3.2 -->
+  <!-- Suncoast Technology | billing.html | v3.3 -->
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet"/>
-  <script src="https://js.stripe.com/v3/"></script>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
     :root{--navy:#04080F;--border:rgba(255,255,255,0.07);--muted:rgba(148,163,184,0.7);--light:#E8F0FF;--orange:#F97316;--gold:#FBBF24;--green:#22C55E;--red:#EF4444;--blue:#4FC3F7;--purple:#A78BFA;--teal:#2DD4BF;}
@@ -469,7 +470,7 @@
   </main>
 </div>
 <script>
-  const stripe = Stripe('pk_test_YOUR_KEY');
+  // stripe initialized above
 
   
 
