@@ -679,10 +679,11 @@ When in doubt about anything technical a client wants done: explain it simply, t
     const bubble = document.createElement('div');
     bubble.className = `sc-bubble sc-bubble-${role}`;
     // Parse basic markdown: **bold**, newlines
-    bubble.innerHTML = text
-      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-      .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
-      .replace(/\n/g,'<br>');
+bubble.innerHTML = text
+  .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+  .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
+  .replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" style="color:#F97316;text-decoration:underline;">$1</a>')
+  .replace(/\n/g,'<br>');
     div.appendChild(icon);
     div.appendChild(bubble);
     msgs.appendChild(div);
