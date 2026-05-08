@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
   <title>Clients — Suncoast Technology</title>
-  <!-- Suncoast Technology | clients.html | v1.3 -->
+  <!-- Suncoast Technology | clients.html | v2.0 -->
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet"/>
@@ -109,6 +109,47 @@
     .client-card{background:rgba(8,16,28,0.8);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:20px;cursor:pointer;transition:border-color 0.15s,transform 0.15s;}
     .client-card:hover{border-color:rgba(249,115,22,0.3);transform:translateY(-2px);}
     .client-avatar{width:38px;height:38px;border-radius:10px;background:rgba(249,115,22,0.15);border:1px solid rgba(249,115,22,0.2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--orange);flex-shrink:0;}
+    .client-meta-row{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);margin-top:5px;}
+    .client-meta-row svg{width:12px;height:12px;flex-shrink:0;}
+    .client-list-row{display:flex;align-items:center;gap:16px;padding:12px 16px;background:rgba(8,16,28,0.8);border:1px solid rgba(255,255,255,0.07);border-radius:10px;cursor:pointer;transition:border-color 0.15s,background 0.15s;}
+    .client-list-row:hover{border-color:rgba(249,115,22,0.3);background:rgba(249,115,22,0.04);}
+    .view-toggle{display:flex;gap:4px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:3px;}
+    .view-btn{padding:6px 10px;border-radius:6px;border:none;background:none;color:var(--muted);cursor:pointer;font-size:12px;transition:all 0.15s;display:flex;align-items:center;gap:5px;}
+    .view-btn.active{background:rgba(249,115,22,0.12);color:var(--orange);}
+    .add-client-btn{display:flex;align-items:center;gap:7px;padding:9px 18px;background:var(--orange);color:#fff;border:none;border-radius:9px;font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background 0.2s;}
+    .add-client-btn:hover{background:#ea6c0a;}
+    /* Add Client Modal */
+    .add-modal-overlay{position:fixed;inset:0;z-index:500;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(2,5,10,0.9);backdrop-filter:blur(16px);}
+    .add-modal-overlay.open{display:flex;}
+    .add-modal{background:#04080F;border-radius:20px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;position:relative;border:1px solid rgba(255,255,255,0.08);}
+    .add-modal::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(79,195,247,0.3),rgba(167,139,250,0.3),transparent);}
+    .add-modal-head{padding:24px 28px 0;display:flex;align-items:center;justify-content:space-between;}
+    .add-modal-title{font-family:'Playfair Display',serif;font-size:20px;color:#fff;}
+    .add-modal-close{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);color:var(--muted);cursor:pointer;padding:7px;border-radius:8px;display:flex;transition:all 0.2s;}
+    .add-modal-close:hover{color:#fff;}
+    .add-modal-body{padding:20px 28px 28px;}
+    .afield{display:flex;flex-direction:column;gap:5px;margin:0 0 14px;}
+    .afield label{font-size:10px;font-weight:600;color:rgba(148,163,184,0.6);text-transform:uppercase;letter-spacing:0.08em;}
+    .afield input,.afield select{width:100%;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:10px 14px;font-size:14px;font-family:'DM Sans',sans-serif;color:#fff;outline:none;transition:all 0.2s;}
+    .afield input:focus,.afield select:focus{border-color:rgba(167,139,250,0.4);background:rgba(167,139,250,0.03);}
+    .afield select option{background:#04080F;}
+    .afield-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+    .notify-toggle{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.07);border-radius:10px;margin:0 0 20px;}
+    .notify-toggle-label{font-size:13px;color:#fff;}
+    .notify-toggle-sub{font-size:12px;color:var(--muted);margin-top:2px;}
+    .toggle-switch{position:relative;width:42px;height:24px;flex-shrink:0;}
+    .toggle-switch input{opacity:0;width:0;height:0;}
+    .toggle-slider{position:absolute;cursor:pointer;inset:0;background:rgba(255,255,255,0.1);border-radius:24px;transition:0.3s;}
+    .toggle-slider::before{content:'';position:absolute;width:18px;height:18px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:0.3s;}
+    input:checked + .toggle-slider{background:var(--orange);}
+    input:checked + .toggle-slider::before{transform:translateX(18px);}
+    .add-submit{width:100%;padding:12px;background:linear-gradient(135deg,#A78BFA,#6D28D9);border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;transition:opacity 0.2s;}
+    .add-submit:hover{opacity:0.9;}
+    .add-submit:disabled{opacity:0.5;cursor:not-allowed;}
+    .add-alert{padding:10px 14px;border-radius:8px;font-size:13px;display:none;margin:0 0 14px;}
+    .add-alert.show{display:block;}
+    .add-success{background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);color:#86EFAC;}
+    .add-error{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#FCA5A5;}
     @media(max-width:768px){.shell{grid-template-columns:1fr}.sidebar{display:none}.main{padding:20px 16px}.grid2,.grid3{grid-template-columns:1fr}.drawer{width:100%}}
 
     .pw-toggle{position:relative;}
@@ -276,49 +317,144 @@ let allClients   = [];
 
   
 
+  let currentView = 'tile';
+
+  function setView(v) {
+    currentView = v;
+    document.getElementById('tileBtn').classList.toggle('active', v === 'tile');
+    document.getElementById('listBtn').classList.toggle('active', v === 'list');
+    const grid = document.getElementById('clientGrid');
+    if (v === 'tile') {
+      grid.style.display = 'grid';
+      grid.style.gridTemplateColumns = 'repeat(auto-fill,minmax(260px,1fr))';
+      grid.style.gap = '14px';
+    } else {
+      grid.style.display = 'flex';
+      grid.style.flexDirection = 'column';
+      grid.style.gap = '8px';
+    }
+    renderGrid(allClients.filter(c => {
+      const q = document.getElementById('searchInput').value.toLowerCase();
+      return !q || (c.client_name||'').toLowerCase().includes(q) || (c.business_name||'').toLowerCase().includes(q) || (c.contact_email||'').toLowerCase().includes(q) || (c.domain||'').toLowerCase().includes(q);
+    }));
+  }
+
   function renderGrid(clients) {
     const grid = document.getElementById('clientGrid');
     if (!clients.length) {
-      grid.innerHTML = '<div class="empty" style="grid-column:1/-1;">No clients found.</div>';
+      grid.innerHTML = '<div class="empty" style="grid-column:1/-1;padding:40px;text-align:center;color:var(--muted);">No clients found.</div>';
       return;
     }
-    grid.innerHTML = clients.map((c, i) => {
-      const initials = (c.client_name || '?').split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
-      const isActive = (c.status || 'Active').toLowerCase() === 'active';
-      return `
-        <div class="client-card" style="animation-delay:${i * 0.04}s" onclick="openProfile('${c.client_id}')">
-          <div class="client-card-top">
+
+    if (currentView === 'list') {
+      grid.innerHTML = clients.map((c, i) => {
+        const initials = (c.client_name||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+        const isActive = (c.status||'Active').toLowerCase() === 'active';
+        return `<div class="client-list-row" onclick="openProfile('${c.client_id}')">
+          <div class="client-avatar" style="flex-shrink:0;">${initials}</div>
+          <div style="flex:1;min-width:0;">
+            <div style="font-size:14px;font-weight:500;color:#fff;">${c.client_name||'—'}</div>
+            <div style="font-size:12px;color:var(--muted);">${c.business_name||''}</div>
+          </div>
+          <div style="font-size:12px;color:var(--muted);width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${c.contact_email||'—'}</div>
+          <div style="font-size:12px;color:var(--blue);width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${c.domain||'—'}</div>
+          <div style="font-size:12px;color:#fff;width:120px;">${c.plan_name||'—'}${c.monthly_rate?' · $'+c.monthly_rate+'/mo':''}</div>
+          <span style="font-size:11px;padding:3px 10px;border-radius:20px;background:${isActive?'rgba(34,197,94,0.12)':'rgba(255,255,255,0.06)'};color:${isActive?'#86EFAC':'rgba(148,163,184,0.6)'};">${c.status||'Active'}</span>
+        </div>`;
+      }).join('');
+    } else {
+      grid.innerHTML = clients.map((c, i) => {
+        const initials = (c.client_name||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+        const isActive = (c.status||'Active').toLowerCase() === 'active';
+        return `<div class="client-card" onclick="openProfile('${c.client_id}')">
+          <div style="display:flex;align-items:center;gap:12px;margin:0 0 14px;">
             <div class="client-avatar">${initials}</div>
-            <div>
-              <div class="client-name">${c.client_name || '—'}</div>
-              <div class="client-biz">${c.business_name || '—'}</div>
+            <div style="min-width:0;">
+              <div style="font-size:14px;font-weight:500;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${c.client_name||'—'}</div>
+              <div style="font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${c.business_name||'—'}</div>
             </div>
           </div>
-          <div class="client-meta">
-            ${c.contact_email ? `<div class="client-meta-row"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="4" width="14" height="9" rx="1.5"/><path d="M1 4l7 5.5L15 4"/></svg>${c.contact_email}</div>` : ''}
-            ${c.domain ? `<div class="client-meta-row"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6.5"/><path d="M8 1.5C8 1.5 5.5 4 5.5 8s2.5 6.5 2.5 6.5M8 1.5C8 1.5 10.5 4 10.5 8s-2.5 6.5-2.5 6.5M1.5 8h13"/></svg>${c.domain}</div>` : ''}
-            ${c.plan_name ? `<div class="client-meta-row"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1l1.9 3.9 4.1.6-3 2.9.7 4.1L8 10.4l-3.7 2.1.7-4.1-3-2.9 4.1-.6z"/></svg>${c.plan_name}${c.monthly_rate ? ' · $' + c.monthly_rate + '/mo' : ''}</div>` : ''}
+          <div style="display:flex;flex-direction:column;gap:5px;margin:0 0 14px;">
+            ${c.contact_email?`<div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="4" width="14" height="9" rx="1.5"/><path d="M1 4l7 5.5L15 4"/></svg><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${c.contact_email}</span></div>`:''}
+            ${c.domain?`<div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6.5"/><path d="M8 1.5C8 1.5 5.5 4 5.5 8s2.5 6.5 2.5 6.5M8 1.5c0 0 2.5 2.5 2.5 6.5s-2.5 6.5-2.5 6.5M1.5 8h13"/></svg>${c.domain}</div>`:''}
+            ${c.plan_name?`<div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1l1.9 3.9 4.1.6-3 2.9.7 4.1L8 10.4l-3.7 2.1.7-4.1-3-2.9 4.1-.6z"/></svg>${c.plan_name}${c.monthly_rate?' · $'+c.monthly_rate+'/mo':''}</div>`:''}
           </div>
-          <div class="client-footer">
-            <div style="display:flex;align-items:center;gap:6px;">
-              <div class="status-dot ${isActive ? '' : 'inactive'}"></div>
-              <span class="status-text">${c.status || 'Active'}</span>
-            </div>
-            <button class="profile-btn">View profile →</button>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid rgba(255,255,255,0.06);">
+            <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted);">
+              <span style="width:6px;height:6px;border-radius:50%;background:${isActive?'var(--green)':'var(--muted)'};"></span>
+              ${c.status||'Active'}
+            </span>
+            <span style="font-size:11px;color:var(--orange);font-weight:500;">View profile →</span>
           </div>
         </div>`;
-    }).join('');
+      }).join('');
+    }
   }
 
   function filterClients(q) {
     const s = q.toLowerCase();
     const filtered = allClients.filter(c =>
-      (c.client_name || '').toLowerCase().includes(s) ||
-      (c.business_name || '').toLowerCase().includes(s) ||
-      (c.contact_email || '').toLowerCase().includes(s) ||
-      (c.domain || '').toLowerCase().includes(s)
+      (c.client_name||'').toLowerCase().includes(s) ||
+      (c.business_name||'').toLowerCase().includes(s) ||
+      (c.contact_email||'').toLowerCase().includes(s) ||
+      (c.domain||'').toLowerCase().includes(s)
     );
     renderGrid(filtered);
+  }
+
+  function openAddClient() {
+    document.getElementById('addClientModal').classList.add('open');
+    ['addSuccess','addError'].forEach(id => document.getElementById(id).classList.remove('show'));
+    document.getElementById('addClientForm').reset();
+  }
+
+  function closeAddClient() {
+    document.getElementById('addClientModal').classList.remove('open');
+  }
+
+  async function handleAddClient() {
+    const btn     = document.getElementById('addClientSubmit');
+    const notify  = document.getElementById('notifyToggle').checked;
+    const name    = document.getElementById('acName').value.trim();
+    const biz     = document.getElementById('acBiz').value.trim();
+    const email   = document.getElementById('acEmail').value.trim();
+    const phone   = document.getElementById('acPhone').value.trim();
+    const domain  = document.getElementById('acDomain').value.trim();
+    const plan    = document.getElementById('acPlan').value.trim();
+    const rate    = document.getElementById('acRate').value;
+    const status  = document.getElementById('acStatus').value;
+
+    ['addSuccess','addError'].forEach(id => document.getElementById(id).classList.remove('show'));
+    if (!name || !email) {
+      document.getElementById('addError').textContent = 'Name and email are required.';
+      document.getElementById('addError').classList.add('show');
+      return;
+    }
+
+    btn.disabled = true; btn.textContent = 'Adding client...';
+
+    try {
+      const res = await api('adminSaveClient', {
+        client: { client_name: name, business_name: biz, contact_email: email, phone, domain, plan_name: plan, monthly_rate: rate, status, notify_client: notify }
+      });
+      if (res.ok) {
+        document.getElementById('addSuccess').textContent = notify
+          ? name + ' has been added and a welcome email has been sent.'
+          : name + ' has been added. No email sent — you can send the welcome email later from their profile.';
+        document.getElementById('addSuccess').classList.add('show');
+        btn.textContent = 'Client added ✓';
+        await loadClients();
+        setTimeout(closeAddClient, 2000);
+      } else {
+        document.getElementById('addError').textContent = res.error || 'Error adding client.';
+        document.getElementById('addError').classList.add('show');
+        btn.disabled = false; btn.textContent = 'Add client';
+      }
+    } catch(e) {
+      document.getElementById('addError').textContent = 'Connection error.';
+      document.getElementById('addError').classList.add('show');
+      btn.disabled = false; btn.textContent = 'Add client';
+    }
   }
 
   async function openProfile(cid) {
@@ -345,6 +481,25 @@ let allClients   = [];
     currentDetails = {};
   }
 
+  async function handleSendWelcome() {
+    if (!currentClient) return;
+    const btn = document.getElementById('welcomeBtn');
+    btn.disabled = true; btn.textContent = 'Sending...';
+    try {
+      const res = await api('adminSendWelcomeEmail', { client_id: currentClient.client_id });
+      if (res.ok) {
+        btn.textContent = 'Sent ✓';
+        document.getElementById('profileSuccess').textContent = 'Welcome email sent to ' + currentClient.contact_email;
+        document.getElementById('profileSuccess').classList.add('show');
+        setTimeout(() => { btn.disabled = false; btn.textContent = 'Send welcome'; }, 3000);
+      } else {
+        btn.disabled = false; btn.textContent = 'Send welcome';
+        document.getElementById('profileError').textContent = res.error || 'Error sending email.';
+        document.getElementById('profileError').classList.add('show');
+      }
+    } catch(e) { btn.disabled = false; btn.textContent = 'Send welcome'; }
+  }
+
   async function switchTab(tab) {
     currentTab = tab;
     document.querySelectorAll('.drawer-tab').forEach((t, i) => {
@@ -361,6 +516,13 @@ let allClients   = [];
       body.innerHTML = `
         <div class="alert alert-success" id="profileSuccess">Saved successfully.</div>
         <div class="alert alert-error" id="profileError">Error saving.</div>
+        <div style="margin:0 0 20px;padding:14px 16px;background:rgba(79,195,247,0.05);border:1px solid rgba(79,195,247,0.12);border-radius:10px;display:flex;align-items:center;justify-content:space-between;gap:12px;">
+          <div>
+            <div style="font-size:13px;font-weight:500;color:#fff;margin:0 0 2px;">Welcome email</div>
+            <div style="font-size:12px;color:rgba(148,163,184,0.6);">Send or resend the welcome email with a fresh temp password</div>
+          </div>
+          <button onclick="handleSendWelcome()" id="welcomeBtn" style="padding:8px 16px;background:rgba(79,195,247,0.1);border:1px solid rgba(79,195,247,0.2);border-radius:8px;color:#4FC3F7;font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;flex-shrink:0;">Send welcome</button>
+        </div>
         <div class="form-section">
           <div class="form-section-title"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.31 2.69-6 6-6s6 2.69 6 6"/></svg>Contact</div>
           <div class="field-grid">
