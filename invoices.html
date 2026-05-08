@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
   <title>Invoices — Suncoast Technology</title>
-  <!-- Suncoast Technology | invoices.html | v3.5 -->
+  <!-- Suncoast Technology | invoices.html | v3.6 -->
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet"/>
@@ -339,15 +339,19 @@
 
   async function load() {
     try {
+      console.log('=== INVOICE LOAD START ===');
+      console.log('token:', token ? token.slice(0,10)+'...' : 'MISSING');
+      console.log('clientId:', clientId);
+      console.log('API:', API.slice(0,50)+'...');
       const clientsRes = await api('adminGetClients');
+      console.log('RAW clientsRes:', JSON.stringify(clientsRes).slice(0,300));
       if (!clientsRes.ok) {
-        // Don't redirect — just show empty state, might be token issue
-        console.error('adminGetClients failed:', clientsRes.error);
-        document.getElementById('invoiceTable').innerHTML = '<div style="color:rgba(239,68,68,0.8);padding:20px;">Session expired — please <a href="login.html" style="color:var(--orange);">log in again</a>.</div>';
+        console.error('adminGetClients FAILED:', clientsRes.error);
+        document.getElementById('invoiceTable').innerHTML = '<div style="color:rgba(239,68,68,0.8);padding:20px;">Error: ' + (clientsRes.error||'unknown') + ' — please <a href="login.html" style="color:var(--orange);">log in again</a>.</div>';
         return;
       }
       allClients = clientsRes.clients || [];
-      console.log('Clients loaded:', allClients.length);
+      console.log('allClients loaded:', allClients.length, allClients.map(c=>c.client_name));
 
       // Populate client dropdown
       const sel = document.getElementById('invClient');
