@@ -11,7 +11,7 @@
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
     :root{--navy:#04080F;--slate:rgba(13,27,42,0.85);--card:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.07);--muted:rgba(148,163,184,0.7);--light:#E8F0FF;--orange:#F97316;--gold:#FBBF24;--green:#22C55E;--red:#EF4444;--blue:#4FC3F7;--purple:#A78BFA;--teal:#2DD4BF;}
-    html,body{min-height:100%;font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--light);}
+    html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--light);}
 
     /* AURORA */
     .scene{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;}
@@ -19,10 +19,10 @@
     .grid-overlay{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(79,195,247,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(79,195,247,0.02) 1px,transparent 1px);background-size:80px 80px;}
 
     /* SHELL */
-    .shell{display:grid;grid-template-columns:220px 1fr;min-height:100vh;position:relative;z-index:10;overflow-x:hidden;}
+    .shell{display:grid;grid-template-columns:220px 1fr;min-height:100%;position:relative;z-index:10;overflow-x:clip;}
 
     /* SIDEBAR */
-    .sidebar{background:rgba(6,12,20,0.8);backdrop-filter:blur(24px);border-right:1px solid var(--border);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto;}
+    .sidebar{background:rgba(6,12,20,0.8);backdrop-filter:blur(24px);border-right:1px solid var(--border);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto;flex-shrink:0;}
     .sidebar-brand{padding:24px 20px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;}
     .brand-mark{width:36px;height:36px;flex-shrink:0;}
     .brand-name{font-family:'Playfair Display',serif;font-size:15px;color:#fff;}
@@ -148,7 +148,7 @@
     <div class="sidebar-footer">
       <div class="user-row">
         <div class="user-avatar">JR</div>
-        <div class="user-name">Justin R.</div>
+        <div class="user-name">Justin R.<div style="font-size:10px;color:rgba(148,163,184,0.3);margin-top:2px;">onboarding.html · v1.0</div></div>
         <button class="logout-btn" onclick="handleLogout()"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3"/><path d="M11 11l3-3-3-3"/><path d="M14 8H6"/></svg></button>
       </div>
     </div>
@@ -730,7 +730,7 @@
   document.documentElement.style.overflowX = 'hidden';
 </script>
 
-<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.25);">Suncoast Technology · onboarding.html · v1.0</div>
+
 <script src="ai-assistant.js"></script>
 </body>
 </html>
