@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
   <title>My Site — Suncoast Technology</title>
-  <!-- Suncoast Technology | my-site.html | v3.4 -->
+  <!-- Suncoast Technology | my-site.html | v3.5 -->
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet"/>
@@ -400,11 +400,7 @@
 
   async function loadCFStats(domain) {
     try {
-      console.log('CF call — token:', token ? token.slice(0,10)+'...' : 'MISSING');
-      console.log('CF call — clientId:', clientId);
-      console.log('CF call — domain:', domain);
       const res = await api('getCloudflareStats', { domain });
-      console.log('CF response:', JSON.stringify(res).slice(0,200));
       
       // Update CF badge in hero
       const cfOk = res.ok && res.zone_status === 'active';
@@ -501,6 +497,6 @@
   document.documentElement.style.overflowX = 'hidden';
 </script>
 
-<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.25);">Suncoast Technology · my-site.html · v3.4</div>
+<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.25);">Suncoast Technology · my-site.html · v3.5</div>
 </body>
 </html>
