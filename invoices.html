@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
   <title>Invoices — Suncoast Technology</title>
-  <!-- Suncoast Technology | invoices.html | v3.3 -->
+  <!-- Suncoast Technology | invoices.html | v3.4 -->
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet"/>
@@ -315,18 +315,23 @@
   </main>
 </div>
 <script>
-  const API='https://script.google.com/macros/s/AKfycbyxg5LlS9eUx6VSiD_VSzE0RD94STkBAK4Hc-h14T_YU5ikqXGE3dz-Fvt1kCAE-9XRLw/exec';
-  const token=localStorage.getItem('sc_token');
-  const clientId=localStorage.getItem('sc_client_id');
-  if(!token) window.location.href='login.html';
-  async function api(action,extra={}){
-    const res=await fetch(API,{method:'POST',body:JSON.stringify({action,token,client_id:clientId,...extra})});
+  const API      = 'https://script.google.com/macros/s/AKfycbyxg5LlS9eUx6VSiD_VSzE0RD94STkBAK4Hc-h14T_YU5ikqXGE3dz-Fvt1kCAE-9XRLw/exec';
+  const token    = localStorage.getItem('sc_token');
+  const clientId = localStorage.getItem('sc_client_id');
+  if (!token) window.location.href = 'login.html';
+
+  async function api(action, extra = {}) {
+    const res = await fetch(API, {
+      method: 'POST',
+      body: JSON.stringify({ action, token, client_id: clientId, ...extra })
+    });
     return res.json();
   }
-  function handleLogout(){
-    fetch(API,{method:'POST',body:JSON.stringify({action:'logout',token})});
+
+  function handleLogout() {
+    fetch(API, { method: 'POST', body: JSON.stringify({ action: 'logout', token }) });
     localStorage.clear();
-    window.location.href='login.html';
+    window.location.href = 'login.html';
   }
 
   let allInvoices = [];
@@ -334,14 +339,9 @@
 
   async function load() {
     try {
-      console.log('load() — token:', token ? token.slice(0,10)+'...' : 'MISSING');
-      console.log('load() — clientId:', clientId);
-      console.log('load() — sc_is_admin:', localStorage.getItem('sc_is_admin'));
-      const clientsRes = await fetch(API,{method:'POST',body:JSON.stringify({action:'adminGetClients',token,client_id:clientId})}).then(r=>r.json());
-      console.log('adminGetClients response:', JSON.stringify(clientsRes).slice(0,200));
-      if (!clientsRes.ok) { window.location.href='login.html'; return; }
+const clientsRes = await fetch(API,{method:'POST',body:JSON.stringify({action:'adminGetClients',token,client_id:clientId})}).then(r=>r.json());
+if (!clientsRes.ok) { window.location.href='login.html'; return; }
       allClients = clientsRes.clients || [];
-      console.log('allClients count:', allClients.length);
 
       // Populate client dropdown
       const sel = document.getElementById('invClient');
