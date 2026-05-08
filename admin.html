@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
   <title>Admin Dashboard — Suncoast Technology</title>
-  <!-- Suncoast Technology | admin.html | v2.0 -->
+  <!-- Suncoast Technology | admin.html | v2.1 -->
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet"/>
@@ -193,6 +193,7 @@
       <a href="clients.html" class="nav-item"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="6" cy="5" r="2.5" stroke="currentColor" stroke-width="1.3"/><path d="M1 13c0-2.76 2.24-5 5-5" stroke="currentColor" stroke-width="1.3"/><circle cx="12" cy="8" r="2" stroke="currentColor" stroke-width="1.3"/><path d="M9.5 13c0-1.93 1.12-3 2.5-3s2.5 1.07 2.5 3" stroke="currentColor" stroke-width="1.3"/></svg>Clients</a>
       <a href="invoices.html" class="nav-item"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 1h10a1 1 0 011 1v12l-2-1.5L10 14l-2-1.5L6 14l-2-1.5L2 14V2a1 1 0 011-1z" stroke="currentColor" stroke-width="1.3"/><path d="M5 5h6M5 8h6M5 11h3" stroke="currentColor" stroke-width="1.3"/></svg>Invoices</a>
       <a href="updates.html" class="nav-item"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.3"/><path d="M8 4.5v4l2.5 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>Updates</a>
+      <a href="onboarding.html" class="nav-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2.5l-7 7-3-3"/><path d="M8 14A6 6 0 108 2"/></svg>Onboarding</a>
       <a href="admin-support.html" class="nav-item"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M14 10.5a2 2 0 01-2 2H4.5L1.5 15V3.5a2 2 0 012-2h8.5a2 2 0 012 2v7z" stroke="currentColor" stroke-width="1.3"/></svg>Support</a>
     </nav>
     <div class="sidebar-footer">
@@ -251,14 +252,59 @@
     localStorage.clear();
     window.location.href='login.html';
   }
-load();
-</script>
 
-<script>
-  // Lock horizontal scroll
-  document.addEventListener('touchstart', function(e) {
-    if (e.touches.length > 1) e.preventDefault();
-  }, { passive: false });
+  async function load() {
+    try {
+      const [clientsRes, invoicesRes] = await Promise.all([
+        fetch(API,{method:'POST',body:JSON.stringify({action:'adminGetClients',token,client_id:clientId})}).then(r=>r.json()),
+        fetch(API,{method:'POST',body:JSON.stringify({action:'adminGetClients',token,client_id:clientId})}).then(r=>r.json())
+      ]);
+      if (!clientsRes.ok) { window.location.href='login.html'; return; }
+      const clients  = clientsRes.clients || [];
+      const active   = clients.filter(c => (c.status||'Active').toLowerCase() === 'active');
+
+      document.getElementById('totalClients').textContent   = clients.length;
+      document.getElementById('activeClients').textContent  = active.length;
+
+      // Get invoices for financial stats
+      const allInvoices = [];
+      for (const c of clients.slice(0,20)) {
+        try {
+          const ir = await fetch(API,{method:'POST',body:JSON.stringify({action:'getInvoices',token,client_id:c.client_id})}).then(r=>r.json());
+          if (ir.invoices) allInvoices.push(...ir.invoices);
+        } catch(e) {}
+      }
+      const unpaid = allInvoices.filter(i => (i.status||'').toLowerCase() !== 'paid');
+      const outstanding = unpaid.reduce((s,i) => s + parseFloat(i.amount||0), 0);
+      const monthly = active.reduce((s,c) => s + parseFloat(c.monthly_rate||0), 0);
+
+      document.getElementById('outstanding').textContent    = '$' + outstanding.toFixed(2);
+      document.getElementById('monthlyRevenue').textContent = '$' + monthly.toFixed(2);
+
+      // Recent activity
+      document.getElementById('recentActivity').innerHTML = clients.slice(0,5).map(c => `
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05);">
+          <div>
+            <div style="font-size:13px;font-weight:500;color:#fff;">${c.business_name||c.client_name}</div>
+            <div style="font-size:11px;color:rgba(148,163,184,0.5);">${c.domain||c.contact_email||''}</div>
+          </div>
+          <span style="font-size:11px;padding:2px 8px;border-radius:20px;background:${(c.status||'Active').toLowerCase()==='active'?'rgba(34,197,94,0.12)':'rgba(255,255,255,0.06)'};color:${(c.status||'Active').toLowerCase()==='active'?'#86EFAC':'rgba(148,163,184,0.6)'};">${c.status||'Active'}</span>
+        </div>`).join('') || '<div style="color:rgba(148,163,184,0.5);font-size:13px;padding:10px 0;">No clients yet.</div>';
+
+      // Unpaid invoices
+      document.getElementById('unpaidInvoices').innerHTML = unpaid.slice(0,5).map(i => `
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05);">
+          <div>
+            <div style="font-size:13px;font-weight:500;color:#fff;">${i.invoice_id}</div>
+            <div style="font-size:11px;color:rgba(148,163,184,0.5);">${i.description||i.period||''}</div>
+          </div>
+          <span style="font-size:13px;font-weight:600;color:#FBBF24;">$${parseFloat(i.amount||0).toFixed(2)}</span>
+        </div>`).join('') || '<div style="color:rgba(148,163,184,0.5);font-size:13px;padding:10px 0;">No unpaid invoices.</div>';
+
+    } catch(e) { console.error(e); }
+  }
+
+load();alse });
   document.body.style.overflowX = 'hidden';
   document.documentElement.style.overflowX = 'hidden';
 </script>

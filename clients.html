@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
   <title>Clients — Suncoast Technology</title>
-  <!-- Suncoast Technology | clients.html | v2.0 -->
+  <!-- Suncoast Technology | clients.html | v1.3 -->
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet"/>
@@ -205,6 +205,7 @@
       <a href="clients.html" class="nav-item active"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="6" cy="5" r="2.5" stroke="currentColor" stroke-width="1.3"/><path d="M1 13c0-2.76 2.24-5 5-5" stroke="currentColor" stroke-width="1.3"/><circle cx="12" cy="8" r="2" stroke="currentColor" stroke-width="1.3"/><path d="M9.5 13c0-1.93 1.12-3 2.5-3s2.5 1.07 2.5 3" stroke="currentColor" stroke-width="1.3"/></svg>Clients</a>
       <a href="invoices.html" class="nav-item"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 1h10a1 1 0 011 1v12l-2-1.5L10 14l-2-1.5L6 14l-2-1.5L2 14V2a1 1 0 011-1z" stroke="currentColor" stroke-width="1.3"/><path d="M5 5h6M5 8h6M5 11h3" stroke="currentColor" stroke-width="1.3"/></svg>Invoices</a>
       <a href="updates.html" class="nav-item"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.3"/><path d="M8 4.5v4l2.5 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>Updates</a>
+      <a href="onboarding.html" class="nav-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2.5l-7 7-3-3"/><path d="M8 14A6 6 0 108 2"/></svg>Onboarding</a>
       <a href="admin-support.html" class="nav-item"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M14 10.5a2 2 0 01-2 2H4.5L1.5 15V3.5a2 2 0 012-2h8.5a2 2 0 012 2v7z" stroke="currentColor" stroke-width="1.3"/></svg>Support</a>
     </nav>
     <div class="sidebar-footer">
@@ -689,6 +690,15 @@ let allClients   = [];
     fetch(API, { method: 'POST', body: JSON.stringify({ action: 'logout', token }) });
     localStorage.clear();
     window.location.href = 'login.html';
+  }
+
+  async function loadClients() {
+    try {
+      const res = await api('adminGetClients');
+      if (!res.ok) { window.location.href = 'login.html'; return; }
+      allClients = res.clients.filter(c => c.client_id !== clientId);
+      renderGrid(allClients);
+    } catch(e) { console.error(e); }
   }
 
   loadClients();

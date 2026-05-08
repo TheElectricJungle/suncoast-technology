@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
   <title>Support — Suncoast Technology</title>
-  <!-- Suncoast Technology | support.html | v2.0 -->
+  <!-- Suncoast Technology | support.html | v2.1 -->
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet"/>
@@ -223,9 +223,27 @@
     window.location.href='login.html';
   }
 
-        
-   catch(e){ document.getElementById('reqError').classList.add('show'); }
-    btn.disabled=false; btn.textContent='Submit request';
+  async function handleSubmit() {
+    const subject  = document.getElementById('reqSubject').value.trim();
+    const desc     = document.getElementById('reqDesc').value.trim();
+    const priority = document.querySelector('.priority-btn.selected-Normal, .priority-btn.selected-High, .priority-btn.selected-Urgent') ? 
+      document.querySelector('.priority-btn.selected-Normal, .priority-btn.selected-High, .priority-btn.selected-Urgent').textContent : 'Normal';
+    const btn      = document.getElementById('submitBtn');
+    ['submitSuccess','submitError'].forEach(id => document.getElementById(id) && document.getElementById(id).classList.remove('show'));
+    if (!subject) { document.getElementById('submitError') && document.getElementById('submitError').classList.add('show'); return; }
+    btn.disabled = true; btn.textContent = 'Submitting...';
+    try {
+      const res = await api('submitRequest', { subject, description: desc, priority });
+      if (res.ok) {
+        document.getElementById('submitSuccess').classList.add('show');
+        document.getElementById('reqSubject').value = '';
+        document.getElementById('reqDesc').value = '';
+        load();
+      } else {
+        document.getElementById('submitError').classList.add('show');
+      }
+    } catch(e) { document.getElementById('submitError') && document.getElementById('submitError').classList.add('show'); }
+    btn.disabled = false; btn.textContent = 'Submit request';
   }
 
   function priorityBadge(p) {

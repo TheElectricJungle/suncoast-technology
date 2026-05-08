@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
   <title>Billing — Suncoast Technology</title>
-  <!-- Suncoast Technology | billing.html | v3.0 -->
+  <!-- Suncoast Technology | billing.html | v3.1 -->
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet"/>
@@ -170,21 +170,7 @@
   </main>
 </div>
 <script>
-  const API='https://script.google.com/macros/s/AKfycbyxg5LlS9eUx6VSiD_VSzE0RD94STkBAK4Hc-h14T_YU5ikqXGE3dz-Fvt1kCAE-9XRLw/exec';
-  const token=localStorage.getItem('sc_token');
-  const clientId=localStorage.getItem('sc_client_id');
-  if(!token) window.location.href='login.html';
-  async function api(action,extra={}){
-    const res=await fetch(API,{method:'POST',body:JSON.stringify({action,token,client_id:clientId,...extra})});
-    return res.json();
-  }
-  function handleLogout(){
-    fetch(API,{method:'POST',body:JSON.stringify({action:'logout',token})});
-    localStorage.clear();
-    window.location.href='login.html';
-  }
-
-          const stripe = Stripe('pk_test_YOUR_KEY');
+  const stripe = Stripe('pk_test_YOUR_KEY');
 
   
 
@@ -305,7 +291,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
   <title>Billing — Suncoast Technology</title>
-  <!-- Suncoast Technology | billing.html | v3.0 -->
+  <!-- Suncoast Technology | billing.html | v3.1 -->
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet"/>
@@ -471,21 +457,7 @@
   </main>
 </div>
 <script>
-  const API='https://script.google.com/macros/s/AKfycbyxg5LlS9eUx6VSiD_VSzE0RD94STkBAK4Hc-h14T_YU5ikqXGE3dz-Fvt1kCAE-9XRLw/exec';
-  const token=localStorage.getItem('sc_token');
-  const clientId=localStorage.getItem('sc_client_id');
-  if(!token) window.location.href='login.html';
-  async function api(action,extra={}){
-    const res=await fetch(API,{method:'POST',body:JSON.stringify({action,token,client_id:clientId,...extra})});
-    return res.json();
-  }
-  function handleLogout(){
-    fetch(API,{method:'POST',body:JSON.stringify({action:'logout',token})});
-    localStorage.clear();
-    window.location.href='login.html';
-  }
-
-          const stripe = Stripe('pk_test_YOUR_KEY');
+  const stripe = Stripe('pk_test_YOUR_KEY');
 
   
 

@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
   <title>Invoices — Suncoast Technology</title>
-  <!-- Suncoast Technology | invoices.html | v2.0 -->
+  <!-- Suncoast Technology | invoices.html | v2.1 -->
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet"/>
@@ -193,6 +193,7 @@
       <a href="clients.html" class="nav-item"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="6" cy="5" r="2.5" stroke="currentColor" stroke-width="1.3"/><path d="M1 13c0-2.76 2.24-5 5-5" stroke="currentColor" stroke-width="1.3"/><circle cx="12" cy="8" r="2" stroke="currentColor" stroke-width="1.3"/><path d="M9.5 13c0-1.93 1.12-3 2.5-3s2.5 1.07 2.5 3" stroke="currentColor" stroke-width="1.3"/></svg>Clients</a>
       <a href="invoices.html" class="nav-item active"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 1h10a1 1 0 011 1v12l-2-1.5L10 14l-2-1.5L6 14l-2-1.5L2 14V2a1 1 0 011-1z" stroke="currentColor" stroke-width="1.3"/><path d="M5 5h6M5 8h6M5 11h3" stroke="currentColor" stroke-width="1.3"/></svg>Invoices</a>
       <a href="updates.html" class="nav-item"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.3"/><path d="M8 4.5v4l2.5 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>Updates</a>
+      <a href="onboarding.html" class="nav-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2.5l-7 7-3-3"/><path d="M8 14A6 6 0 108 2"/></svg>Onboarding</a>
       <a href="admin-support.html" class="nav-item"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M14 10.5a2 2 0 01-2 2H4.5L1.5 15V3.5a2 2 0 012-2h8.5a2 2 0 012 2v7z" stroke="currentColor" stroke-width="1.3"/></svg>Support</a>
     </nav>
     <div class="sidebar-footer">
@@ -271,7 +272,130 @@
     localStorage.clear();
     window.location.href='login.html';
   }
-load();
+
+  let allInvoices = [];
+  let allClients  = [];
+
+  async function load() {
+    try {
+      if (!isAdmin(token)) { window.location.href = 'login.html'; return; }
+      const [clientsRes] = await Promise.all([
+        fetch(API,{method:'POST',body:JSON.stringify({action:'adminGetClients',token,client_id:clientId})}).then(r=>r.json())
+      ]);
+      if (!clientsRes.ok) { window.location.href='login.html'; return; }
+      allClients = clientsRes.clients || [];
+
+      // Populate client dropdown
+      const sel = document.getElementById('invClient');
+      if (sel) {
+        sel.innerHTML = '<option value="">Select client...</option>' +
+          allClients.map(c => `<option value="${c.client_id}">${c.business_name||c.client_name}</option>`).join('');
+      }
+
+      // Load all invoices
+      allInvoices = [];
+      for (const c of allClients) {
+        try {
+          const ir = await fetch(API,{method:'POST',body:JSON.stringify({action:'getInvoices',token,client_id:c.client_id})}).then(r=>r.json());
+          if (ir.invoices) allInvoices.push(...ir.invoices.map(i => ({...i, _clientName: c.business_name||c.client_name})));
+        } catch(e) {}
+      }
+      allInvoices.sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
+
+      // Stats
+      const unpaid   = allInvoices.filter(i => (i.status||'').toLowerCase() === 'unpaid');
+      const paid     = allInvoices.filter(i => (i.status||'').toLowerCase() === 'paid');
+      const overdue  = allInvoices.filter(i => (i.status||'').toLowerCase() === 'overdue');
+      const now      = new Date();
+      const thisMonth = allInvoices.filter(i => i.paid_date && new Date(i.paid_date).getMonth() === now.getMonth());
+      
+      document.getElementById('totalOutstanding').textContent = '$' + unpaid.reduce((s,i)=>s+parseFloat(i.amount||0),0).toFixed(2);
+      document.getElementById('paidThisMonth').textContent    = '$' + thisMonth.reduce((s,i)=>s+parseFloat(i.amount||0),0).toFixed(2);
+      document.getElementById('overdueCount').textContent     = overdue.length;
+
+      renderInvoices(allInvoices);
+    } catch(e) { console.error(e); }
+  }
+
+  function renderInvoices(invoices) {
+    const table = document.getElementById('invoiceTable');
+    if (!table) return;
+    if (!invoices.length) { table.innerHTML = '<div style="text-align:center;padding:40px;color:rgba(148,163,184,0.5);">No invoices found.</div>'; return; }
+    table.innerHTML = `<table style="width:100%;border-collapse:collapse;">
+      <thead><tr>
+        <th style="padding:10px;text-align:left;font-size:10px;color:rgba(148,163,184,0.5);text-transform:uppercase;letter-spacing:0.06em;border-bottom:1px solid rgba(255,255,255,0.06);">Invoice</th>
+        <th style="padding:10px;text-align:left;font-size:10px;color:rgba(148,163,184,0.5);text-transform:uppercase;letter-spacing:0.06em;border-bottom:1px solid rgba(255,255,255,0.06);">Client</th>
+        <th style="padding:10px;text-align:left;font-size:10px;color:rgba(148,163,184,0.5);text-transform:uppercase;letter-spacing:0.06em;border-bottom:1px solid rgba(255,255,255,0.06);">Description</th>
+        <th style="padding:10px;text-align:right;font-size:10px;color:rgba(148,163,184,0.5);text-transform:uppercase;letter-spacing:0.06em;border-bottom:1px solid rgba(255,255,255,0.06);">Amount</th>
+        <th style="padding:10px;text-align:left;font-size:10px;color:rgba(148,163,184,0.5);text-transform:uppercase;letter-spacing:0.06em;border-bottom:1px solid rgba(255,255,255,0.06);">Due</th>
+        <th style="padding:10px;text-align:left;font-size:10px;color:rgba(148,163,184,0.5);text-transform:uppercase;letter-spacing:0.06em;border-bottom:1px solid rgba(255,255,255,0.06);">Status</th>
+        <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,0.06);"></th>
+      </tr></thead>
+      <tbody>${invoices.map(inv => {
+        const st = (inv.status||'Unpaid').toLowerCase();
+        const bc = st==='paid'?'rgba(34,197,94,0.12);color:#86EFAC':st==='overdue'?'rgba(239,68,68,0.12);color:#FCA5A5':'rgba(251,191,36,0.12);color:#FBBF24';
+        const due = inv.due_date ? new Date(inv.due_date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '—';
+        return `<tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+          <td style="padding:10px;font-size:12px;color:rgba(148,163,184,0.5);">${inv.invoice_id}</td>
+          <td style="padding:10px;font-size:13px;color:#fff;">${inv._clientName||'—'}</td>
+          <td style="padding:10px;font-size:12px;color:rgba(148,163,184,0.7);">${inv.description||inv.period||'—'}</td>
+          <td style="padding:10px;font-size:13px;font-weight:500;color:#fff;text-align:right;">$${parseFloat(inv.amount||0).toFixed(2)}</td>
+          <td style="padding:10px;font-size:12px;color:rgba(148,163,184,0.6);">${due}</td>
+          <td style="padding:10px;"><span style="background:${bc};padding:2px 8px;border-radius:20px;font-size:11px;">${inv.status||'Unpaid'}</span></td>
+          <td style="padding:10px;"><button onclick="openInvoiceModal('${inv.invoice_id}')" style="font-size:11px;padding:4px 10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:6px;color:rgba(148,163,184,0.7);cursor:pointer;font-family:'DM Sans',sans-serif;">Edit</button></td>
+        </tr>`;
+      }).join('')}</tbody>
+    </table>`;
+  }
+
+  function filterInvoices() {
+    const status = document.getElementById('filterStatus').value;
+    const filtered = status === 'All' ? allInvoices : allInvoices.filter(i => (i.status||'Unpaid') === status);
+    renderInvoices(filtered);
+  }
+
+  function openInvoiceModal(invoiceId) {
+    const inv = allInvoices.find(i => i.invoice_id === invoiceId);
+    if (!inv) return;
+    document.getElementById('modalTitle').textContent = 'Edit ' + invoiceId;
+    document.getElementById('invAmount').value  = inv.amount || '';
+    document.getElementById('invDue').value     = inv.due_date ? inv.due_date.split('T')[0] : '';
+    document.getElementById('invPeriod').value  = inv.period ? inv.period.split('T')[0] : '';
+    document.getElementById('invDesc').value    = inv.description || '';
+    document.getElementById('invStatus').value  = inv.status || 'Unpaid';
+    document.getElementById('invClient').value  = inv.client_id || '';
+    document.getElementById('invoiceModal').classList.add('open');
+    document.getElementById('invoiceModal')._invoiceId = invoiceId;
+  }
+
+  async function saveInvoice() {
+    const modal = document.getElementById('invoiceModal');
+    const invoiceId = modal._invoiceId;
+    const inv = allInvoices.find(i => i.invoice_id === invoiceId) || {};
+    try {
+      const res = await fetch(API,{method:'POST',body:JSON.stringify({
+        action:'adminSaveInvoice', token, client_id: clientId,
+        invoice: {
+          invoice_id:  invoiceId || '',
+          client_id:   document.getElementById('invClient').value,
+          amount:      document.getElementById('invAmount').value,
+          due_date:    document.getElementById('invDue').value,
+          period:      document.getElementById('invPeriod').value,
+          description: document.getElementById('invDesc').value,
+          status:      document.getElementById('invStatus').value,
+        }
+      })}).then(r=>r.json());
+      if (res.ok) {
+        document.getElementById('invoiceSaveSuccess').classList.add('show');
+        modal.classList.remove('open');
+        load();
+      } else {
+        document.getElementById('invoiceSaveError').classList.add('show');
+      }
+    } catch(e) { console.error(e); }
+  }
+
+  function isAdmin(t) { return localStorage.getItem('sc_is_admin') === 'true'; }
 </script>
 
 <script>

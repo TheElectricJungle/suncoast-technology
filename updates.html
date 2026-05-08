@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
   <title>Updates — Suncoast Technology</title>
-  <!-- Suncoast Technology | updates.html | v2.0 -->
+  <!-- Suncoast Technology | updates.html | v2.1 -->
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet"/>
@@ -193,6 +193,7 @@
       <a href="clients.html" class="nav-item"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="6" cy="5" r="2.5" stroke="currentColor" stroke-width="1.3"/><path d="M1 13c0-2.76 2.24-5 5-5" stroke="currentColor" stroke-width="1.3"/><circle cx="12" cy="8" r="2" stroke="currentColor" stroke-width="1.3"/><path d="M9.5 13c0-1.93 1.12-3 2.5-3s2.5 1.07 2.5 3" stroke="currentColor" stroke-width="1.3"/></svg>Clients</a>
       <a href="invoices.html" class="nav-item"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 1h10a1 1 0 011 1v12l-2-1.5L10 14l-2-1.5L6 14l-2-1.5L2 14V2a1 1 0 011-1z" stroke="currentColor" stroke-width="1.3"/><path d="M5 5h6M5 8h6M5 11h3" stroke="currentColor" stroke-width="1.3"/></svg>Invoices</a>
       <a href="updates.html" class="nav-item active"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.3"/><path d="M8 4.5v4l2.5 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>Updates</a>
+      <a href="onboarding.html" class="nav-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2.5l-7 7-3-3"/><path d="M8 14A6 6 0 108 2"/></svg>Onboarding</a>
       <a href="admin-support.html" class="nav-item"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M14 10.5a2 2 0 01-2 2H4.5L1.5 15V3.5a2 2 0 012-2h8.5a2 2 0 012 2v7z" stroke="currentColor" stroke-width="1.3"/></svg>Support</a>
     </nav>
     <div class="sidebar-footer">
@@ -248,7 +249,73 @@
     localStorage.clear();
     window.location.href='login.html';
   }
-load();
+
+  async function load() {
+    try {
+      const clientsRes = await fetch(API,{method:'POST',body:JSON.stringify({action:'adminGetClients',token,client_id:clientId})}).then(r=>r.json());
+      if (!clientsRes.ok) { window.location.href='login.html'; return; }
+      const clients = clientsRes.clients || [];
+
+      // Populate client dropdown
+      const sel = document.getElementById('updateClient');
+      if (sel) {
+        sel.innerHTML = '<option value="">Select client...</option>' +
+          clients.map(c => `<option value="${c.client_id}">${c.business_name||c.client_name}</option>`).join('');
+      }
+
+      // Load recent updates across all clients
+      const allUpdates = [];
+      for (const c of clients.slice(0,10)) {
+        try {
+          const ur = await fetch(API,{method:'POST',body:JSON.stringify({action:'getUpdates',token,client_id:c.client_id})}).then(r=>r.json());
+          if (ur.updates) allUpdates.push(...ur.updates.map(u => ({...u, _clientName: c.business_name||c.client_name})));
+        } catch(e) {}
+      }
+      allUpdates.sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
+
+      const list = document.getElementById('updatesList');
+      if (list) {
+        list.innerHTML = allUpdates.slice(0,20).map(u => `
+          <div style="padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.05);">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin:0 0 4px;">
+              <div style="font-size:13px;font-weight:500;color:#fff;">${u.title}</div>
+              <div style="display:flex;gap:6px;align-items:center;">
+                ${u.category ? `<span style="font-size:10px;background:rgba(79,195,247,0.1);color:#4FC3F7;padding:2px 8px;border-radius:20px;">${u.category}</span>` : ''}
+                <span style="font-size:11px;color:rgba(148,163,184,0.4);">${u._clientName}</span>
+              </div>
+            </div>
+            ${u.content ? `<div style="font-size:12px;color:rgba(148,163,184,0.6);line-height:1.5;">${u.content}</div>` : ''}
+            <div style="font-size:11px;color:rgba(148,163,184,0.35);margin-top:4px;">${new Date(u.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</div>
+          </div>`).join('') || '<div style="color:rgba(148,163,184,0.5);padding:20px 0;">No updates yet.</div>';
+      }
+    } catch(e) { console.error(e); }
+  }
+
+  async function postUpdate() {
+    const btn    = document.getElementById('postBtn');
+    const client = document.getElementById('updateClient').value;
+    const title  = document.getElementById('updateTitle').value.trim();
+    const cat    = document.getElementById('updateCategory').value;
+    const body   = document.getElementById('updateContent').value.trim();
+    ['updateSuccess','updateError'].forEach(id => document.getElementById(id).classList.remove('show'));
+    if (!client || !title) { document.getElementById('updateError').classList.add('show'); return; }
+    btn.disabled = true; btn.textContent = 'Posting...';
+    try {
+      const res = await fetch(API,{method:'POST',body:JSON.stringify({
+        action:'adminPostUpdate', token, client_id: clientId,
+        update_client_id: client, title, category: cat, content: body
+      })}).then(r=>r.json());
+      if (res.ok) {
+        document.getElementById('updateSuccess').classList.add('show');
+        document.getElementById('updateTitle').value = '';
+        document.getElementById('updateContent').value = '';
+        load();
+      } else {
+        document.getElementById('updateError').classList.add('show');
+      }
+    } catch(e) { document.getElementById('updateError').classList.add('show'); }
+    btn.disabled = false; btn.textContent = 'Post update & notify client';
+  }
 </script>
 
 <script>

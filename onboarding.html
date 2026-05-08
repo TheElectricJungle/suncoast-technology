@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Client Onboarding — Suncoast Technology</title>
+  <!-- Suncoast Technology | onboarding.html | v1.0 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{--navy:#04080F;--slate:rgba(13,27,42,0.85);--card:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.07);--muted:rgba(148,163,184,0.7);--light:#E8F0FF;--orange:#F97316;--gold:#FBBF24;--green:#22C55E;--red:#EF4444;--blue:#4FC3F7;--purple:#A78BFA;--teal:#2DD4BF;}
+    html,body{min-height:100%;font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--light);overflow-x:hidden;}
+
+    /* AURORA */
+    .scene{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;}
+    canvas#aurora{position:absolute;inset:0;width:100%;height:100%;opacity:0.7;}
+    .grid-overlay{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(79,195,247,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(79,195,247,0.02) 1px,transparent 1px);background-size:80px 80px;}
+
+    /* SHELL */
+    .shell{display:grid;grid-template-columns:220px 1fr;min-height:100vh;position:relative;z-index:10;}
+
+    /* SIDEBAR */
+    .sidebar{background:rgba(6,12,20,0.8);backdrop-filter:blur(24px);border-right:1px solid var(--border);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;}
+    .sidebar-brand{padding:24px 20px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;}
+    .brand-mark{width:36px;height:36px;flex-shrink:0;}
+    .brand-name{font-family:'Playfair Display',serif;font-size:15px;color:#fff;}
+    .brand-name em{color:var(--orange);font-style:normal;}
+    .brand-sub{font-size:10px;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase;margin-top:2px;}
+    .nav{padding:16px 12px;flex:1;display:flex;flex-direction:column;gap:2px;}
+    .nav-label{font-size:10px;font-weight:500;color:rgba(148,163,184,0.4);letter-spacing:0.1em;text-transform:uppercase;padding:10px 10px 6px;margin-top:8px;}
+    .nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;font-size:13px;color:var(--muted);text-decoration:none;transition:all 0.15s;}
+    .nav-item:hover{background:rgba(255,255,255,0.05);color:#fff;}
+    .nav-item.active{background:rgba(249,115,22,0.12);color:var(--orange);}
+    .nav-item svg{width:16px;height:16px;flex-shrink:0;}
+    .sidebar-footer{padding:16px 20px;border-top:1px solid var(--border);}
+    .user-row{display:flex;align-items:center;gap:10px;}
+    .user-avatar{width:32px;height:32px;border-radius:50%;background:rgba(249,115,22,0.2);border:1px solid rgba(249,115,22,0.3);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:var(--orange);flex-shrink:0;}
+    .user-name{font-size:13px;color:#fff;font-weight:500;flex:1;}
+    .logout-btn{background:none;border:none;color:var(--muted);cursor:pointer;padding:4px;border-radius:4px;display:flex;}
+    .logout-btn:hover{color:#fff;}
+
+    /* MAIN */
+    .main{padding:32px 40px;display:flex;flex-direction:column;gap:24px;max-width:900px;}
+    .page-label{font-size:12px;color:var(--muted);margin-bottom:4px;letter-spacing:0.04em;text-transform:uppercase;}
+    .page-title{font-family:'Playfair Display',serif;font-size:28px;font-weight:400;color:#fff;}
+    .page-title em{color:var(--orange);font-style:normal;}
+
+    /* CLIENT HEADER CARD */
+    .client-header{background:rgba(13,22,36,0.8);border:1px solid var(--border);border-radius:16px;padding:24px 28px;display:flex;align-items:center;justify-content:space-between;gap:20px;backdrop-filter:blur(20px);}
+    .client-info{display:flex;align-items:center;gap:16px;}
+    .client-avatar{width:52px;height:52px;border-radius:14px;background:rgba(249,115,22,0.15);border:1px solid rgba(249,115,22,0.25);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:600;color:var(--orange);flex-shrink:0;}
+    .client-name{font-size:20px;font-weight:600;color:#fff;margin:0 0 3px;}
+    .client-domain{font-size:13px;color:var(--muted);}
+    .progress-wrap{display:flex;flex-direction:column;align-items:flex-end;gap:6px;}
+    .progress-label{font-size:12px;color:var(--muted);}
+    .progress-bar{width:200px;height:6px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden;}
+    .progress-fill{height:100%;background:linear-gradient(90deg,var(--orange),var(--gold));border-radius:3px;transition:width 0.4s ease;}
+    .progress-pct{font-size:13px;font-weight:500;color:var(--orange);}
+
+    /* CLIENT SELECT */
+    .client-select-card{background:rgba(13,22,36,0.8);border:1px solid var(--border);border-radius:16px;padding:24px 28px;backdrop-filter:blur(20px);}
+    .client-select-card label{font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;display:block;margin:0 0 10px;}
+    .client-select-card select{width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:9px;padding:12px 16px;font-size:14px;font-family:'DM Sans',sans-serif;color:#fff;outline:none;cursor:pointer;}
+    .client-select-card select option{background:#0D1622;}
+
+    /* CHECKLIST SECTIONS */
+    .checklist-section{background:rgba(13,22,36,0.8);border:1px solid var(--border);border-radius:16px;overflow:hidden;backdrop-filter:blur(20px);}
+    .section-header{padding:18px 24px;display:flex;align-items:center;gap:14px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.04);}
+    .section-header:hover{background:rgba(255,255,255,0.02);}
+    .section-icon{font-size:22px;flex-shrink:0;}
+    .section-title{font-size:15px;font-weight:500;color:#fff;flex:1;}
+    .section-meta{font-size:12px;color:var(--muted);}
+    .section-badge{font-size:11px;padding:3px 10px;border-radius:20px;}
+    .badge-done{background:rgba(34,197,94,0.12);color:#86EFAC;border:1px solid rgba(34,197,94,0.2);}
+    .badge-partial{background:rgba(251,191,36,0.12);color:var(--gold);border:1px solid rgba(251,191,36,0.2);}
+    .badge-todo{background:rgba(255,255,255,0.06);color:var(--muted);border:1px solid var(--border);}
+    .section-chevron{color:var(--muted);transition:transform 0.2s;font-size:18px;}
+    .section-body{padding:8px 0 16px;}
+
+    /* CHECKLIST ITEMS */
+    .check-item{display:flex;align-items:flex-start;gap:14px;padding:14px 24px;transition:background 0.15s;position:relative;}
+    .check-item:hover{background:rgba(255,255,255,0.02);}
+    .check-item.completed .check-label{color:rgba(148,163,184,0.5);text-decoration:line-through;}
+    .check-item.completed .check-desc{opacity:0.4;}
+    .check-box{width:20px;height:20px;border-radius:6px;border:1.5px solid rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;flex-shrink:0;margin-top:1px;background:transparent;}
+    .check-box.checked{background:var(--green);border-color:var(--green);}
+    .check-box.checked::after{content:'✓';font-size:11px;color:#fff;font-weight:600;}
+    .check-content{flex:1;}
+    .check-label{font-size:14px;font-weight:500;color:#fff;margin:0 0 3px;display:flex;align-items:center;gap:8px;}
+    .check-desc{font-size:12px;color:var(--muted);line-height:1.6;margin:0 0 8px;}
+    .check-links{display:flex;gap:8px;flex-wrap:wrap;}
+    .check-link{font-size:11px;padding:4px 10px;border-radius:6px;background:rgba(79,195,247,0.08);border:1px solid rgba(79,195,247,0.15);color:var(--blue);text-decoration:none;transition:all 0.15s;}
+    .check-link:hover{background:rgba(79,195,247,0.15);color:#fff;}
+    .check-link.orange{background:rgba(249,115,22,0.08);border-color:rgba(249,115,22,0.2);color:var(--orange);}
+    .check-link.purple{background:rgba(167,139,250,0.08);border-color:rgba(167,139,250,0.2);color:var(--purple);}
+    .check-link.green{background:rgba(34,197,94,0.08);border-color:rgba(34,197,94,0.2);color:var(--green);}
+    .check-note{margin-top:8px;}
+    .check-note input{width:100%;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:7px;padding:7px 10px;font-size:12px;font-family:'DM Sans',sans-serif;color:var(--muted);outline:none;}
+    .check-note input:focus{border-color:rgba(249,115,22,0.3);color:#fff;}
+    .check-note input::placeholder{color:rgba(148,163,184,0.3);}
+
+    /* COMPLETE BANNER */
+    .complete-banner{background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:16px;padding:28px;text-align:center;display:none;}
+    .complete-banner.show{display:block;}
+    .complete-banner h3{font-size:20px;font-weight:600;color:var(--green);margin:0 0 8px;}
+    .complete-banner p{font-size:14px;color:var(--muted);}
+
+    /* RESET BTN */
+    .btn-reset{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:8px;font-size:12px;color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;}
+    .btn-reset:hover{color:#fff;border-color:rgba(255,255,255,0.2);}
+
+    /* GLASSMORPHIC OVERRIDES */
+    .sidebar{background:rgba(6,12,20,0.8) !important;backdrop-filter:blur(24px) !important;}
+
+    @media(max-width:768px){.shell{grid-template-columns:1fr}.sidebar{display:none}.main{padding:20px 16px}}
+  </style>
+</head>
+<body>
+<div class="scene"><canvas id="aurora"></canvas></div>
+<div class="grid-overlay"></div>
+
+<div class="shell">
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <svg class="brand-mark" viewBox="0 0 36 36" fill="none">
+        <circle cx="18" cy="18" r="17" fill="#0D1B2A" stroke="rgba(249,115,22,0.3)" stroke-width="1"/>
+        <path d="M7 22 Q18 10 29 22" stroke="#F97316" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+        <path d="M5 25 Q18 7 31 25" stroke="#FBBF24" stroke-width="1.2" stroke-linecap="round" fill="none" opacity="0.5"/>
+        <circle cx="18" cy="27" r="3" fill="#F97316"/>
+      </svg>
+      <div>
+        <div class="brand-name">Suncoast <em>Technology</em></div>
+        <div class="brand-sub">Admin Panel</div>
+      </div>
+    </div>
+    <nav class="nav">
+      <div class="nav-label">Admin</div>
+      <a href="admin.html" class="nav-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="1" width="6" height="6" rx="1.5"/><rect x="9" y="1" width="6" height="6" rx="1.5"/><rect x="1" y="9" width="6" height="6" rx="1.5"/><rect x="9" y="9" width="6" height="6" rx="1.5"/></svg>Dashboard</a>
+      <a href="clients.html" class="nav-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="5" r="2.5"/><path d="M1 13c0-2.76 2.24-5 5-5"/><circle cx="12" cy="8" r="2"/><path d="M9.5 13c0-1.93 1.12-3 2.5-3s2.5 1.07 2.5 3"/></svg>Clients</a>
+      <a href="invoices.html" class="nav-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 1h10a1 1 0 011 1v12l-2-1.5L10 14l-2-1.5L6 14l-2-1.5L2 14V2a1 1 0 011-1z"/><path d="M5 5h6M5 8h6M5 11h3"/></svg>Invoices</a>
+      <a href="updates.html" class="nav-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6.5"/><path d="M8 4.5v4l2.5 1.5"/></svg>Updates</a>
+      <a href="admin-support.html" class="nav-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 10.5a2 2 0 01-2 2H4.5L1.5 15V3.5a2 2 0 012-2h8.5a2 2 0 012 2v7z"/></svg>Support</a>
+      <a href="onboarding.html" class="nav-item active"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2.5l-7 7-3-3"/><path d="M8 14A6 6 0 108 2"/></svg>Onboarding</a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-row">
+        <div class="user-avatar">JR</div>
+        <div class="user-name">Justin R.</div>
+        <button class="logout-btn" onclick="handleLogout()"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3"/><path d="M11 11l3-3-3-3"/><path d="M14 8H6"/></svg></button>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;">
+      <div>
+        <div class="page-label">Admin</div>
+        <div class="page-title">Client <em>onboarding</em></div>
+      </div>
+      <button class="btn-reset" onclick="resetChecklist()">↺ Reset checklist</button>
+    </div>
+
+    <!-- CLIENT SELECT -->
+    <div class="client-select-card">
+      <label>Select client to onboard</label>
+      <select id="clientSelect" onchange="selectClient()">
+        <option value="">— Choose a client —</option>
+      </select>
+    </div>
+
+    <!-- CLIENT HEADER (shown after selection) -->
+    <div class="client-header" id="clientHeader" style="display:none;">
+      <div class="client-info">
+        <div class="client-avatar" id="headerInitials">?</div>
+        <div>
+          <div class="client-name" id="headerName">—</div>
+          <div class="client-domain" id="headerDomain">—</div>
+        </div>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-label">Onboarding progress</div>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+        <div class="progress-pct" id="progressPct">0% complete</div>
+      </div>
+    </div>
+
+    <!-- CHECKLIST -->
+    <div id="checklist" style="display:none;display:flex;flex-direction:column;gap:14px;">
+
+      <!-- 1. PORTAL SETUP -->
+      <div class="checklist-section" id="sec1">
+        <div class="section-header" onclick="toggleSection('sec1')">
+          <span class="section-icon">👤</span>
+          <span class="section-title">1 — Portal account setup</span>
+          <span class="section-badge badge-todo" id="badge-sec1">Not started</span>
+          <span class="section-chevron" id="chev-sec1">▾</span>
+        </div>
+        <div class="section-body" id="body-sec1">
+          <div class="check-item" id="item-1-1">
+            <div class="check-box" onclick="toggleCheck('1-1')"></div>
+            <div class="check-content">
+              <div class="check-label">Create client in Google Sheet</div>
+              <div class="check-desc">Add a new row to the Clients sheet with their name, email, business name, domain, plan, and monthly rate. Assign a CLT-XXX ID.</div>
+              <div class="check-links">
+                <a href="https://docs.google.com/spreadsheets/d/1KsBCY-vJSX9TN3141maWMayrdbIwVM2qOEyLBk97Ki8" target="_blank" class="check-link">Open Clients sheet ↗</a>
+              </div>
+            </div>
+          </div>
+          <div class="check-item" id="item-1-2">
+            <div class="check-box" onclick="toggleCheck('1-2')"></div>
+            <div class="check-content">
+              <div class="check-label">Add client in admin panel</div>
+              <div class="check-desc">Go to Clients in the admin panel, click Add client, fill in their details, and set a temporary password. This triggers the welcome email automatically.</div>
+              <div class="check-links">
+                <a href="clients.html" class="check-link orange">Open clients panel ↗</a>
+              </div>
+            </div>
+          </div>
+          <div class="check-item" id="item-1-3">
+            <div class="check-box" onclick="toggleCheck('1-3')"></div>
+            <div class="check-content">
+              <div class="check-label">Confirm welcome email received</div>
+              <div class="check-desc">Check that the client received their welcome email with login details and temp password. Ask them to confirm or check your sent mail.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. DOMAIN & DNS -->
+      <div class="checklist-section" id="sec2">
+        <div class="section-header" onclick="toggleSection('sec2')">
+          <span class="section-icon">🌐</span>
+          <span class="section-title">2 — Domain & DNS setup</span>
+          <span class="section-badge badge-todo" id="badge-sec2">Not started</span>
+          <span class="section-chevron" id="chev-sec2">▾</span>
+        </div>
+        <div class="section-body" id="body-sec2">
+          <div class="check-item" id="item-2-1">
+            <div class="check-box" onclick="toggleCheck('2-1')"></div>
+            <div class="check-content">
+              <div class="check-label">Register domain (if needed)</div>
+              <div class="check-desc">Purchase the domain on Namecheap if not already registered. Use the client's preferred name. Save login credentials to their ClientDetails profile.</div>
+              <div class="check-links">
+                <a href="https://namecheap.com" target="_blank" class="check-link">Namecheap ↗</a>
+              </div>
+            </div>
+          </div>
+          <div class="check-item" id="item-2-2">
+            <div class="check-box" onclick="toggleCheck('2-2')"></div>
+            <div class="check-content">
+              <div class="check-label">Add domain to Cloudflare</div>
+              <div class="check-desc">Go to Cloudflare → Add a site → enter the domain → select Free plan. Cloudflare will scan existing DNS records automatically.</div>
+              <div class="check-links">
+                <a href="https://dash.cloudflare.com" target="_blank" class="check-link">Cloudflare dashboard ↗</a>
+              </div>
+            </div>
+          </div>
+          <div class="check-item" id="item-2-3">
+            <div class="check-box" onclick="toggleCheck('2-3')"></div>
+            <div class="check-content">
+              <div class="check-label">Update nameservers in Namecheap</div>
+              <div class="check-desc">Namecheap → find domain → Manage → Nameservers → Custom DNS → paste in the two Cloudflare nameservers (anna.ns.cloudflare.com and quentin.ns.cloudflare.com or whatever CF assigns).</div>
+              <div class="check-links">
+                <a href="https://namecheap.com" target="_blank" class="check-link">Namecheap ↗</a>
+              </div>
+            </div>
+          </div>
+          <div class="check-item" id="item-2-4">
+            <div class="check-box" onclick="toggleCheck('2-4')"></div>
+            <div class="check-content">
+              <div class="check-label">Add DNS records in Cloudflare</div>
+              <div class="check-desc">Add 4 A records pointing to GitHub Pages IPs (185.199.108-111.153), DNS only. Add www CNAME → theelectricjungle.github.io, proxied.</div>
+              <div class="check-links">
+                <a href="https://dash.cloudflare.com" target="_blank" class="check-link">Cloudflare DNS ↗</a>
+              </div>
+              <div class="check-note"><input type="text" placeholder="Note: e.g. DNS propagated at 3pm" id="note-2-4" onchange="saveNote('2-4')" /></div>
+            </div>
+          </div>
+          <div class="check-item" id="item-2-5">
+            <div class="check-box" onclick="toggleCheck('2-5')"></div>
+            <div class="check-content">
+              <div class="check-label">Save zone ID to client profile</div>
+              <div class="check-desc">In Cloudflare, find the Zone ID for this domain (right sidebar on the overview page). Save it to the client's ClientDetails record so the portal can pull live stats.</div>
+              <div class="check-links">
+                <a href="clients.html" class="check-link orange">Client profiles ↗</a>
+              </div>
+              <div class="check-note"><input type="text" placeholder="Zone ID: e.g. 3a2b165eb2d87fd3..." id="note-2-5" onchange="saveNote('2-5')" /></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. GITHUB & HOSTING -->
+      <div class="checklist-section" id="sec3">
+        <div class="section-header" onclick="toggleSection('sec3')">
+          <span class="section-icon">🖥️</span>
+          <span class="section-title">3 — GitHub Pages hosting</span>
+          <span class="section-badge badge-todo" id="badge-sec3">Not started</span>
+          <span class="section-chevron" id="chev-sec3">▾</span>
+        </div>
+        <div class="section-body" id="body-sec3">
+          <div class="check-item" id="item-3-1">
+            <div class="check-box" onclick="toggleCheck('3-1')"></div>
+            <div class="check-content">
+              <div class="check-label">Create GitHub repo</div>
+              <div class="check-desc">Create a new public repo under the theelectricjungle GitHub account. Name it after the client or their domain. Upload site files.</div>
+              <div class="check-links">
+                <a href="https://github.com/new" target="_blank" class="check-link">New repo ↗</a>
+              </div>
+            </div>
+          </div>
+          <div class="check-item" id="item-3-2">
+            <div class="check-box" onclick="toggleCheck('3-2')"></div>
+            <div class="check-content">
+              <div class="check-label">Enable GitHub Pages</div>
+              <div class="check-desc">Repo → Settings → Pages → Source: Deploy from branch → main → / (root) → Save.</div>
+            </div>
+          </div>
+          <div class="check-item" id="item-3-3">
+            <div class="check-box" onclick="toggleCheck('3-3')"></div>
+            <div class="check-content">
+              <div class="check-label">Set custom domain in GitHub Pages</div>
+              <div class="check-desc">Repo → Settings → Pages → Custom domain → enter the domain → Save. Wait for DNS check to pass.</div>
+            </div>
+          </div>
+          <div class="check-item" id="item-3-4">
+            <div class="check-box" onclick="toggleCheck('3-4')"></div>
+            <div class="check-content">
+              <div class="check-label">Enable Enforce HTTPS</div>
+              <div class="check-desc">Once DNS check passes the Enforce HTTPS checkbox becomes clickable. Check it. SSL certificate will provision within 30 minutes.</div>
+            </div>
+          </div>
+          <div class="check-item" id="item-3-5">
+            <div class="check-box" onclick="toggleCheck('3-5')"></div>
+            <div class="check-content">
+              <div class="check-label">Verify site is live</div>
+              <div class="check-desc">Visit the domain in a browser. Confirm it loads, shows a padlock, and redirects http to https.</div>
+              <div class="check-note"><input type="text" placeholder="Note: e.g. went live at 4:30pm" id="note-3-5" onchange="saveNote('3-5')" /></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. EMAIL SETUP -->
+      <div class="checklist-section" id="sec4">
+        <div class="section-header" onclick="toggleSection('sec4')">
+          <span class="section-icon">📧</span>
+          <span class="section-title">4 — Email setup</span>
+          <span class="section-badge badge-todo" id="badge-sec4">Not started</span>
+          <span class="section-chevron" id="chev-sec4">▾</span>
+        </div>
+        <div class="section-body" id="body-sec4">
+          <div class="check-item" id="item-4-1">
+            <div class="check-box" onclick="toggleCheck('4-1')"></div>
+            <div class="check-content">
+              <div class="check-label">Enable Cloudflare Email Routing</div>
+              <div class="check-desc">Cloudflare → domain → Email → Email Routing → Enable. Cloudflare will add the required MX records automatically.</div>
+              <div class="check-links">
+                <a href="https://dash.cloudflare.com" target="_blank" class="check-link">Cloudflare ↗</a>
+              </div>
+            </div>
+          </div>
+          <div class="check-item" id="item-4-2">
+            <div class="check-box" onclick="toggleCheck('4-2')"></div>
+            <div class="check-content">
+              <div class="check-label">Create email forwarding rules</div>
+              <div class="check-desc">Cloudflare → Email Routing → Routing rules → Create address. Set up info@, hello@, or whatever aliases the client needs. Forward each to their personal inbox.</div>
+              <div class="check-note"><input type="text" placeholder="Note: e.g. info@ and hello@ forwarding to jane@gmail.com" id="note-4-2" onchange="saveNote('4-2')" /></div>
+            </div>
+          </div>
+          <div class="check-item" id="item-4-3">
+            <div class="check-box" onclick="toggleCheck('4-3')"></div>
+            <div class="check-content">
+              <div class="check-label">Add SPF record</div>
+              <div class="check-desc">Cloudflare Email Routing adds an SPF record automatically when enabled. Verify it exists in DNS → TXT records. Should contain "include:_spf.mx.cloudflare.net".</div>
+            </div>
+          </div>
+          <div class="check-item" id="item-4-4">
+            <div class="check-box" onclick="toggleCheck('4-4')"></div>
+            <div class="check-content">
+              <div class="check-label">Add DMARC record</div>
+              <div class="check-desc">In Cloudflare DNS add a TXT record: Name: _dmarc, Value: "v=DMARC1; p=none; rua=mailto:info@theirdomain.com"</div>
+            </div>
+          </div>
+          <div class="check-item" id="item-4-5">
+            <div class="check-box" onclick="toggleCheck('4-5')"></div>
+            <div class="check-content">
+              <div class="check-label">Set up Gmail Send As (for client)</div>
+              <div class="check-desc">Help the client add their custom address as a Gmail Send As alias so they can reply from info@theirdomain.com. Gmail → Settings → Accounts → Add another email address → use smtp.gmail.com with their Gmail credentials.</div>
+              <div class="check-links">
+                <a href="https://mail.google.com/mail/u/0/#settings/accounts" target="_blank" class="check-link green">Gmail settings ↗</a>
+              </div>
+            </div>
+          </div>
+          <div class="check-item" id="item-4-6">
+            <div class="check-box" onclick="toggleCheck('4-6')"></div>
+            <div class="check-content">
+              <div class="check-label">Test email end to end</div>
+              <div class="check-desc">Send a test email TO info@theirdomain.com and confirm it arrives in their inbox. Then reply FROM info@theirdomain.com and confirm it sends correctly.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. STRIPE -->
+      <div class="checklist-section" id="sec5">
+        <div class="section-header" onclick="toggleSection('sec5')">
+          <span class="section-icon">💳</span>
+          <span class="section-title">5 — Billing & payments</span>
+          <span class="section-badge badge-todo" id="badge-sec5">Not started</span>
+          <span class="section-chevron" id="chev-sec5">▾</span>
+        </div>
+        <div class="section-body" id="body-sec5">
+          <div class="check-item" id="item-5-1">
+            <div class="check-box" onclick="toggleCheck('5-1')"></div>
+            <div class="check-content">
+              <div class="check-label">Set plan and monthly rate</div>
+              <div class="check-desc">In the client's profile, set their plan name and monthly rate. This is what auto-invoicing uses every month.</div>
+              <div class="check-links">
+                <a href="clients.html" class="check-link orange">Client profiles ↗</a>
+              </div>
+            </div>
+          </div>
+          <div class="check-item" id="item-5-2">
+            <div class="check-box" onclick="toggleCheck('5-2')"></div>
+            <div class="check-content">
+              <div class="check-label">Create Stripe subscription (if recurring)</div>
+              <div class="check-desc">Admin panel → client → Subscribe. Enter amount and billing interval. Client will receive an email to add their payment method.</div>
+              <div class="check-links">
+                <a href="admin.html" class="check-link purple">Admin panel ↗</a>
+                <a href="https://dashboard.stripe.com" target="_blank" class="check-link">Stripe ↗</a>
+              </div>
+            </div>
+          </div>
+          <div class="check-item" id="item-5-3">
+            <div class="check-box" onclick="toggleCheck('5-3')"></div>
+            <div class="check-content">
+              <div class="check-label">Create first invoice</div>
+              <div class="check-desc">Go to Invoices → create invoice for this client for the first billing period. Send it so they can pay through the portal.</div>
+              <div class="check-links">
+                <a href="invoices.html" class="check-link orange">Invoices ↗</a>
+              </div>
+            </div>
+          </div>
+          <div class="check-item" id="item-5-4">
+            <div class="check-box" onclick="toggleCheck('5-4')"></div>
+            <div class="check-content">
+              <div class="check-label">Register domain with Stripe (Apple Pay)</div>
+              <div class="check-desc">Stripe → Settings → Payment methods → Apple Pay → Add domain → enter their domain. Enables Apple Pay on their checkout.</div>
+              <div class="check-links">
+                <a href="https://dashboard.stripe.com/settings/payment_method_domains" target="_blank" class="check-link">Stripe domains ↗</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. CLIENT DETAILS -->
+      <div class="checklist-section" id="sec6">
+        <div class="section-header" onclick="toggleSection('sec6')">
+          <span class="section-icon">📋</span>
+          <span class="section-title">6 — Document & handoff</span>
+          <span class="section-badge badge-todo" id="badge-sec6">Not started</span>
+          <span class="section-chevron" id="chev-sec6">▾</span>
+        </div>
+        <div class="section-body" id="body-sec6">
+          <div class="check-item" id="item-6-1">
+            <div class="check-box" onclick="toggleCheck('6-1')"></div>
+            <div class="check-content">
+              <div class="check-label">Fill in client credentials profile</div>
+              <div class="check-desc">Go to the client's profile → fill in all credentials — domain registrar login, hosting login, DNS details, SSL info. This is the source of truth for all their account info.</div>
+              <div class="check-links">
+                <a href="clients.html" class="check-link orange">Client profiles ↗</a>
+              </div>
+            </div>
+          </div>
+          <div class="check-item" id="item-6-2">
+            <div class="check-box" onclick="toggleCheck('6-2')"></div>
+            <div class="check-content">
+              <div class="check-label">Send credentials document to client</div>
+              <div class="check-desc">Client profile → Send doc → select sections to include → send. Client receives a branded email with all their credentials for their records.</div>
+              <div class="check-links">
+                <a href="clients.html" class="check-link orange">Client profiles ↗</a>
+              </div>
+            </div>
+          </div>
+          <div class="check-item" id="item-6-3">
+            <div class="check-box" onclick="toggleCheck('6-3')"></div>
+            <div class="check-content">
+              <div class="check-label">Final check — everything working</div>
+              <div class="check-desc">Log into the client portal as the client. Verify site status shows Online, SSL shows Active, Cloudflare data loads, billing shows correct plan, and My Site page looks right.</div>
+              <div class="check-note"><input type="text" placeholder="Notes on final check..." id="note-6-3" onchange="saveNote('6-3')" /></div>
+            </div>
+          </div>
+          <div class="check-item" id="item-6-4">
+            <div class="check-box" onclick="toggleCheck('6-4')"></div>
+            <div class="check-content">
+              <div class="check-label">Mark onboarding complete 🎉</div>
+              <div class="check-desc">You're done. Client is fully set up and live. Update their status to Active in the Clients sheet if not already set.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end checklist -->
+
+    <!-- COMPLETE BANNER -->
+    <div class="complete-banner" id="completeBanner">
+      <h3>🎉 Onboarding complete!</h3>
+      <p>This client is fully set up and live. All steps have been checked off.</p>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  const API = 'https://script.google.com/macros/s/AKfycbyxg5LlS9eUx6VSiD_VSzE0RD94STkBAK4Hc-h14T_YU5ikqXGE3dz-Fvt1kCAE-9XRLw/exec';
+  const token    = localStorage.getItem('sc_token');
+  const clientId = localStorage.getItem('sc_client_id');
+  if (!token) window.location.href = 'login.html';
+
+  const SECTIONS = ['sec1','sec2','sec3','sec4','sec5','sec6'];
+  const ALL_ITEMS = [
+    '1-1','1-2','1-3',
+    '2-1','2-2','2-3','2-4','2-5',
+    '3-1','3-2','3-3','3-4','3-5',
+    '4-1','4-2','4-3','4-4','4-5','4-6',
+    '5-1','5-2','5-3','5-4',
+    '6-1','6-2','6-3','6-4'
+  ];
+  const SECTION_ITEMS = {
+    sec1: ['1-1','1-2','1-3'],
+    sec2: ['2-1','2-2','2-3','2-4','2-5'],
+    sec3: ['3-1','3-2','3-3','3-4','3-5'],
+    sec4: ['4-1','4-2','4-3','4-4','4-5','4-6'],
+    sec5: ['5-1','5-2','5-3','5-4'],
+    sec6: ['6-1','6-2','6-3','6-4']
+  };
+
+  let currentClientId = null;
+  let state = {}; // { checks: {}, notes: {} }
+
+  function storageKey() {
+    return 'onboarding_' + (currentClientId || 'default');
+  }
+
+  function loadState() {
+    try {
+      const saved = localStorage.getItem(storageKey());
+      state = saved ? JSON.parse(saved) : { checks: {}, notes: {} };
+    } catch(e) { state = { checks: {}, notes: {} }; }
+    renderState();
+  }
+
+  function saveState() {
+    localStorage.setItem(storageKey(), JSON.stringify(state));
+  }
+
+  function renderState() {
+    ALL_ITEMS.forEach(id => {
+      const box = document.querySelector(`#item-${id} .check-box`);
+      const item = document.getElementById(`item-${id}`);
+      if (!box || !item) return;
+      if (state.checks[id]) {
+        box.classList.add('checked');
+        item.classList.add('completed');
+      } else {
+        box.classList.remove('checked');
+        item.classList.remove('completed');
+      }
+      // Notes
+      const note = document.getElementById(`note-${id}`);
+      if (note && state.notes && state.notes[id]) note.value = state.notes[id];
+    });
+    updateProgress();
+    updateSectionBadges();
+  }
+
+  function toggleCheck(id) {
+    if (!currentClientId) { alert('Please select a client first.'); return; }
+    state.checks[id] = !state.checks[id];
+    saveState();
+    renderState();
+  }
+
+  function saveNote(id) {
+    if (!state.notes) state.notes = {};
+    const note = document.getElementById(`note-${id}`);
+    if (note) state.notes[id] = note.value;
+    saveState();
+  }
+
+  function updateProgress() {
+    const total = ALL_ITEMS.length;
+    const done  = ALL_ITEMS.filter(id => state.checks[id]).length;
+    const pct   = Math.round((done / total) * 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressPct').textContent = pct + '% complete (' + done + '/' + total + ')';
+    document.getElementById('completeBanner').classList.toggle('show', pct === 100);
+  }
+
+  function updateSectionBadges() {
+    SECTIONS.forEach(sec => {
+      const items = SECTION_ITEMS[sec];
+      const done = items.filter(id => state.checks[id]).length;
+      const badge = document.getElementById('badge-' + sec);
+      if (!badge) return;
+      if (done === 0) {
+        badge.className = 'section-badge badge-todo';
+        badge.textContent = 'Not started';
+      } else if (done < items.length) {
+        badge.className = 'section-badge badge-partial';
+        badge.textContent = done + '/' + items.length + ' done';
+      } else {
+        badge.className = 'section-badge badge-done';
+        badge.textContent = '✓ Complete';
+      }
+    });
+  }
+
+  function toggleSection(secId) {
+    const body = document.getElementById('body-' + secId);
+    const chev = document.getElementById('chev-' + secId);
+    const isOpen = body.style.display !== 'none';
+    body.style.display = isOpen ? 'none' : 'block';
+    chev.textContent = isOpen ? '▸' : '▾';
+  }
+
+  function resetChecklist() {
+    if (!confirm('Reset all checkboxes for this client?')) return;
+    state = { checks: {}, notes: {} };
+    saveState();
+    renderState();
+    // Clear note inputs
+    document.querySelectorAll('.check-note input').forEach(i => i.value = '');
+  }
+
+  function selectClient() {
+    const sel = document.getElementById('clientSelect');
+    const opt = sel.options[sel.selectedIndex];
+    currentClientId = sel.value;
+    
+    if (!currentClientId) {
+      document.getElementById('clientHeader').style.display = 'none';
+      document.getElementById('checklist').style.display = 'none';
+      return;
+    }
+
+    const name   = opt.dataset.name   || '—';
+    const domain = opt.dataset.domain || '—';
+    const initials = name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+
+    document.getElementById('headerInitials').textContent = initials;
+    document.getElementById('headerName').textContent = name;
+    document.getElementById('headerDomain').textContent = domain;
+    document.getElementById('clientHeader').style.display = 'flex';
+    document.getElementById('checklist').style.display = 'flex';
+
+    loadState();
+  }
+
+  async function load() {
+    try {
+      const res = await fetch(API, { method: 'POST', body: JSON.stringify({ action: 'adminGetClients', token, client_id: clientId }) });
+      const data = await res.json();
+      if (!data.ok) { window.location.href = 'login.html'; return; }
+      
+      const sel = document.getElementById('clientSelect');
+      data.clients.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.client_id;
+        opt.textContent = (c.business_name || c.client_name) + (c.domain ? ' — ' + c.domain : '');
+        opt.dataset.name = c.client_name;
+        opt.dataset.domain = c.domain || '';
+        sel.appendChild(opt);
+      });
+    } catch(e) { console.error(e); }
+  }
+
+  function handleLogout() {
+    fetch(API, { method: 'POST', body: JSON.stringify({ action: 'logout', token }) });
+    localStorage.clear();
+    window.location.href = 'login.html';
+  }
+
+  load();
+</script>
+
+<script>
+  // Aurora
+  (function(){
+    const canvas = document.getElementById('aurora');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let W, H, t = 0;
+    function resize(){ W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+    resize(); window.addEventListener('resize', resize);
+    const blobs = [
+      {x:0.2,y:0.3,r:0.5,color:[79,195,247],speed:0.00005},
+      {x:0.8,y:0.2,r:0.45,color:[167,139,250],speed:0.00004},
+      {x:0.5,y:0.7,r:0.4,color:[244,114,182],speed:0.00006},
+      {x:0.1,y:0.8,r:0.35,color:[45,212,191],speed:0.000045},
+      {x:0.9,y:0.6,r:0.3,color:[249,115,22],speed:0.000055},
+    ];
+    function draw(){
+      ctx.clearRect(0,0,W,H); t++;
+      blobs.forEach((b,i)=>{
+        const ox=Math.sin(t*b.speed*1000+i*1.2)*0.15;
+        const oy=Math.cos(t*b.speed*800+i*0.9)*0.12;
+        const cx=(b.x+ox)*W, cy=(b.y+oy)*H, rad=b.r*Math.min(W,H);
+        const g=ctx.createRadialGradient(cx,cy,0,cx,cy,rad);
+        const [r,g2,bl]=b.color;
+        g.addColorStop(0,`rgba(${r},${g2},${bl},0.2)`);
+        g.addColorStop(0.4,`rgba(${r},${g2},${bl},0.08)`);
+        g.addColorStop(1,`rgba(${r},${g2},${bl},0)`);
+        ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+      });
+      requestAnimationFrame(draw);
+    }
+    draw();
+  })();
+</script>
+
+<script>
+  document.addEventListener('touchstart', function(e) { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
+  document.body.style.overflowX = 'hidden';
+  document.documentElement.style.overflowX = 'hidden';
+</script>
+
+<div style="text-align:center;padding:24px;font-size:11px;color:rgba(148,163,184,0.25);">Suncoast Technology · onboarding.html · v1.0</div>
+</body>
+</html>
