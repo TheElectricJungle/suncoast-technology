@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
   <title>Invoices — Suncoast Technology</title>
-  <!-- Suncoast Technology | invoices.html | v3.0 -->
+  <!-- Suncoast Technology | invoices.html | v3.1 -->
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet"/>
@@ -428,13 +428,17 @@
     document.getElementById('invDue').value    = '';
     document.getElementById('invPeriod').value = '';
     document.getElementById('invStatus').value = 'Unpaid';
-    document.getElementById('invClient').value = '';
     document.getElementById('discountType').value  = 'none';
     document.getElementById('discountValue').value = '';
     lineItems = [];
     renderLineItems();
     recalc();
     ['invoiceSaveSuccess','invoiceSaveError'].forEach(id => document.getElementById(id).classList.remove('show'));
+    // Always repopulate client dropdown from allClients
+    const sel = document.getElementById('invClient');
+    sel.innerHTML = '<option value="">Select client...</option>' +
+      allClients.map(c => `<option value="${c.client_id}">${c.business_name||c.client_name}</option>`).join('');
+    sel.value = '';
     document.getElementById('invoiceModal').classList.add('open');
     loadServices();
   }
