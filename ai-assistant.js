@@ -1,10 +1,10 @@
-// Suncoast Technology | ai-assistant.js | v2.0
+// Suncoast Technology | ai-assistant.js | v2.1
 // Floating AI assistant — deep knowledge, full conversation
 
 (function() {
   'use strict';
 
-  const ANTHROPIC_API = 'https://api.anthropic.com/v1/messages';
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyxg5LlS9eUx6VSiD_VSzE0RD94STkBAK4Hc-h14T_YU5ikqXGE3dz-Fvt1kCAE-9XRLw/exec';
 
   // ── DEEP PAGE CONTEXTS ──
   const PAGE_CONTEXTS = {
@@ -711,24 +711,25 @@ If the user asks something not covered by the page context, draw on your general
     const systemPrompt = SYSTEM_PROMPT.replace('{PAGE_CONTEXT}', getPageContext());
 
     try {
-      const res = await fetch(ANTHROPIC_API, {
+      const token    = localStorage.getItem('sc_token');
+      const clientId = localStorage.getItem('sc_client_id');
+      const res = await fetch(APPS_SCRIPT_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 1000,
-          system: systemPrompt,
-          messages: history.slice(-20)
+          action:    'aiChat',
+          token:     token,
+          client_id: clientId,
+          system:    systemPrompt,
+          messages:  history.slice(-20)
         })
       });
       const data = await res.json();
       hideTyping();
-      if (data.content && data.content[0] && data.content[0].text) {
-        const reply = data.content[0].text;
-        history.push({ role: 'assistant', content: reply });
-        addMsg('ai', reply);
+      if (data.ok && data.reply) {
+        history.push({ role: 'assistant', content: data.reply });
+        addMsg('ai', data.reply);
       } else {
-        addMsg('ai', 'Sorry, I had trouble with that. Please try again or contact us at info@suncoast.technology.');
+        addMsg('ai', 'Sorry, I had trouble connecting. Please try again or contact us at info@suncoast.technology.');
       }
     } catch(e) {
       hideTyping();
