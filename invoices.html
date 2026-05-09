@@ -4,14 +4,15 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
   <title>Invoices — Suncoast Technology</title>
-  <!-- Suncoast Technology | invoices.html | v3.6 -->
+  <!-- Suncoast Technology | invoices.html | v3.7 -->
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet"/>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
     :root{--navy:#04080F;--border:rgba(255,255,255,0.07);--muted:rgba(148,163,184,0.7);--light:#E8F0FF;--orange:#F97316;--gold:#FBBF24;--green:#22C55E;--red:#EF4444;--blue:#4FC3F7;--purple:#A78BFA;--teal:#2DD4BF;}
-    html,body{height:100%;font-family:'DM Sans',sans-serif;background:#04080F;color:var(--light);}
+    html,body{height:100%;font-family:'DM Sans',sans-serif;background:#04080F;color:var(--light);overflow-x:hidden;max-width:100vw;}
+    *{max-width:100%;}
     canvas#aurora{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;}
     .grid{position:fixed;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none;background-image:linear-gradient(rgba(79,195,247,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(79,195,247,0.02) 1px,transparent 1px);background-size:80px 80px;}
     .shell{position:relative;z-index:10;display:grid;grid-template-columns:220px 1fr;min-height:100%;overflow-x:clip;}
@@ -39,137 +40,51 @@
     .page-title em{color:var(--orange);font-style:normal;}
     .card{background:rgba(8,16,28,0.8);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:24px;position:relative;}
     .card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.07),transparent);border-radius:16px 16px 0 0;pointer-events:none;}
-    .card-title{font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin:0 0 16px;}
-    .card-value{font-size:28px;font-weight:600;color:#fff;line-height:1.1;}
     .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;}
     .stat{background:rgba(8,16,28,0.8);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:18px 20px;}
     .stat-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin:0 0 8px;}
     .stat-value{font-size:22px;font-weight:600;color:#fff;}
-    .badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:500;}
-    .badge-green{background:rgba(34,197,94,0.12);color:#86EFAC;border:1px solid rgba(34,197,94,0.2);}
-    .badge-gold{background:rgba(251,191,36,0.1);color:var(--gold);border:1px solid rgba(251,191,36,0.2);}
-    .badge-red{background:rgba(239,68,68,0.1);color:#FCA5A5;border:1px solid rgba(239,68,68,0.2);}
-    .badge-blue{background:rgba(79,195,247,0.1);color:var(--blue);border:1px solid rgba(79,195,247,0.2);}
-    .badge-muted{background:rgba(148,163,184,0.08);color:var(--muted);border:1px solid rgba(148,163,184,0.15);}
-    .badge-purple{background:rgba(167,139,250,0.1);color:var(--purple);border:1px solid rgba(167,139,250,0.2);}
     .btn{display:inline-flex;align-items:center;gap:7px;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;border:none;transition:opacity 0.2s,transform 0.1s;text-decoration:none;}
     .btn:active{transform:scale(0.98);}
     .btn-primary{background:linear-gradient(135deg,var(--orange),#ea580c);color:#fff;}
     .btn-primary:hover{opacity:0.9;}
     .btn-primary:disabled{opacity:0.6;cursor:not-allowed;}
-    .btn-ghost{background:rgba(255,255,255,0.05);color:var(--muted);border:1px solid rgba(255,255,255,0.09);}
-    .btn-ghost:hover{background:rgba(255,255,255,0.09);color:#fff;}
-    .btn-green{background:rgba(34,197,94,0.1);color:#86EFAC;border:1px solid rgba(34,197,94,0.2);}
-    .btn-sm{padding:6px 12px;font-size:12px;}
     .field{display:flex;flex-direction:column;gap:5px;margin:0 0 14px;}
     .field label{font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;}
     .field input,.field textarea,.field select{width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:10px 13px;font-size:13px;font-family:'DM Sans',sans-serif;color:#fff;outline:none;transition:border-color 0.2s;}
     .field input:focus,.field textarea:focus,.field select:focus{border-color:rgba(249,115,22,0.4);background:rgba(249,115,22,0.02);}
-    .field textarea{resize:vertical;min-height:80px;}
     .field select option{background:#0D1B2A;}
     .alert{display:none;padding:10px 14px;border-radius:8px;font-size:13px;margin:0 0 14px;align-items:center;gap:8px;}
     .alert.show{display:flex;}
     .alert-success{background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);color:#86EFAC;}
     .alert-error{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#FCA5A5;}
-    .alert-info{background:rgba(79,195,247,0.08);border:1px solid rgba(79,195,247,0.2);color:var(--blue);}
     .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-    .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
-    table{width:100%;border-collapse:collapse;font-size:13px;}
-    thead th{padding:8px 12px;text-align:left;font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;border-bottom:1px solid rgba(255,255,255,0.06);background:transparent;}
-    tbody td{padding:11px 12px;border-bottom:1px solid rgba(255,255,255,0.04);color:rgba(255,255,255,0.85);background:transparent;}
-    tbody tr:last-child td{border-bottom:none;}
-    tbody tr:hover td{background:rgba(255,255,255,0.02);}
-    .empty{padding:40px;text-align:center;color:var(--muted);font-size:13px;}
-    .drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);z-index:50;display:none;}
-    .drawer-overlay.show{display:block;}
-    .drawer{position:fixed;top:0;right:0;bottom:0;width:520px;background:rgba(6,12,20,0.97);backdrop-filter:blur(30px);border-left:1px solid rgba(255,255,255,0.1);z-index:51;display:flex;flex-direction:column;transform:translateX(100%);transition:transform 0.3s ease;}
-    .drawer.show{transform:translateX(0);}
-    .drawer-head{padding:20px 24px;border-bottom:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
-    .drawer-title{font-family:'Playfair Display',serif;font-size:20px;color:#fff;}
-    .drawer-close{background:none;border:none;color:var(--muted);cursor:pointer;padding:6px;border-radius:6px;display:flex;transition:color 0.15s;}
-    .drawer-close:hover{color:#fff;}
-    .drawer-tabs{display:flex;border-bottom:1px solid rgba(255,255,255,0.07);flex-shrink:0;}
-    .drawer-tab{padding:11px 18px;font-size:13px;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:color 0.15s,border-color 0.15s;background:none;border-top:none;border-left:none;border-right:none;font-family:'DM Sans',sans-serif;}
-    .drawer-tab.active{color:var(--orange);border-bottom-color:var(--orange);}
-    .drawer-body{flex:1;overflow-y:auto;padding:24px;}
-    .drawer-footer{padding:16px 24px;border-top:1px solid rgba(255,255,255,0.07);display:flex;gap:10px;flex-shrink:0;}
     .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);z-index:100;display:none;align-items:center;justify-content:center;padding:20px;}
     .modal-overlay.open{display:flex;}
-    .modal{background:rgba(6,12,20,0.97);backdrop-filter:blur(30px);border:1px solid rgba(255,255,255,0.1);border-radius:20px;width:100%;max-width:500px;max-height:90vh;overflow-y:auto;position:relative;}
+    .modal{background:rgba(6,12,20,0.97);backdrop-filter:blur(30px);border:1px solid rgba(255,255,255,0.1);border-radius:20px;width:100%;max-width:680px;max-height:90vh;overflow-y:auto;position:relative;}
     .modal::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(79,195,247,0.3),rgba(167,139,250,0.3),transparent);border-radius:20px 20px 0 0;}
     .modal-head{padding:24px 28px 0;display:flex;align-items:center;justify-content:space-between;}
     .modal-title{font-family:'Playfair Display',serif;font-size:20px;color:#fff;}
     .modal-close{background:none;border:none;color:var(--muted);cursor:pointer;padding:4px;border-radius:6px;display:flex;}
     .modal-close:hover{color:#fff;}
     .modal-body{padding:20px 28px 28px;}
-    .search-bar{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:9px 14px;width:260px;}
-    .search-bar input{background:none;border:none;outline:none;font-size:13px;color:#fff;font-family:'DM Sans',sans-serif;width:100%;}
-    .search-bar input::placeholder{color:var(--muted);}
-    .client-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
-    .client-card{background:rgba(8,16,28,0.8);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:20px;cursor:pointer;transition:border-color 0.15s,transform 0.15s;}
-    .client-card:hover{border-color:rgba(249,115,22,0.3);transform:translateY(-2px);}
-    .client-avatar{width:38px;height:38px;border-radius:10px;background:rgba(249,115,22,0.15);border:1px solid rgba(249,115,22,0.2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--orange);flex-shrink:0;}
-    @media(max-width:768px){.shell{grid-template-columns:1fr}.sidebar{display:none}.main{padding:20px 16px}.grid2,.grid3{grid-template-columns:1fr}.drawer{width:100%}}
-
-  
-    /* ── MOBILE LOCK ── */
-    html, body {
-      overflow-x: hidden;
-      max-width: 100vw;
-    }
-    * {
-      max-width: 100%;
-    }
+    @media(max-width:768px){.shell{grid-template-columns:1fr}.sidebar{display:none}.main{padding:20px 16px}.grid2{grid-template-columns:1fr}}
   </style>
-
-<script>
-  // Prevent pinch zoom
-  document.addEventListener('touchmove', function(e) {
-    if (e.touches.length > 1) e.preventDefault();
-  }, { passive: false });
-  document.addEventListener('gesturestart', function(e) {
-    e.preventDefault();
-  });
-  // Reset zoom on load/refresh
-  document.addEventListener('DOMContentLoaded', function() {
-    var meta = document.querySelector('meta[name="viewport"]');
-    if (meta) {
-      meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
-    }
-  });
-</script>
+  <script>
+    document.addEventListener('touchmove',function(e){if(e.touches.length>1)e.preventDefault();},{passive:false});
+    document.addEventListener('gesturestart',function(e){e.preventDefault();});
+  </script>
 </head>
 <body>
 <canvas id="aurora"></canvas>
 <script>
   (function(){
-    const canvas = document.getElementById('aurora');
-    const ctx = canvas.getContext('2d');
-    let W, H, t = 0;
-    function resize(){ W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
-    resize(); window.addEventListener('resize', resize);
-    const blobs = [
-      {x:0.2,y:0.3,r:0.55,color:[79,195,247],speed:0.00005},
-      {x:0.8,y:0.2,r:0.5,color:[167,139,250],speed:0.00004},
-      {x:0.5,y:0.7,r:0.45,color:[244,114,182],speed:0.00006},
-      {x:0.1,y:0.8,r:0.4,color:[45,212,191],speed:0.000045},
-      {x:0.9,y:0.5,r:0.35,color:[249,115,22],speed:0.000055},
-    ];
-    function draw(){
-      ctx.clearRect(0,0,W,H); t++;
-      blobs.forEach((b,i)=>{
-        const ox=Math.sin(t*b.speed*500+i*1.2)*0.15;
-        const oy=Math.cos(t*b.speed*400+i*0.9)*0.12;
-        const cx=(b.x+ox)*W, cy=(b.y+oy)*H, rad=b.r*Math.min(W,H);
-        const g=ctx.createRadialGradient(cx,cy,0,cx,cy,rad);
-        const [r,g2,bl]=b.color;
-        g.addColorStop(0,`rgba(${r},${g2},${bl},0.22)`);
-        g.addColorStop(0.4,`rgba(${r},${g2},${bl},0.09)`);
-        g.addColorStop(1,`rgba(${r},${g2},${bl},0)`);
-        ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
-      });
-      requestAnimationFrame(draw);
-    }
+    const canvas=document.getElementById('aurora'),ctx=canvas.getContext('2d');
+    let W,H,t=0;
+    function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+    resize();window.addEventListener('resize',resize);
+    const blobs=[{x:0.2,y:0.3,r:0.55,color:[79,195,247],speed:0.00005},{x:0.8,y:0.2,r:0.5,color:[167,139,250],speed:0.00004},{x:0.5,y:0.7,r:0.45,color:[244,114,182],speed:0.00006},{x:0.1,y:0.8,r:0.4,color:[45,212,191],speed:0.000045},{x:0.9,y:0.5,r:0.35,color:[249,115,22],speed:0.000055}];
+    function draw(){ctx.clearRect(0,0,W,H);t++;blobs.forEach((b,i)=>{const ox=Math.sin(t*b.speed*500+i*1.2)*0.15,oy=Math.cos(t*b.speed*400+i*0.9)*0.12,cx=(b.x+ox)*W,cy=(b.y+oy)*H,rad=b.r*Math.min(W,H),g=ctx.createRadialGradient(cx,cy,0,cx,cy,rad),[r,g2,bl]=b.color;g.addColorStop(0,`rgba(${r},${g2},${bl},0.22)`);g.addColorStop(0.4,`rgba(${r},${g2},${bl},0.09)`);g.addColorStop(1,`rgba(${r},${g2},${bl},0)`);ctx.fillStyle=g;ctx.fillRect(0,0,W,H);});requestAnimationFrame(draw);}
     draw();
   })();
 </script>
@@ -203,13 +118,14 @@
     <div class="sidebar-footer">
       <div class="user-row">
         <div class="user-avatar">JR</div>
-        <div class="user-name">Justin R.<div style="font-size:10px;color:rgba(148,163,184,0.3);margin-top:2px;">v3.6</div></div>
+        <div class="user-name">Justin R.<div style="font-size:10px;color:rgba(148,163,184,0.3);margin-top:2px;">v3.7</div></div>
         <button class="logout-btn" onclick="handleLogout()">
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3"/><path d="M11 11l3-3-3-3M14 8H6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
       </div>
     </div>
   </aside>
+
   <main class="main">
     <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:12px;">
       <div>
@@ -221,14 +137,16 @@
         New invoice
       </button>
     </div>
+
     <div class="stat-grid">
       <div class="stat"><div class="stat-label">Total outstanding</div><div class="stat-value" id="totalOutstanding">—</div></div>
       <div class="stat"><div class="stat-label">Paid this month</div><div class="stat-value" id="paidThisMonth">—</div></div>
       <div class="stat"><div class="stat-label">Overdue</div><div class="stat-value" id="overdueCount">—</div></div>
     </div>
+
     <div class="card">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
-        <div class="card-title" style="margin:0;">All invoices</div>
+        <div style="font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;">All invoices</div>
         <select id="filterStatus" onchange="filterInvoices()" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);border-radius:7px;padding:6px 12px;font-size:12px;color:var(--muted);font-family:'DM Sans',sans-serif;outline:none;">
           <option value="">All</option>
           <option value="Unpaid">Unpaid</option>
@@ -236,12 +154,12 @@
           <option value="Overdue">Overdue</option>
         </select>
       </div>
-      <div id="invoiceTable"><div class="empty">Loading...</div></div>
+      <div id="invoiceTable"><div style="text-align:center;padding:40px;color:rgba(148,163,184,0.5);">Loading...</div></div>
     </div>
-    <!-- New Invoice Modal -->
-    <!-- FULL INVOICE BUILDER MODAL -->
+
+    <!-- INVOICE BUILDER MODAL -->
     <div class="modal-overlay" id="invoiceModal" onclick="if(event.target===this)closeModal()">
-      <div class="modal" style="max-width:680px;">
+      <div class="modal">
         <div class="modal-head">
           <div class="modal-title" id="modalTitle">New invoice</div>
           <button class="modal-close" onclick="closeModal()"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
@@ -250,9 +168,13 @@
           <div class="alert alert-success" id="invoiceSaveSuccess">Invoice saved.</div>
           <div class="alert alert-error" id="invoiceSaveError">Error saving invoice.</div>
 
-          <!-- Client + dates -->
           <div class="grid2" style="margin:0 0 14px;">
-            <div class="field" style="margin:0;"><label>Client *</label><select id="invClient" onchange="onClientChange()"><option value="">Select client...</option></select></div>
+            <div class="field" style="margin:0;">
+              <label>Client *</label>
+              <select id="invClient" onchange="onClientChange()">
+                <option value="">Select client...</option>
+              </select>
+            </div>
             <div class="field" style="margin:0;"><label>Due date</label><input type="date" id="invDue"/></div>
           </div>
           <div class="grid2" style="margin:0 0 20px;">
@@ -272,7 +194,6 @@
             </div>
           </div>
 
-          <!-- Line items table -->
           <div id="lineItemsContainer" style="margin:0 0 16px;border:1px solid rgba(255,255,255,0.07);border-radius:10px;overflow:hidden;">
             <div style="display:grid;grid-template-columns:1fr 70px 90px 90px 32px;gap:0;background:rgba(255,255,255,0.03);padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.06);">
               <div style="font-size:10px;color:rgba(148,163,184,0.5);text-transform:uppercase;letter-spacing:0.06em;">Description</div>
@@ -299,9 +220,7 @@
 
           <!-- Totals -->
           <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:14px 16px;margin:0 0 20px;">
-            <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:13px;color:rgba(148,163,184,0.6);">
-              <span>Subtotal</span><span id="subtotalDisplay">$0.00</span>
-            </div>
+            <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:13px;color:rgba(148,163,184,0.6);"><span>Subtotal</span><span id="subtotalDisplay">$0.00</span></div>
             <div id="discountRow" style="display:none;justify-content:space-between;padding:4px 0;font-size:13px;color:rgba(34,197,94,0.8);">
               <span id="discountRowLabel">Discount</span><span id="discountDisplay">-$0.00</span>
             </div>
@@ -317,84 +236,62 @@
     </div>
   </main>
 </div>
-<script>
-  const API      = 'https://script.google.com/macros/s/AKfycbyxg5LlS9eUx6VSiD_VSzE0RD94STkBAK4Hc-h14T_YU5ikqXGE3dz-Fvt1kCAE-9XRLw/exec';
-  const token    = localStorage.getItem('sc_token');
-  const clientId = localStorage.getItem('sc_client_id');
-  if (!token) {
-    console.error('No token found — redirecting to login');
-    window.location.href = 'login.html';
-  }
 
-  async function api(action, extra = {}) {
-    const res = await fetch(API, {
-      method: 'POST',
-      body: JSON.stringify({ action, token, client_id: clientId, ...extra })
-    });
+<script>
+  const API     = 'https://script.google.com/macros/s/AKfycbyxg5LlS9eUx6VSiD_VSzE0RD94STkBAK4Hc-h14T_YU5ikqXGE3dz-Fvt1kCAE-9XRLw/exec';
+  const token   = localStorage.getItem('sc_token');
+  const clientId= localStorage.getItem('sc_client_id');
+  if (!token) window.location.href = 'login.html';
+
+  async function api(action, extra={}) {
+    const res = await fetch(API,{method:'POST',body:JSON.stringify({action,token,client_id:clientId,...extra})});
     return res.json();
   }
-
-  function handleLogout() {
-    fetch(API, { method: 'POST', body: JSON.stringify({ action: 'logout', token }) });
-    localStorage.clear();
-    window.location.href = 'login.html';
+  function handleLogout(){
+    fetch(API,{method:'POST',body:JSON.stringify({action:'logout',token})});
+    localStorage.clear(); window.location.href='login.html';
   }
 
-  let allInvoices = [];
-  let allClients  = [];
+  let allInvoices=[], allClients=[], lineItems=[], allServices=[];
 
   async function load() {
     try {
-      console.log('=== INVOICE LOAD START ===');
-      console.log('token:', token ? token.slice(0,10)+'...' : 'MISSING');
-      console.log('clientId:', clientId);
-      console.log('API:', API.slice(0,50)+'...');
       const clientsRes = await api('adminGetClients');
-      console.log('RAW clientsRes:', JSON.stringify(clientsRes).slice(0,300));
-      if (!clientsRes.ok) {
-        console.error('adminGetClients FAILED:', clientsRes.error);
-        document.getElementById('invoiceTable').innerHTML = '<div style="color:rgba(239,68,68,0.8);padding:20px;">Error: ' + (clientsRes.error||'unknown') + ' — please <a href="login.html" style="color:var(--orange);">log in again</a>.</div>';
-        return;
-      }
+      if (!clientsRes.ok) { window.location.href='login.html'; return; }
       allClients = clientsRes.clients || [];
-      console.log('allClients loaded:', allClients.length, allClients.map(c=>c.client_name));
 
-      // Populate client dropdown
+      // Populate client dropdown — domain as primary display
       const sel = document.getElementById('invClient');
       if (sel) {
         sel.innerHTML = '<option value="">Select client...</option>' +
-          allClients.map(c => `<option value="${c.client_id}">${c.business_name||c.client_name}</option>`).join('');
+          allClients.map(c => `<option value="${c.client_id}">${c.domain||c.business_name||c.client_name}</option>`).join('');
       }
 
-      // Load all invoices
       allInvoices = [];
       for (const c of allClients) {
         try {
           const ir = await fetch(API,{method:'POST',body:JSON.stringify({action:'getInvoices',token,client_id:c.client_id})}).then(r=>r.json());
-          if (ir.invoices) allInvoices.push(...ir.invoices.map(i => ({...i, _clientName: c.business_name||c.client_name})));
-        } catch(e) {}
+          if (ir.invoices) allInvoices.push(...ir.invoices.map(i=>({...i, _clientDisplay: c.domain||c.business_name||c.client_name, _clientName: c.client_name})));
+        } catch(e){}
       }
-      allInvoices.sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
+      allInvoices.sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
 
-      // Stats
-      const unpaid   = allInvoices.filter(i => (i.status||'').toLowerCase() === 'unpaid');
-      const paid     = allInvoices.filter(i => (i.status||'').toLowerCase() === 'paid');
-      const overdue  = allInvoices.filter(i => (i.status||'').toLowerCase() === 'overdue');
+      const unpaid   = allInvoices.filter(i=>(i.status||'').toLowerCase()==='unpaid');
+      const overdue  = allInvoices.filter(i=>(i.status||'').toLowerCase()==='overdue');
       const now      = new Date();
-      const thisMonth = allInvoices.filter(i => i.paid_date && new Date(i.paid_date).getMonth() === now.getMonth());
-      
-      document.getElementById('totalOutstanding').textContent = '$' + unpaid.reduce((s,i)=>s+parseFloat(i.amount||0),0).toFixed(2);
-      document.getElementById('paidThisMonth').textContent    = '$' + thisMonth.reduce((s,i)=>s+parseFloat(i.amount||0),0).toFixed(2);
+      const thisMonth= allInvoices.filter(i=>i.paid_date && new Date(i.paid_date).getMonth()===now.getMonth() && new Date(i.paid_date).getFullYear()===now.getFullYear());
+
+      document.getElementById('totalOutstanding').textContent = '$'+unpaid.reduce((s,i)=>s+parseFloat(i.amount||0),0).toFixed(2);
+      document.getElementById('paidThisMonth').textContent    = '$'+thisMonth.reduce((s,i)=>s+parseFloat(i.amount||0),0).toFixed(2);
       document.getElementById('overdueCount').textContent     = overdue.length;
 
       renderInvoices(allInvoices);
-    } catch(e) { console.error(e); }
+    } catch(e){ console.error(e); }
   }
 
   function renderInvoices(invoices) {
     const table = document.getElementById('invoiceTable');
-    if (!table) return;
-    if (!invoices.length) { table.innerHTML = '<div style="text-align:center;padding:40px;color:rgba(148,163,184,0.5);">No invoices found.</div>'; return; }
+    if (!invoices.length) { table.innerHTML='<div style="text-align:center;padding:40px;color:rgba(148,163,184,0.5);">No invoices found.</div>'; return; }
     table.innerHTML = `<table style="width:100%;border-collapse:collapse;">
       <thead><tr>
         <th style="padding:10px;text-align:left;font-size:10px;color:rgba(148,163,184,0.5);text-transform:uppercase;letter-spacing:0.06em;border-bottom:1px solid rgba(255,255,255,0.06);">Invoice</th>
@@ -405,39 +302,37 @@
         <th style="padding:10px;text-align:left;font-size:10px;color:rgba(148,163,184,0.5);text-transform:uppercase;letter-spacing:0.06em;border-bottom:1px solid rgba(255,255,255,0.06);">Status</th>
         <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,0.06);"></th>
       </tr></thead>
-      <tbody>${invoices.map(inv => {
-        const st = (inv.status||'Unpaid').toLowerCase();
-        const bc = st==='paid'?'rgba(34,197,94,0.12);color:#86EFAC':st==='overdue'?'rgba(239,68,68,0.12);color:#FCA5A5':'rgba(251,191,36,0.12);color:#FBBF24';
-        const due = inv.due_date ? new Date(inv.due_date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '—';
+      <tbody>${invoices.map(inv=>{
+        const st=(inv.status||'Unpaid').toLowerCase();
+        const bc=st==='paid'?'rgba(34,197,94,0.12);color:#86EFAC':st==='overdue'?'rgba(239,68,68,0.12);color:#FCA5A5':'rgba(251,191,36,0.12);color:#FBBF24';
+        const due=inv.due_date?new Date(inv.due_date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):'—';
         return `<tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
           <td style="padding:10px;font-size:12px;color:rgba(148,163,184,0.5);">${inv.invoice_id}</td>
-          <td style="padding:10px;font-size:13px;color:#fff;">${inv._clientName||'—'}</td>
+          <td style="padding:10px;">
+            <div style="font-size:13px;font-weight:500;color:#fff;">${inv._clientDisplay||'—'}</div>
+            <div style="font-size:11px;color:rgba(148,163,184,0.5);">${inv._clientName||''}</div>
+          </td>
           <td style="padding:10px;font-size:12px;color:rgba(148,163,184,0.7);">${inv.description||inv.period||'—'}</td>
           <td style="padding:10px;font-size:13px;font-weight:500;color:#fff;text-align:right;">$${parseFloat(inv.amount||0).toFixed(2)}</td>
           <td style="padding:10px;font-size:12px;color:rgba(148,163,184,0.6);">${due}</td>
           <td style="padding:10px;"><span style="background:${bc};padding:2px 8px;border-radius:20px;font-size:11px;">${inv.status||'Unpaid'}</span></td>
           <td style="padding:10px;"><button onclick="openInvoiceModal('${inv.invoice_id}')" style="font-size:11px;padding:4px 10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:6px;color:rgba(148,163,184,0.7);cursor:pointer;font-family:'DM Sans',sans-serif;">Edit</button></td>
         </tr>`;
-      }).join('')}</tbody>
-    </table>`;
+      }).join('')}</tbody></table>`;
   }
 
-  let lineItems    = [];
-  let allServices  = [];
-
-  // Load services for catalog picker
   async function loadServices() {
     try {
       const res = await api('adminGetServices');
       if (res.ok) {
-        allServices = (res.services || []).filter(s => s.active !== false && s.active !== 'FALSE');
+        allServices = (res.services||[]).filter(s=>s.active!==false&&s.active!=='FALSE');
         const picker = document.getElementById('svcPicker');
         if (picker) {
           picker.innerHTML = '<option value="">Add from catalog...</option>' +
-            allServices.map(s => `<option value="${s.service_id}">${s.name} — $${parseFloat(s.price||0).toFixed(2)}${s.type==='recurring'?'/mo':''}</option>`).join('');
+            allServices.map(s=>`<option value="${s.service_id}">${s.name} — $${parseFloat(s.price||0).toFixed(2)}${s.type==='recurring'?'/mo':''}</option>`).join('');
         }
       }
-    } catch(e) {}
+    } catch(e){}
   }
 
   function openNewInvoice() {
@@ -449,238 +344,167 @@
     document.getElementById('discountType').value  = 'none';
     document.getElementById('discountValue').value = '';
     lineItems = [];
-    renderLineItems();
-    recalc();
-    ['invoiceSaveSuccess','invoiceSaveError'].forEach(id => document.getElementById(id).classList.remove('show'));
-    // Always repopulate client dropdown from allClients
+    renderLineItems(); recalc();
+    ['invoiceSaveSuccess','invoiceSaveError'].forEach(id=>document.getElementById(id).classList.remove('show'));
     const sel = document.getElementById('invClient');
     sel.innerHTML = '<option value="">Select client...</option>' +
-      allClients.map(c => `<option value="${c.client_id}">${c.business_name||c.client_name}</option>`).join('');
+      allClients.map(c=>`<option value="${c.client_id}">${c.domain||c.business_name||c.client_name}</option>`).join('');
     sel.value = '';
     document.getElementById('invoiceModal').classList.add('open');
     loadServices();
   }
 
-  function closeModal() {
-    document.getElementById('invoiceModal').classList.remove('open');
-  }
+  function closeModal() { document.getElementById('invoiceModal').classList.remove('open'); }
 
   function onClientChange() {
     const cid = document.getElementById('invClient').value;
-    const c   = allClients.find(x => x.client_id === cid);
-    if (c && c.plan_name) {
-      if (!document.getElementById('invPeriod').value) {
-        const now = new Date();
-        document.getElementById('invPeriod').value = c.plan_name + ' — ' + now.toLocaleDateString('en-US',{month:'long',year:'numeric'});
-      }
+    const c   = allClients.find(x=>x.client_id===cid);
+    if (c && c.plan_name && !document.getElementById('invPeriod').value) {
+      const now = new Date();
+      document.getElementById('invPeriod').value = c.plan_name+' — '+now.toLocaleDateString('en-US',{month:'long',year:'numeric'});
     }
   }
 
   function addLineFromCatalog() {
-    const picker  = document.getElementById('svcPicker');
-    const svcId   = picker.value;
+    const picker = document.getElementById('svcPicker');
+    const svcId  = picker.value;
     if (!svcId) return;
-    const svc = allServices.find(s => s.service_id === svcId);
+    const svc = allServices.find(s=>s.service_id===svcId);
     if (!svc) return;
-    lineItems.push({
-      id:          Date.now(),
-      name:        svc.name,
-      service_id:  svc.service_id,
-      qty:         1,
-      unit_price:  parseFloat(svc.price || 0),
-      discount_pct: 0
-    });
-    picker.value = '';
-    renderLineItems();
-    recalc();
+    lineItems.push({id:Date.now(),name:svc.name,service_id:svc.service_id,qty:1,unit_price:parseFloat(svc.price||0),discount_pct:0});
+    picker.value=''; renderLineItems(); recalc();
   }
 
   function addBlankLine() {
-    lineItems.push({ id: Date.now(), name: '', qty: 1, unit_price: 0, discount_pct: 0 });
-    renderLineItems();
-    recalc();
+    lineItems.push({id:Date.now(),name:'',qty:1,unit_price:0,discount_pct:0});
+    renderLineItems(); recalc();
   }
 
-  function removeLine(id) {
-    lineItems = lineItems.filter(l => l.id !== id);
-    renderLineItems();
-    recalc();
-  }
+  function removeLine(id) { lineItems=lineItems.filter(l=>l.id!==id); renderLineItems(); recalc(); }
 
-  function updateLine(id, field, value) {
-    const item = lineItems.find(l => l.id === id);
-    if (!item) return;
-    if (field === 'qty')          item.qty          = parseFloat(value) || 0;
-    if (field === 'unit_price')   item.unit_price   = parseFloat(value) || 0;
-    if (field === 'discount_pct') item.discount_pct = parseFloat(value) || 0;
-    if (field === 'name')         item.name         = value;
+  function updateLine(id,field,value) {
+    const item=lineItems.find(l=>l.id===id); if(!item) return;
+    if(field==='qty')        item.qty        =parseFloat(value)||0;
+    if(field==='unit_price') item.unit_price =parseFloat(value)||0;
+    if(field==='name')       item.name       =value;
     recalc();
   }
 
   function renderLineItems() {
-    const list  = document.getElementById('lineItemsList');
-    const empty = document.getElementById('lineItemsEmpty');
-    if (!lineItems.length) {
-      list.innerHTML  = '';
-      empty.style.display = 'block';
-      return;
-    }
-    empty.style.display = 'none';
-    list.innerHTML = lineItems.map(item => {
-      const lineTotal = (item.qty * item.unit_price * (1 - (item.discount_pct||0)/100));
+    const list =document.getElementById('lineItemsList');
+    const empty=document.getElementById('lineItemsEmpty');
+    if (!lineItems.length) { list.innerHTML=''; empty.style.display='block'; return; }
+    empty.style.display='none';
+    list.innerHTML=lineItems.map(item=>{
+      const lt=(item.qty*item.unit_price*(1-(item.discount_pct||0)/100));
       return `<div style="display:grid;grid-template-columns:1fr 70px 90px 90px 32px;gap:4px;padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.04);align-items:center;">
-        <input value="${item.name}" placeholder="Item description" oninput="updateLine(${item.id},'name',this.value)"
-          style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:6px;padding:5px 8px;font-size:12px;font-family:'DM Sans',sans-serif;color:#fff;outline:none;width:100%;"/>
-        <input type="number" value="${item.qty}" min="0" oninput="updateLine(${item.id},'qty',this.value)"
-          style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:6px;padding:5px 8px;font-size:12px;font-family:'DM Sans',sans-serif;color:#fff;outline:none;width:100%;text-align:center;"/>
-        <input type="number" value="${item.unit_price.toFixed(2)}" min="0" step="0.01" oninput="updateLine(${item.id},'unit_price',this.value)"
-          style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:6px;padding:5px 8px;font-size:12px;font-family:'DM Sans',sans-serif;color:#fff;outline:none;width:100%;text-align:right;"/>
-        <div style="font-size:13px;font-weight:500;color:#fff;text-align:right;padding-right:4px;">$${lineTotal.toFixed(2)}</div>
+        <input value="${item.name}" placeholder="Item description" oninput="updateLine(${item.id},'name',this.value)" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:6px;padding:5px 8px;font-size:12px;font-family:'DM Sans',sans-serif;color:#fff;outline:none;width:100%;"/>
+        <input type="number" value="${item.qty}" min="0" oninput="updateLine(${item.id},'qty',this.value)" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:6px;padding:5px 8px;font-size:12px;font-family:'DM Sans',sans-serif;color:#fff;outline:none;width:100%;text-align:center;"/>
+        <input type="number" value="${item.unit_price.toFixed(2)}" min="0" step="0.01" oninput="updateLine(${item.id},'unit_price',this.value)" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:6px;padding:5px 8px;font-size:12px;font-family:'DM Sans',sans-serif;color:#fff;outline:none;width:100%;text-align:right;"/>
+        <div style="font-size:13px;font-weight:500;color:#fff;text-align:right;padding-right:4px;">$${lt.toFixed(2)}</div>
         <button onclick="removeLine(${item.id})" style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);border-radius:6px;color:#FCA5A5;font-size:14px;cursor:pointer;width:28px;height:28px;display:flex;align-items:center;justify-content:center;padding:0;">×</button>
       </div>`;
     }).join('');
   }
 
   function recalc() {
-    const subtotal     = lineItems.reduce((s,i) => s + (i.qty * i.unit_price * (1 - (i.discount_pct||0)/100)), 0);
-    const dtype        = document.getElementById('discountType').value;
-    const dval         = parseFloat(document.getElementById('discountValue').value) || 0;
-    let discountAmt    = 0;
-    if (dtype === 'percent' && dval > 0) discountAmt = subtotal * (dval / 100);
-    if (dtype === 'dollar'  && dval > 0) discountAmt = Math.min(dval, subtotal);
-    const total = Math.max(0, subtotal - discountAmt);
-
-    document.getElementById('subtotalDisplay').textContent = '$' + subtotal.toFixed(2);
-    document.getElementById('totalDisplay').textContent    = '$' + total.toFixed(2);
-
-    const discRow   = document.getElementById('discountRow');
-    const discLabel = document.getElementById('discountRowLabel');
-    const discDisp  = document.getElementById('discountDisplay');
-    const discLbl   = document.getElementById('discountLabel');
-
-    if (discountAmt > 0) {
-      discRow.style.display = 'flex';
-      discLabel.textContent = dtype === 'percent' ? 'Discount (' + dval + '%)' : 'Discount';
-      discDisp.textContent  = '-$' + discountAmt.toFixed(2);
-      discLbl.textContent   = 'Saving $' + discountAmt.toFixed(2);
-    } else {
-      discRow.style.display = 'none';
-      discLbl.textContent   = '';
-    }
+    const subtotal   =lineItems.reduce((s,i)=>s+(i.qty*i.unit_price*(1-(i.discount_pct||0)/100)),0);
+    const dtype      =document.getElementById('discountType').value;
+    const dval       =parseFloat(document.getElementById('discountValue').value)||0;
+    let discountAmt  =0;
+    if(dtype==='percent'&&dval>0) discountAmt=subtotal*(dval/100);
+    if(dtype==='dollar' &&dval>0) discountAmt=Math.min(dval,subtotal);
+    const total=Math.max(0,subtotal-discountAmt);
+    document.getElementById('subtotalDisplay').textContent='$'+subtotal.toFixed(2);
+    document.getElementById('totalDisplay').textContent   ='$'+total.toFixed(2);
+    const discRow  =document.getElementById('discountRow');
+    const discLabel=document.getElementById('discountRowLabel');
+    const discDisp =document.getElementById('discountDisplay');
+    const discLbl  =document.getElementById('discountLabel');
+    if(discountAmt>0){
+      discRow.style.display='flex';
+      discLabel.textContent=dtype==='percent'?'Discount ('+dval+'%)':'Discount';
+      discDisp.textContent ='-$'+discountAmt.toFixed(2);
+      discLbl.textContent  ='Saving $'+discountAmt.toFixed(2);
+    } else { discRow.style.display='none'; discLbl.textContent=''; }
   }
 
   function openInvoiceModal(invoiceId) {
-    const inv = allInvoices.find(i => i.invoice_id === invoiceId);
-    if (!inv) return;
-    document.getElementById('modalTitle').textContent = 'Edit ' + invoiceId;
-    document.getElementById('invDue').value    = inv.due_date ? inv.due_date.split('T')[0] : '';
-    document.getElementById('invPeriod').value = inv.period || inv.description || '';
-    document.getElementById('invStatus').value = inv.status || 'Unpaid';
-    document.getElementById('invClient').value = inv.client_id || '';
-    document.getElementById('discountType').value  = inv.discount_type  || 'none';
-    document.getElementById('discountValue').value = inv.discount_value || '';
-
-    // Load line items if they exist
-    try {
-      lineItems = inv.line_items ? JSON.parse(inv.line_items).map((l,i) => ({...l, id: Date.now()+i})) : [];
-    } catch(e) {
-      lineItems = inv.amount ? [{ id: Date.now(), name: inv.description||'Service', qty: 1, unit_price: parseFloat(inv.amount), discount_pct: 0 }] : [];
-    }
-    renderLineItems();
-    recalc();
-    ['invoiceSaveSuccess','invoiceSaveError'].forEach(id => document.getElementById(id).classList.remove('show'));
-    document.getElementById('invoiceModal')._invoiceId = invoiceId;
+    const inv=allInvoices.find(i=>i.invoice_id===invoiceId); if(!inv) return;
+    document.getElementById('modalTitle').textContent='Edit '+invoiceId;
+    document.getElementById('invDue').value   =inv.due_date?inv.due_date.split('T')[0]:'';
+    document.getElementById('invPeriod').value=inv.period||inv.description||'';
+    document.getElementById('invStatus').value=inv.status||'Unpaid';
+    document.getElementById('invClient').value=inv.client_id||'';
+    document.getElementById('discountType').value =inv.discount_type ||'none';
+    document.getElementById('discountValue').value=inv.discount_value||'';
+    try { lineItems=inv.line_items?JSON.parse(inv.line_items).map((l,i)=>({...l,id:Date.now()+i})):[];
+    } catch(e){ lineItems=inv.amount?[{id:Date.now(),name:inv.description||'Service',qty:1,unit_price:parseFloat(inv.amount),discount_pct:0}]:[]; }
+    renderLineItems(); recalc();
+    ['invoiceSaveSuccess','invoiceSaveError'].forEach(id=>document.getElementById(id).classList.remove('show'));
+    document.getElementById('invoiceModal')._invoiceId=invoiceId;
     document.getElementById('invoiceModal').classList.add('open');
     loadServices();
   }
 
   async function handleSaveInvoice() {
-    const btn       = document.getElementById('invoiceSaveBtn');
-    const modal     = document.getElementById('invoiceModal');
-    const invoiceId = modal._invoiceId;
-    const cid       = document.getElementById('invClient').value;
-    ['invoiceSaveSuccess','invoiceSaveError'].forEach(id => document.getElementById(id).classList.remove('show'));
-
-    if (!cid) {
-      document.getElementById('invoiceSaveError').textContent = 'Please select a client.';
-      document.getElementById('invoiceSaveError').classList.add('show'); return;
-    }
-    if (!lineItems.length) {
-      document.getElementById('invoiceSaveError').textContent = 'Please add at least one line item.';
-      document.getElementById('invoiceSaveError').classList.add('show'); return;
-    }
-
-    const dtype    = document.getElementById('discountType').value;
-    const dval     = parseFloat(document.getElementById('discountValue').value) || 0;
-    const subtotal = lineItems.reduce((s,i) => s + (i.qty * i.unit_price * (1 - (i.discount_pct||0)/100)), 0);
-    let discAmt    = 0;
-    if (dtype === 'percent' && dval > 0) discAmt = subtotal * (dval/100);
-    if (dtype === 'dollar'  && dval > 0) discAmt = Math.min(dval, subtotal);
-    const total    = Math.max(0, subtotal - discAmt);
-
-    btn.disabled = true; btn.textContent = 'Saving...';
-
+    const btn      =document.getElementById('invoiceSaveBtn');
+    const modal    =document.getElementById('invoiceModal');
+    const invoiceId=modal._invoiceId;
+    const cid      =document.getElementById('invClient').value;
+    ['invoiceSaveSuccess','invoiceSaveError'].forEach(id=>document.getElementById(id).classList.remove('show'));
+    if (!cid){ document.getElementById('invoiceSaveError').textContent='Please select a client.'; document.getElementById('invoiceSaveError').classList.add('show'); return; }
+    if (!lineItems.length){ document.getElementById('invoiceSaveError').textContent='Please add at least one line item.'; document.getElementById('invoiceSaveError').classList.add('show'); return; }
+    const dtype   =document.getElementById('discountType').value;
+    const dval    =parseFloat(document.getElementById('discountValue').value)||0;
+    const subtotal=lineItems.reduce((s,i)=>s+(i.qty*i.unit_price*(1-(i.discount_pct||0)/100)),0);
+    let discAmt=0;
+    if(dtype==='percent'&&dval>0) discAmt=subtotal*(dval/100);
+    if(dtype==='dollar' &&dval>0) discAmt=Math.min(dval,subtotal);
+    const total=Math.max(0,subtotal-discAmt);
+    btn.disabled=true; btn.textContent='Saving...';
     try {
-      const res = await api('adminSaveInvoice', {
-        invoice: {
-          invoice_id:     invoiceId || '',
-          client_id:      cid,
-          amount:         total.toFixed(2),
-          due_date:       document.getElementById('invDue').value,
-          period:         document.getElementById('invPeriod').value,
-          description:    document.getElementById('invPeriod').value,
-          status:         document.getElementById('invStatus').value,
-          line_items:     JSON.stringify(lineItems.map(l => ({
-            service_id:   l.service_id || '',
-            name:         l.name,
-            qty:          l.qty,
-            unit_price:   l.unit_price,
-            discount_pct: l.discount_pct || 0,
-            line_total:   l.qty * l.unit_price * (1 - (l.discount_pct||0)/100)
-          }))),
-          discount_type:  dtype,
-          discount_value: dval,
-          subtotal:       subtotal.toFixed(2)
+      const res=await api('adminSaveInvoice',{
+        invoice:{
+          invoice_id:    invoiceId||'',
+          client_id:     cid,
+          amount:        total.toFixed(2),
+          due_date:      document.getElementById('invDue').value,
+          period:        document.getElementById('invPeriod').value,
+          description:   document.getElementById('invPeriod').value,
+          status:        document.getElementById('invStatus').value,
+          line_items:    JSON.stringify(lineItems.map(l=>({service_id:l.service_id||'',name:l.name,qty:l.qty,unit_price:l.unit_price,discount_pct:l.discount_pct||0,line_total:l.qty*l.unit_price*(1-(l.discount_pct||0)/100)}))),
+          discount_type: dtype,
+          discount_value:dval,
+          subtotal:      subtotal.toFixed(2)
         }
       });
-      if (res.ok) {
-        document.getElementById('invoiceSaveSuccess').textContent = 'Invoice saved successfully.';
+      if(res.ok){
+        document.getElementById('invoiceSaveSuccess').textContent='Invoice saved successfully.';
         document.getElementById('invoiceSaveSuccess').classList.add('show');
-        btn.textContent = 'Saved ✓';
+        btn.textContent='Saved ✓';
         await load();
-        setTimeout(() => { closeModal(); btn.disabled=false; btn.textContent='Save & send invoice'; }, 1500);
+        setTimeout(()=>{ closeModal(); btn.disabled=false; btn.textContent='Save & send invoice'; },1500);
       } else {
-        document.getElementById('invoiceSaveError').textContent = res.error || 'Error saving.';
+        document.getElementById('invoiceSaveError').textContent=res.error||'Error saving.';
         document.getElementById('invoiceSaveError').classList.add('show');
-        btn.disabled = false; btn.textContent = 'Save & send invoice';
+        btn.disabled=false; btn.textContent='Save & send invoice';
       }
-    } catch(e) {
-      document.getElementById('invoiceSaveError').textContent = 'Connection error.';
-      document.getElementById('invoiceSaveError').classList.add('show');
-      btn.disabled = false; btn.textContent = 'Save & send invoice';
-    }
+    } catch(e){ document.getElementById('invoiceSaveError').textContent='Connection error.'; document.getElementById('invoiceSaveError').classList.add('show'); btn.disabled=false; btn.textContent='Save & send invoice'; }
   }
 
   function filterInvoices() {
-    const status  = document.getElementById('filterStatus').value;
-    const filtered = status === 'All' ? allInvoices : allInvoices.filter(i => (i.status||'Unpaid') === status);
-    renderInvoices(filtered);
+    const status=document.getElementById('filterStatus').value;
+    renderInvoices(status?allInvoices.filter(i=>(i.status||'Unpaid')===status):allInvoices);
   }
-
-  function isAdmin(t) { return localStorage.getItem('sc_is_admin') === 'true'; }
 
   load();
 </script>
-
 <script>
-  // Lock horizontal scroll
-  document.addEventListener('touchstart', function(e) {
-    if (e.touches.length > 1) e.preventDefault();
-  }, { passive: false });
-  document.body.style.overflowX = 'hidden';
-  document.documentElement.style.overflowX = 'hidden';
+  document.addEventListener('touchstart',function(e){if(e.touches.length>1)e.preventDefault();},{passive:false});
+  document.body.style.overflowX='hidden';
+  document.documentElement.style.overflowX='hidden';
 </script>
-
 <script src="ai-assistant.js"></script>
 </body>
 </html>
