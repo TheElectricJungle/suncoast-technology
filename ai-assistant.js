@@ -1,5 +1,5 @@
-// Suncoast Technology | ai-assistant.js | v2.2
-// v2.2 — Renamed to Sonny, fixed Apps Script fetch (redirect:follow + error logging)
+// Suncoast Technology | ai-assistant.js | v2.3
+// v2.3 — Fixed suggestion click closing panel; added Sonny nudge popup (6s delay, 8s auto-dismiss, once per session)
 // Floating AI assistant — deep knowledge, full conversation
 
 (function() {
@@ -563,6 +563,41 @@ If the user asks something not covered by the page context, draw on your general
       #sc-ai-panel { width: calc(100vw - 24px); right: 12px; bottom: 80px; }
       #sc-ai-btn { right: 12px; bottom: 14px; }
     }
+    #sc-sonny-nudge {
+      position: fixed; bottom: 90px; right: 86px; z-index: 9989;
+      background: #0D1622; border: 1px solid rgba(167,139,250,0.35);
+      border-radius: 14px 14px 4px 14px;
+      padding: 10px 14px; max-width: 210px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+      animation: sc-nudge-in 0.35s cubic-bezier(0.34,1.56,0.64,1) forwards;
+      cursor: pointer;
+    }
+    #sc-sonny-nudge p {
+      margin: 0; font-size: 13px; color: rgba(255,255,255,0.9);
+      font-family: 'DM Sans', sans-serif; line-height: 1.5;
+    }
+    #sc-sonny-nudge span {
+      font-size: 11px; color: rgba(148,163,184,0.5);
+      font-family: 'DM Sans', sans-serif; display: block; margin-top: 3px;
+    }
+    #sc-sonny-nudge-close {
+      position: absolute; top: 6px; right: 8px;
+      background: none; border: none; color: rgba(148,163,184,0.4);
+      font-size: 13px; cursor: pointer; line-height: 1; padding: 0;
+      font-family: monospace;
+    }
+    #sc-sonny-nudge-close:hover { color: rgba(255,255,255,0.7); }
+    @keyframes sc-nudge-in {
+      from { opacity: 0; transform: translateY(10px) scale(0.95); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes sc-nudge-out {
+      from { opacity: 1; transform: translateY(0) scale(1); }
+      to   { opacity: 0; transform: translateY(6px) scale(0.95); }
+    }
+    @media (max-width: 480px) {
+      #sc-sonny-nudge { right: 70px; bottom: 76px; max-width: 180px; }
+    }
   `;
 
   const styleEl = document.createElement('style');
@@ -619,6 +654,7 @@ If the user asks something not covered by the page context, draw on your general
   let isLoading  = false;
   let greeted    = false;
   let history    = [];
+  let nudgeShown = false;
 
   function toggle() {
     isOpen = !isOpen;
@@ -644,7 +680,7 @@ If the user asks something not covered by the page context, draw on your general
       const btn = document.createElement('button');
       btn.className = 'sc-sugg';
       btn.textContent = s;
-      btn.onclick = () => { wrap.remove(); sendMsg(s); };
+      btn.onclick = (e) => { e.stopPropagation(); wrap.remove(); sendMsg(s); };
       wrap.appendChild(btn);
     });
     document.getElementById('sc-ai-messages').appendChild(wrap);
@@ -767,5 +803,53 @@ If the user asks something not covered by the page context, draw on your general
 
   // expose clear globally for the button
   window.scClear = scClear;
+
+  // ── SONNY NUDGE POPUP ──
+  function showNudge() {
+    if (nudgeShown || isOpen) return;
+    nudgeShown = true;
+    const nudge = document.createElement('div');
+    nudge.id = 'sc-sonny-nudge';
+    nudge.innerHTML = `
+      <button id="sc-sonny-nudge-close" title="Dismiss">✕</button>
+      <p>👋 Hey! I'm <strong>Sonny</strong>.</p>
+      <span>Ask me anything about your site or account.</span>
+    `;
+    document.body.appendChild(nudge);
+
+    function dismissNudge() {
+      nudge.style.animation = 'sc-nudge-out 0.25s ease forwards';
+      setTimeout(() => nudge.remove(), 250);
+    }
+
+    // click anywhere on nudge opens chat; X just dismisses
+    nudge.addEventListener('click', (e) => {
+      if (e.target.id === 'sc-sonny-nudge-close') {
+        e.stopPropagation();
+        dismissNudge();
+        return;
+      }
+      dismissNudge();
+      if (!isOpen) toggle();
+    });
+
+    // auto-dismiss after 8 seconds
+    setTimeout(dismissNudge, 8000);
+  }
+
+  // Show nudge after 6 seconds on page load (only once per session)
+  try {
+    if (!sessionStorage.getItem('sc_nudge_shown')) {
+      sessionStorage.setItem('sc_nudge_shown', '1');
+      setTimeout(showNudge, 6000);
+    } else {
+      nudgeShown = true; // already shown this session
+    }
+  } catch(e) {
+    setTimeout(showNudge, 6000);
+  }
+
+  // Dismiss nudge if user opens chat manually before it triggers
+  btnEl.addEventListener('click', () => { nudgeShown = true; });
 
 })();
