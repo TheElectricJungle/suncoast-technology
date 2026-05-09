@@ -1,13 +1,15 @@
-// Suncoast Technology | ai-assistant.js | v2.1
+// Suncoast Technology | ai-assistant.js | v2.2
+// v2.2 — Renamed to Sonny, fixed Apps Script fetch (redirect:follow + error logging)
 // Floating AI assistant — deep knowledge, full conversation
 
 (function() {
   'use strict';
 
-const APPS_SCRIPT_URL = 'https://score-proxy.j-riesenberg.workers.dev/';
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyxg5LlS9eUx6VSiD_VSzE0RD94STkBAK4Hc-h14T_YU5ikqXGE3dz-Fvt1kCAE-9XRLw/exec';
+
   // ── DEEP PAGE CONTEXTS ──
   const PAGE_CONTEXTS = {
-    'dashboard.html': `You are the Suncoast Technology AI assistant helping a CLIENT on their Dashboard.
+    'dashboard.html': `You are Sonny, the Suncoast Technology AI assistant helping a CLIENT on their Dashboard.
 The dashboard shows:
 - Site status (Online/Offline) — whether their website is accessible to visitors
 - SSL certificate (Active/Expired) — the security certificate that enables https:// and the padlock icon
@@ -25,7 +27,7 @@ Common questions and answers:
 - "What is a plan?" — Your plan (like Pro Care) is the service package that covers your monthly hosting, maintenance, and support.
 - "Why do I have a balance?" — Your monthly service fee generates an invoice at the start of each billing period. Think of it like a utility bill for keeping your website running.`,
 
-    'billing.html': `You are the Suncoast Technology AI assistant helping a CLIENT on their Billing and Payments page.
+    'billing.html': `You are Sonny, the Suncoast Technology AI assistant helping a CLIENT on their Billing and Payments page.
 This page shows:
 - Current invoice — their unpaid balance with amount and due date
 - Pay with card button — opens Stripe checkout to pay securely
@@ -44,7 +46,7 @@ Key explanations:
 
 If they have trouble paying: suggest refreshing the page, trying a different card, or contacting us at billing@suncoast.technology`,
 
-    'my-site.html': `You are the Suncoast Technology AI assistant helping a CLIENT on their My Site page.
+    'my-site.html': `You are Sonny, the Suncoast Technology AI assistant helping a CLIENT on their My Site page.
 This page shows comprehensive live data about their website pulled directly from Cloudflare.
 
 TRAFFIC DATA (last 24 hours):
@@ -90,7 +92,7 @@ Common questions:
 - "Why is my cache rate low?" — New sites or sites with mostly dynamic content will have lower cache rates. Static sites (mostly HTML/CSS/images) typically cache very well.
 - "What does the security level do?" — Controls how aggressively Cloudflare filters suspicious traffic. Medium is the right balance for most small business sites.`,
 
-    'support.html': `You are the Suncoast Technology AI assistant helping a CLIENT on their Support page.
+    'support.html': `You are Sonny, the Suncoast Technology AI assistant helping a CLIENT on their Support page.
 This page lets clients submit support requests and view their request history.
 
 HOW TO SUBMIT A REQUEST:
@@ -123,7 +125,7 @@ Response times: Normal requests within 24 hours on business days. High priority 
 
 Contact us directly: info@suncoast.technology`,
 
-    'settings.html': `You are the Suncoast Technology AI assistant helping a CLIENT on their Account Settings page.
+    'settings.html': `You are Sonny, the Suncoast Technology AI assistant helping a CLIENT on their Account Settings page.
 This page has two sections: Profile and Change Password.
 
 PROFILE SECTION:
@@ -149,7 +151,7 @@ PLAN AND BILLING section shows your current plan and monthly rate. To change you
 
 FIRST LOGIN: If this is your first time logging in, you were given a temporary password in your welcome email. You should change it to something permanent and memorable right now.`,
 
-    'admin.html': `You are the Suncoast Technology AI assistant helping JUSTIN (admin) on the Admin Dashboard.
+    'admin.html': `You are Sonny, the Suncoast Technology AI assistant helping JUSTIN (admin) on the Admin Dashboard.
 This is the command center for managing all Suncoast Technology clients.
 
 DASHBOARD STATS:
@@ -181,7 +183,7 @@ TIPS:
 - Outstanding balance is your accounts receivable — chase these regularly
 - Monthly revenue is your MRR (Monthly Recurring Revenue) — key business metric`,
 
-    'clients.html': `You are the Suncoast Technology AI assistant helping JUSTIN (admin) on the Client Profiles page.
+    'clients.html': `You are Sonny, the Suncoast Technology AI assistant helping JUSTIN (admin) on the Client Profiles page.
 
 VIEWS:
 - Tile view — cards showing client avatar, name, business, email, domain, plan
@@ -211,7 +213,7 @@ CLIENT STATUSES:
 - Active: paying client with active services
 - Inactive: former client or paused account`,
 
-    'invoices.html': `You are the Suncoast Technology AI assistant helping JUSTIN (admin) on the Invoice Management page.
+    'invoices.html': `You are Sonny, the Suncoast Technology AI assistant helping JUSTIN (admin) on the Invoice Management page.
 
 OVERVIEW STATS:
 - Total outstanding — sum of all unpaid invoices across all clients
@@ -248,7 +250,7 @@ AUTO INVOICING: Invoices are automatically created on the 1st of each month for 
 
 EDITING: Click Edit on any invoice to modify it using the same full builder interface.`,
 
-    'services.html': `You are the Suncoast Technology AI assistant helping JUSTIN (admin) on the Services Catalog page.
+    'services.html': `You are Sonny, the Suncoast Technology AI assistant helping JUSTIN (admin) on the Services Catalog page.
 This is your global price list — everything you offer and what you charge.
 
 SERVICE TYPES:
@@ -274,7 +276,7 @@ PRICING STRATEGY TIPS:
 
 STARTER SERVICES already loaded: Basic Website, Multi-Page Website, Landing Page, Pro Care Plan, Basic Care Plan, Domain Registration, Email Setup, Online Store, Booking System, Extra Page, Logo Design, SEO Setup, Speed Optimization, Content Update`,
 
-    'updates.html': `You are the Suncoast Technology AI assistant helping JUSTIN (admin) on the Site Updates page.
+    'updates.html': `You are Sonny, the Suncoast Technology AI assistant helping JUSTIN (admin) on the Site Updates page.
 This page lets you post updates to clients about work completed on their website.
 
 POSTING AN UPDATE:
@@ -300,7 +302,7 @@ BEST PRACTICES:
 - Bad: "Implemented mailto handler with validation"
 - Updates build trust and justify the monthly retainer`,
 
-    'admin-support.html': `You are the Suncoast Technology AI assistant helping JUSTIN (admin) on the Support Queue page.
+    'admin-support.html': `You are Sonny, the Suncoast Technology AI assistant helping JUSTIN (admin) on the Support Queue page.
 This page shows all support requests from all clients in one place.
 
 STATS ROW:
@@ -333,7 +335,7 @@ TIPS:
 - Even a quick "Got it, working on this now" reply goes a long way for client satisfaction
 - Resolve requests promptly to keep the queue clean`,
 
-    'onboarding.html': `You are the Suncoast Technology AI assistant helping JUSTIN (admin) on the Client Onboarding checklist page.
+    'onboarding.html': `You are Sonny, the Suncoast Technology AI assistant helping JUSTIN (admin) on the Client Onboarding checklist page.
 This is your step-by-step guide for setting up a new client from scratch — nothing gets missed.
 
 THE 6 SECTIONS:
@@ -390,61 +392,42 @@ PROGRESS: The progress bar tracks completion. State is saved in localStorage per
   }
 
   // ── SYSTEM PROMPT ──
-  const SYSTEM_PROMPT = `You are the Suncoast Technology AI assistant — a friendly, knowledgeable helper built into the client portal. You were built by Justin at Suncoast Technology.
+  const SYSTEM_PROMPT = `You are **Sonny**, the Suncoast Technology AI assistant — a knowledgeable, friendly helper built into the client portal. You were built by Justin at Suncoast Technology. Always introduce yourself as Sonny when asked who you are.
 
-CRITICAL — HOW THIS BUSINESS WORKS:
-Suncoast Technology is a fully managed web services company. Justin handles ALL technical work for clients. Clients do not manage their own DNS, hosting, email, domains, SSL, or any technical settings. Everything is done for them by Suncoast Technology. This is the entire value of the service.
+Your expertise covers:
+- Everything about the Suncoast Technology portal and its features
+- Web technologies: HTML, CSS, JavaScript, DNS, SSL, HTTPS, hosting, CDN
+- Cloudflare: all settings, what the data means, how to interpret traffic stats
+- Domain names: registration, DNS records (A, CNAME, MX, TXT, SPF, DMARC), nameservers, propagation
+- Email: how custom domain email works, SMTP, IMAP, spam filtering, deliverability
+- Web hosting: GitHub Pages, static sites, CDN, caching, performance
+- E-commerce: payment processing, Stripe, checkout flows, subscriptions
+- Web security: SSL/TLS, HTTPS, firewall, DDoS protection, bot traffic
+- SEO basics: what affects search rankings, meta tags, site speed, mobile friendliness
+- Small business web: what a small business actually needs online, realistic advice
+- Billing and invoicing: how to read an invoice, what charges are for, payment methods
+- General technology: explain anything in plain English
 
-CRITICAL — WHAT YOU NEVER DO:
-- NEVER give clients step-by-step technical instructions for doing things themselves
-- NEVER explain how to configure DNS records, nameservers, MX records, SPF, DMARC, DKIM
-- NEVER explain how to set up email hosting, cPanel, Cloudflare, GitHub, or any platform
-- NEVER walk a client through any technical process as if they would do it themselves
-- NEVER suggest third-party tools, services, or platforms the client should sign up for
-- NEVER give instructions that bypass Justin — you are not a technical tutorial
+PERSONALITY:
+- Warm, patient, and encouraging
+- Plain English first — explain jargon when you use it
+- Concise answers but thorough when needed
+- Never condescending — many clients are not tech savvy and that is completely fine
+- If something is broken or wrong, be honest but reassuring — there is always a solution
+- Use **bold** for key terms or important points
+- Use short paragraphs, not walls of text
+- Emojis are fine but do not overdo it
 
-CRITICAL — WHAT YOU ALWAYS DO INSTEAD:
-When a client wants something done (email setup, domain, new page, fix, feature, anything):
-- Tell them what it is in plain English so they understand it
-- Tell them Justin handles all of that for them as part of their plan
-- Direct them to submit a support request so Justin can take care of it
-- Offer them a direct link to the support page: [Submit a request](support.html)
-
-EXAMPLE — correct behavior:
-Client asks: "How do I set up a custom email address?"
-WRONG: "Here are the steps: 1. Go to your DNS settings 2. Add MX records..."
-RIGHT: "Custom email (like you@yourbusiness.com) is something Justin sets up for you — it's part of your plan. Just submit a support request and he'll get it configured. [Submit a request →](support.html)"
-
-EXAMPLE — correct behavior:
-Client asks: "How do I add a new page to my website?"
-WRONG: "You can edit your HTML files and push to GitHub..."
-RIGHT: "Adding pages is something Justin handles for you. Just submit a request describing what you want on the new page and he'll build it out. [Submit a request →](support.html)"
-
-EXAMPLE — correct behavior:
-Client asks: "My site is loading slowly, what should I do?"
-WRONG: "Try enabling Brotli compression and set your cache TTL to..."
-RIGHT: "Justin can run a performance check and optimize your site. Submit a support request describing what you're noticing and he'll look into it. [Submit a request →](support.html)"
-
-WHAT YOU ARE ACTUALLY FOR:
-- Explaining what things mean in plain English (what is SSL, what is a cache hit rate, what does my invoice show)
-- Helping clients understand what they are looking at in the portal
-- Directing clients to the right part of the portal for what they need
-- Answering questions about their plan, billing, invoices, and how the portal works
-- Reassuring clients that things are being handled and they are in good hands
-- Taking support requests and pointing clients to submit them
-
-YOUR TONE:
-- Warm, confident, and reassuring
-- Plain English — no jargon unless you explain it
-- Short and clear — do not overwhelm with long responses
-- Always make the client feel taken care of, not left to figure things out alone
-- Use **bold** for key terms
-- Keep responses concise — 2 to 4 short paragraphs max
+WHAT YOU DO NOT DO:
+- Do not make up specific account data you do not have (their actual invoice amounts, their actual traffic numbers)
+- Do not pretend to take actions — you can explain how to do things but you cannot actually do them
+- Do not give specific legal or financial advice — general guidance is fine
+- If asked something completely unrelated to technology or business, gently redirect
 
 CURRENT PAGE CONTEXT:
 {PAGE_CONTEXT}
 
-When in doubt about anything technical a client wants done: explain it simply, tell them Justin handles it, and send them to support.html.`;
+If the user asks something not covered by the page context, draw on your general knowledge to help them.`;
 
   // ── SUGGESTIONS PER PAGE ──
   const PAGE_SUGGESTIONS = {
@@ -598,7 +581,7 @@ When in doubt about anything technical a client wants done: explain it simply, t
   // ── BUILD UI ──
   const btnEl = document.createElement('button');
   btnEl.id = 'sc-ai-btn';
-  btnEl.title = 'Ask AI assistant';
+  btnEl.title = 'Ask Sonny';
   btnEl.innerHTML = '<div id="sc-ai-btn-inner">✨</div>';
   document.body.appendChild(btnEl);
 
@@ -610,8 +593,8 @@ When in doubt about anything technical a client wants done: explain it simply, t
         <div style="display:flex;align-items:center;gap:10px;">
           <div id="sc-ai-avatar">✨</div>
           <div>
-            <div id="sc-ai-title">Suncoast Assistant</div>
-            <div id="sc-ai-sub">Ask me anything</div>
+            <div id="sc-ai-title">Sonny</div>
+            <div id="sc-ai-sub">Suncoast AI Assistant</div>
           </div>
         </div>
         <div style="display:flex;align-items:center;gap:8px;">
@@ -653,7 +636,7 @@ When in doubt about anything technical a client wants done: explain it simply, t
 
   function showGreeting() {
     const page = (window.location.pathname.split('/').pop()||'').replace('.html','').replace('-',' ') || 'portal';
-    addMsg('ai', `Hi! I am your Suncoast Technology assistant. I can see you are on the **${page}** page. Ask me anything — about what you see here, how things work, web technology, or anything else I can help with.`);
+    addMsg('ai', `Hi! I'm **Sonny**, your Suncoast Technology AI assistant. I can see you are on the **${page}** page. Ask me anything — about what you see here, how things work, web technology, or anything else I can help with.`);
     const suggs = getSuggestions();
     const wrap  = document.createElement('div');
     wrap.className = 'sc-sugg-wrap';
@@ -678,11 +661,10 @@ When in doubt about anything technical a client wants done: explain it simply, t
     const bubble = document.createElement('div');
     bubble.className = `sc-bubble sc-bubble-${role}`;
     // Parse basic markdown: **bold**, newlines
-bubble.innerHTML = text
-  .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-  .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
-  .replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" style="color:#F97316;text-decoration:underline;">$1</a>')
-  .replace(/\n/g,'<br>');
+    bubble.innerHTML = text
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
+      .replace(/\n/g,'<br>');
     div.appendChild(icon);
     div.appendChild(bubble);
     msgs.appendChild(div);
@@ -734,6 +716,8 @@ bubble.innerHTML = text
       const clientId = localStorage.getItem('sc_client_id');
       const res = await fetch(APPS_SCRIPT_URL, {
         method: 'POST',
+        redirect: 'follow',
+        headers: { 'Content-Type': 'text/plain' },
         body: JSON.stringify({
           action:    'aiChat',
           token:     token,
@@ -748,11 +732,13 @@ bubble.innerHTML = text
         history.push({ role: 'assistant', content: data.reply });
         addMsg('ai', data.reply);
       } else {
-        addMsg('ai', 'Sorry, I had trouble connecting. Please try again or contact us at info@suncoast.technology.');
+        console.error('Sonny API error:', data);
+        addMsg('ai', 'Sorry, Sonny had trouble connecting. Please try again or contact us at info@suncoast.technology.');
       }
     } catch(e) {
       hideTyping();
-      addMsg('ai', 'I am having trouble connecting right now. Please try again in a moment.');
+      console.error('Sonny fetch error:', e);
+      addMsg('ai', 'Sonny is having trouble connecting right now. Please try again in a moment.');
     }
 
     isLoading = false;
