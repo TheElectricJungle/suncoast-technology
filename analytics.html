@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
   <title>Analytics — Suncoast Technology</title>
-  <!-- Suncoast Technology | analytics.html | v1.0 -->
+  <!-- Suncoast Technology | analytics.html | v2.0 -->
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet"/>
@@ -13,7 +13,7 @@
     :root{--navy:#04080F;--border:rgba(255,255,255,0.07);--muted:rgba(148,163,184,0.7);--light:#E8F0FF;--orange:#F97316;--gold:#FBBF24;--green:#22C55E;--red:#EF4444;--blue:#4FC3F7;--purple:#A78BFA;--teal:#2DD4BF;}
     html,body{height:100%;font-family:'DM Sans',sans-serif;background:#04080F;color:var(--light);overflow-x:hidden;max-width:100vw;}
     canvas#aurora{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;}
-    .grid-bg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none;background-image:linear-gradient(rgba(79,195,247,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(79,195,247,0.02) 1px,transparent 1px);background-size:80px 80px;}
+    .grid-bg{position:fixed;inset:0;z-index:1;pointer-events:none;background-image:linear-gradient(rgba(79,195,247,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(79,195,247,0.02) 1px,transparent 1px);background-size:80px 80px;}
     .shell{position:relative;z-index:10;display:grid;grid-template-columns:220px 1fr;min-height:100%;overflow-x:clip;}
     .sidebar{background:rgba(4,8,15,0.82);backdrop-filter:blur(24px);border-right:1px solid var(--border);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto;flex-shrink:0;}
     .sidebar-brand{padding:22px 20px 18px;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:10px;}
@@ -31,16 +31,16 @@
     .user-row{display:flex;align-items:center;gap:10px;}
     .user-avatar{width:30px;height:30px;border-radius:50%;background:rgba(249,115,22,0.15);border:1px solid rgba(249,115,22,0.25);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--orange);flex-shrink:0;}
     .user-name{font-size:12px;color:#fff;font-weight:500;flex:1;}
-    .logout-btn{background:none;border:none;color:var(--muted);cursor:pointer;padding:4px;display:flex;border-radius:4px;transition:color 0.15s;}
+    .logout-btn{background:none;border:none;color:var(--muted);cursor:pointer;padding:4px;display:flex;border-radius:4px;}
     .logout-btn:hover{color:#fff;}
     .main{padding:32px 36px;display:flex;flex-direction:column;gap:20px;min-width:0;}
     .page-label{font-size:11px;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:4px;}
-    .page-title{font-family:'Playfair Display',serif;font-size:28px;font-weight:400;color:#fff;line-height:1.1;margin-bottom:4px;}
+    .page-title{font-family:'Playfair Display',serif;font-size:28px;font-weight:400;color:#fff;line-height:1.1;}
     .page-title em{color:var(--orange);font-style:normal;}
     .card{background:rgba(8,16,28,0.8);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:24px;position:relative;}
     .card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.07),transparent);border-radius:16px 16px 0 0;pointer-events:none;}
     .card-title{font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin:0 0 18px;}
-    .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;}
+    .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:12px;}
     .stat{background:rgba(8,16,28,0.8);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:18px 20px;position:relative;overflow:hidden;}
     .stat::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;border-radius:0 0 12px 12px;}
     .stat-orange::after{background:linear-gradient(90deg,transparent,var(--orange),transparent);}
@@ -53,15 +53,12 @@
     .stat-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin:0 0 8px;}
     .stat-value{font-size:26px;font-weight:600;color:#fff;line-height:1;}
     .stat-sub{font-size:11px;color:rgba(148,163,184,0.5);margin-top:5px;}
-    .stat-trend{font-size:11px;margin-top:5px;display:flex;align-items:center;gap:4px;}
-    .trend-up{color:#86EFAC;}
-    .trend-down{color:#FCA5A5;}
     .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
     .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
     /* BAR CHART */
     .bar-chart{display:flex;align-items:flex-end;gap:6px;height:120px;padding-top:10px;}
     .bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;height:100%;}
-    .bar-col{width:100%;border-radius:4px 4px 0 0;transition:height 0.6s ease;min-height:2px;position:relative;}
+    .bar-col{width:100%;border-radius:4px 4px 0 0;transition:height 0.6s ease;min-height:2px;position:relative;cursor:pointer;}
     .bar-col:hover::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:rgba(6,12,20,0.95);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:4px 8px;font-size:11px;color:#fff;white-space:nowrap;pointer-events:none;z-index:10;}
     .bar-label{font-size:9px;color:rgba(148,163,184,0.5);text-align:center;white-space:nowrap;}
     /* DONUT */
@@ -70,42 +67,51 @@
     .legend-item{display:flex;align-items:center;gap:8px;font-size:12px;color:rgba(148,163,184,0.8);}
     .legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
     .legend-val{margin-left:auto;font-weight:500;color:#fff;}
+    /* PROGRESS */
+    .progress-row{display:flex;align-items:center;gap:10px;margin:0 0 10px;}
+    .progress-label{font-size:12px;color:rgba(148,163,184,0.7);width:140px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+    .progress-track{flex:1;height:6px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden;}
+    .progress-fill{height:100%;border-radius:3px;transition:width 0.8s ease;}
+    .progress-val{font-size:12px;color:#fff;font-weight:500;width:50px;text-align:right;flex-shrink:0;}
+    /* BADGES */
+    .badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:500;}
+    .badge-g{background:rgba(34,197,94,0.12);color:#86EFAC;border:1px solid rgba(34,197,94,0.2);}
+    .badge-r{background:rgba(239,68,68,0.12);color:#FCA5A5;border:1px solid rgba(239,68,68,0.2);}
+    .badge-y{background:rgba(251,191,36,0.12);color:#FBBF24;border:1px solid rgba(251,191,36,0.2);}
+    .badge-b{background:rgba(79,195,247,0.12);color:#4FC3F7;border:1px solid rgba(79,195,247,0.2);}
+    .badge-p{background:rgba(167,139,250,0.12);color:#A78BFA;border:1px solid rgba(167,139,250,0.2);}
+    .badge-m{background:rgba(255,255,255,0.06);color:var(--muted);border:1px solid var(--border);}
+    /* HEALTH RINGS */
+    .health-ring{display:flex;align-items:center;gap:20px;flex-wrap:wrap;}
+    .health-item{display:flex;flex-direction:column;align-items:center;gap:6px;}
+    .ring-wrap{position:relative;width:64px;height:64px;}
+    .ring-wrap svg{transform:rotate(-90deg);}
+    .ring-label{font-size:10px;color:rgba(148,163,184,0.6);text-align:center;max-width:70px;}
+    .ring-val{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:13px;font-weight:600;color:#fff;}
+    /* CLIENT DEEP CARD */
+    .client-deep-card{background:rgba(8,16,28,0.6);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:20px;margin:0 0 12px;}
+    .client-deep-card:last-child{margin:0;}
+    .client-deep-header{display:flex;align-items:center;justify-content:space-between;margin:0 0 16px;}
+    .client-deep-domain{font-size:16px;font-weight:500;color:#fff;}
+    .client-deep-name{font-size:12px;color:rgba(148,163,184,0.5);margin-top:2px;}
+    .client-deep-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:10px;margin:0 0 16px;}
+    .client-deep-stat{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:10px 12px;}
+    .client-deep-stat-label{font-size:10px;color:rgba(148,163,184,0.5);text-transform:uppercase;letter-spacing:0.06em;margin:0 0 4px;}
+    .client-deep-stat-value{font-size:18px;font-weight:600;color:#fff;}
+    /* TIMELINE */
+    .timeline-item{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
+    .timeline-item:last-child{border-bottom:none;}
+    .timeline-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px;}
+    .timeline-title{font-size:13px;font-weight:500;color:#fff;}
+    .timeline-sub{font-size:11px;color:rgba(148,163,184,0.5);margin-top:2px;}
     /* TABLE */
     .data-table{width:100%;border-collapse:collapse;font-size:13px;}
     .data-table th{padding:8px 12px;text-align:left;font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;border-bottom:1px solid rgba(255,255,255,0.06);}
     .data-table td{padding:11px 12px;border-bottom:1px solid rgba(255,255,255,0.04);color:rgba(255,255,255,0.85);}
     .data-table tr:last-child td{border-bottom:none;}
     .data-table tr:hover td{background:rgba(255,255,255,0.02);}
-    /* BADGE */
-    .badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:500;}
-    .badge-g{background:rgba(34,197,94,0.12);color:#86EFAC;border:1px solid rgba(34,197,94,0.2);}
-    .badge-r{background:rgba(239,68,68,0.12);color:#FCA5A5;border:1px solid rgba(239,68,68,0.2);}
-    .badge-y{background:rgba(251,191,36,0.12);color:#FBBF24;border:1px solid rgba(251,191,36,0.2);}
-    .badge-b{background:rgba(79,195,247,0.12);color:#4FC3F7;border:1px solid rgba(79,195,247,0.2);}
-    .badge-m{background:rgba(255,255,255,0.06);color:var(--muted);border:1px solid var(--border);}
-    /* HEALTH RING */
-    .health-ring{display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
-    .health-item{display:flex;flex-direction:column;align-items:center;gap:6px;}
-    .ring-wrap{position:relative;width:64px;height:64px;}
-    .ring-wrap svg{transform:rotate(-90deg);}
-    .ring-label{font-size:10px;color:rgba(148,163,184,0.6);text-align:center;max-width:70px;}
-    .ring-val{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:13px;font-weight:600;color:#fff;}
-    /* PROGRESS BAR */
-    .progress-row{display:flex;align-items:center;gap:10px;margin:0 0 10px;}
-    .progress-label{font-size:12px;color:rgba(148,163,184,0.7);width:130px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-    .progress-track{flex:1;height:6px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden;}
-    .progress-fill{height:100%;border-radius:3px;transition:width 0.8s ease;}
-    .progress-val{font-size:12px;color:#fff;font-weight:500;width:45px;text-align:right;flex-shrink:0;}
-    /* TIMELINE */
-    .timeline-item{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
-    .timeline-item:last-child{border-bottom:none;}
-    .timeline-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px;}
-    .timeline-content{flex:1;}
-    .timeline-title{font-size:13px;font-weight:500;color:#fff;}
-    .timeline-sub{font-size:11px;color:rgba(148,163,184,0.5);margin-top:2px;}
-    /* LOADING */
-    .skeleton{background:linear-gradient(90deg,rgba(255,255,255,0.04) 25%,rgba(255,255,255,0.08) 50%,rgba(255,255,255,0.04) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:6px;height:20px;}
-    @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+    /* PROJECTION CARD */
+    .projection-card{background:linear-gradient(135deg,rgba(249,115,22,0.08),rgba(167,139,250,0.08));border:1px solid rgba(249,115,22,0.15);border-radius:12px;padding:20px;}
     @media(max-width:768px){.shell{grid-template-columns:1fr}.sidebar{display:none}.main{padding:20px 16px}.grid2,.grid3{grid-template-columns:1fr}}
   </style>
   <script>document.addEventListener('touchmove',function(e){if(e.touches.length>1)e.preventDefault();},{passive:false});</script>
@@ -114,13 +120,10 @@
 <canvas id="aurora"></canvas>
 <script>
 (function(){
-  const canvas=document.getElementById('aurora'),ctx=canvas.getContext('2d');
-  let W,H,t=0;
-  function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
-  resize();window.addEventListener('resize',resize);
-  const blobs=[{x:0.15,y:0.2,r:0.5,color:[79,195,247],speed:0.00005},{x:0.85,y:0.3,r:0.45,color:[167,139,250],speed:0.00004},{x:0.5,y:0.8,r:0.4,color:[244,114,182],speed:0.00006},{x:0.1,y:0.7,r:0.35,color:[45,212,191],speed:0.000045},{x:0.9,y:0.6,r:0.3,color:[249,115,22],speed:0.000055}];
-  function draw(){ctx.clearRect(0,0,W,H);t++;blobs.forEach((b,i)=>{const ox=Math.sin(t*b.speed*500+i*1.2)*0.15,oy=Math.cos(t*b.speed*400+i*0.9)*0.12,cx=(b.x+ox)*W,cy=(b.y+oy)*H,rad=b.r*Math.min(W,H),g=ctx.createRadialGradient(cx,cy,0,cx,cy,rad),[r,g2,bl]=b.color;g.addColorStop(0,`rgba(${r},${g2},${bl},0.18)`);g.addColorStop(0.4,`rgba(${r},${g2},${bl},0.07)`);g.addColorStop(1,`rgba(${r},${g2},${bl},0)`);ctx.fillStyle=g;ctx.fillRect(0,0,W,H);});requestAnimationFrame(draw);}
-  draw();
+  const c=document.getElementById('aurora'),x=c.getContext('2d');let W,H,t=0;
+  function r(){W=c.width=window.innerWidth;H=c.height=window.innerHeight;}r();window.addEventListener('resize',r);
+  const b=[{x:0.15,y:0.2,r:0.5,color:[79,195,247],s:0.00005},{x:0.85,y:0.3,r:0.45,color:[167,139,250],s:0.00004},{x:0.5,y:0.8,r:0.4,color:[244,114,182],s:0.00006},{x:0.1,y:0.7,r:0.35,color:[45,212,191],s:0.000045},{x:0.9,y:0.6,r:0.3,color:[249,115,22],s:0.000055}];
+  function d(){x.clearRect(0,0,W,H);t++;b.forEach((b,i)=>{const ox=Math.sin(t*b.s*500+i*1.2)*0.15,oy=Math.cos(t*b.s*400+i*0.9)*0.12,cx=(b.x+ox)*W,cy=(b.y+oy)*H,rad=b.r*Math.min(W,H),g=x.createRadialGradient(cx,cy,0,cx,cy,rad),[r,g2,bl]=b.color;g.addColorStop(0,`rgba(${r},${g2},${bl},0.18)`);g.addColorStop(0.4,`rgba(${r},${g2},${bl},0.07)`);g.addColorStop(1,`rgba(${r},${g2},${bl},0)`);x.fillStyle=g;x.fillRect(0,0,W,H);});requestAnimationFrame(d);}d();
 })();
 </script>
 <div class="grid-bg"></div>
@@ -154,7 +157,7 @@
     <div class="sidebar-footer">
       <div class="user-row">
         <div class="user-avatar">JR</div>
-        <div class="user-name">Justin R.<div style="font-size:10px;color:rgba(148,163,184,0.3);margin-top:2px;">v1.0</div></div>
+        <div class="user-name">Justin R.<div style="font-size:10px;color:rgba(148,163,184,0.3);margin-top:2px;">v2.0</div></div>
         <button class="logout-btn" onclick="handleLogout()">
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3"/><path d="M11 11l3-3-3-3M14 8H6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
@@ -171,24 +174,32 @@
       <div style="font-size:12px;color:rgba(148,163,184,0.4);" id="lastUpdated">Loading...</div>
     </div>
 
-    <!-- ── TOP KPI ROW ── -->
-    <div class="stat-grid" id="kpiGrid">
-      <div class="stat stat-orange"><div class="stat-label">Monthly recurring revenue</div><div class="stat-value" id="kpiMRR">—</div><div class="stat-sub" id="kpiMRRSub"></div></div>
+    <!-- ── KPI ROW ── -->
+    <div class="stat-grid">
+      <div class="stat stat-orange"><div class="stat-label">Monthly recurring</div><div class="stat-value" id="kpiMRR">—</div><div class="stat-sub" id="kpiMRRSub"></div></div>
       <div class="stat stat-green"><div class="stat-label">Collected this month</div><div class="stat-value" id="kpiCollected">—</div><div class="stat-sub" id="kpiCollectedSub"></div></div>
-      <div class="stat stat-red"><div class="stat-label">Outstanding balance</div><div class="stat-value" id="kpiOutstanding">—</div><div class="stat-sub" id="kpiOutstandingSub"></div></div>
+      <div class="stat stat-red"><div class="stat-label">Outstanding</div><div class="stat-value" id="kpiOutstanding">—</div><div class="stat-sub" id="kpiOutstandingSub"></div></div>
+      <div class="stat stat-purple"><div class="stat-label">Projected annual</div><div class="stat-value" id="kpiAnnual">—</div><div class="stat-sub" id="kpiAnnualSub"></div></div>
       <div class="stat stat-blue"><div class="stat-label">Active clients</div><div class="stat-value" id="kpiActive">—</div><div class="stat-sub" id="kpiActiveSub"></div></div>
-      <div class="stat stat-purple"><div class="stat-label">Total clients</div><div class="stat-value" id="kpiTotal">—</div><div class="stat-sub" id="kpiTotalSub"></div></div>
-      <div class="stat stat-teal"><div class="stat-label">Sites online</div><div class="stat-value" id="kpiOnline">—</div><div class="stat-sub" id="kpiOnlineSub"></div></div>
+      <div class="stat stat-teal"><div class="stat-label">Sites healthy</div><div class="stat-value" id="kpiOnline">—</div><div class="stat-sub" id="kpiOnlineSub"></div></div>
+      <div class="stat stat-gold"><div class="stat-label">Updates posted</div><div class="stat-value" id="kpiUpdates">—</div><div class="stat-sub" id="kpiUpdatesSub"></div></div>
+      <div class="stat stat-orange"><div class="stat-label">Support requests</div><div class="stat-value" id="kpiRequests">—</div><div class="stat-sub" id="kpiRequestsSub"></div></div>
     </div>
 
-    <!-- ── REVENUE + INVOICE TREND ── -->
+    <!-- ── REVENUE PROJECTIONS ── -->
+    <div class="card">
+      <div class="card-title">💰 Revenue projections</div>
+      <div class="grid3" id="projectionGrid"></div>
+    </div>
+
+    <!-- ── REVENUE CHART + INVOICE BREAKDOWN ── -->
     <div class="grid2">
       <div class="card">
-        <div class="card-title">Revenue by month — last 6 months</div>
+        <div class="card-title">Revenue collected — last 6 months</div>
         <div class="bar-chart" id="revenueChart"></div>
         <div style="display:flex;gap:16px;margin-top:14px;flex-wrap:wrap;">
-          <div style="font-size:12px;color:var(--muted);">Total collected: <span style="color:#fff;font-weight:500;" id="totalCollected6m">—</span></div>
-          <div style="font-size:12px;color:var(--muted);">Avg/month: <span style="color:#fff;font-weight:500;" id="avgMonthly">—</span></div>
+          <div style="font-size:12px;color:var(--muted);">Total 6 months: <span style="color:#fff;font-weight:500;" id="total6m">—</span></div>
+          <div style="font-size:12px;color:var(--muted);">Avg/month: <span style="color:#fff;font-weight:500;" id="avg6m">—</span></div>
         </div>
       </div>
       <div class="card">
@@ -202,25 +213,36 @@
             <span>Collection rate</span>
             <span style="color:#fff;font-weight:500;" id="collectionRate">—</span>
           </div>
-          <div class="progress-track" style="height:8px;">
-            <div class="progress-fill" id="collectionBar" style="background:linear-gradient(90deg,var(--green),var(--teal));width:0%;"></div>
+          <div style="height:8px;background:rgba(255,255,255,0.06);border-radius:4px;overflow:hidden;">
+            <div id="collectionBar" style="height:100%;background:linear-gradient(90deg,var(--green),var(--teal));border-radius:4px;transition:width 0.8s ease;width:0%;"></div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- ── SITE HEALTH + CLIENT HEALTH ── -->
+    <!-- ── PER-CLIENT DEEP DIVE ── -->
+    <div class="card">
+      <div class="card-title">👤 Per-client deep dive</div>
+      <div id="clientDeepDive"></div>
+    </div>
+
+    <!-- ── WORK LOG — UPDATES & SUPPORT ── -->
     <div class="grid2">
       <div class="card">
-        <div class="card-title">Site health overview</div>
-        <div id="siteHealthRings" class="health-ring" style="margin-bottom:20px;"></div>
-        <div class="card-title" style="margin-top:4px;">Per-client status</div>
-        <div id="siteHealthTable"></div>
+        <div class="card-title">🛠 Work by client — updates posted</div>
+        <div id="workByClient"></div>
       </div>
       <div class="card">
-        <div class="card-title">Revenue by client</div>
-        <div id="revenueByClient"></div>
+        <div class="card-title">💬 Support requests by client</div>
+        <div id="supportByClient"></div>
       </div>
+    </div>
+
+    <!-- ── SITE HEALTH ── -->
+    <div class="card">
+      <div class="card-title">🌐 Site health</div>
+      <div class="health-ring" id="healthRings" style="margin-bottom:20px;"></div>
+      <div id="siteHealthTable"></div>
     </div>
 
     <!-- ── PLAN DISTRIBUTION + INVOICE AGE ── -->
@@ -235,17 +257,17 @@
       </div>
     </div>
 
-    <!-- ── RECENT ACTIVITY TIMELINE ── -->
+    <!-- ── ACTIVITY TIMELINE ── -->
     <div class="card">
-      <div class="card-title">Recent financial activity</div>
+      <div class="card-title">Recent activity</div>
       <div id="activityTimeline"></div>
     </div>
 
-    <!-- ── CLIENT TABLE ── -->
+    <!-- ── FULL CLIENT TABLE ── -->
     <div class="card">
-      <div class="card-title">All clients — financial summary</div>
+      <div class="card-title">All clients — full financial summary</div>
       <div style="overflow-x:auto;">
-        <table class="data-table" id="clientSummaryTable">
+        <table class="data-table">
           <thead><tr>
             <th>Site</th>
             <th>Client</th>
@@ -253,10 +275,12 @@
             <th style="text-align:right;">MRR</th>
             <th style="text-align:right;">Total paid</th>
             <th style="text-align:right;">Outstanding</th>
+            <th style="text-align:right;">Updates</th>
+            <th style="text-align:right;">Requests</th>
             <th>Site</th>
             <th>SSL</th>
           </tr></thead>
-          <tbody id="clientSummaryBody"><tr><td colspan="8" style="text-align:center;padding:30px;color:rgba(148,163,184,0.4);">Loading...</td></tr></tbody>
+          <tbody id="clientTableBody"></tbody>
         </table>
       </div>
     </div>
@@ -273,106 +297,250 @@
     fetch(API,{method:'POST',body:JSON.stringify({action:'logout',token})});
     localStorage.clear(); window.location.href='login.html';
   }
-
   async function api(action,extra={}){
-    const res=await fetch(API,{method:'POST',body:JSON.stringify({action,token,client_id:clientId,...extra})});
-    return res.json();
+    const r=await fetch(API,{method:'POST',body:JSON.stringify({action,token,client_id:clientId,...extra})});
+    return r.json();
   }
 
-  const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
   async function load() {
     try {
-      // Load clients
       const clientsRes = await api('adminGetClients');
       if (!clientsRes.ok){ window.location.href='login.html'; return; }
-      const clients = clientsRes.clients || [];
-      const active  = clients.filter(c=>(c.status||'Active').toLowerCase()==='active');
+      const clients = clientsRes.clients||[];
+      // Only real clients — exclude admin account
+      const realClients = clients.filter(c=>!(c.is_admin===true||c.is_admin==='TRUE'));
+      const active      = realClients.filter(c=>(c.status||'Active').toLowerCase()==='active');
 
-      // Load all invoices
-      let allInvoices = [];
-      for (const c of clients) {
-        try {
-          const ir = await api('getInvoices',{client_id:c.client_id});
-          if (ir.invoices) allInvoices.push(...ir.invoices.map(i=>({...i,_c:c})));
-        } catch(e){}
+      // Load invoices, updates, requests per client
+      const clientData = {};
+      for (const c of realClients) {
+        const [ir, ur, rr] = await Promise.all([
+          api('getInvoices',{client_id:c.client_id}),
+          api('getUpdates', {client_id:c.client_id}),
+          api('getRequests',{client_id:c.client_id}),
+        ]);
+        clientData[c.client_id] = {
+          client:   c,
+          invoices: ir.invoices||[],
+          updates:  ur.updates||[],
+          requests: rr.requests||[],
+        };
       }
 
-      const now       = new Date();
-      const thisMonth = now.getMonth();
-      const thisYear  = now.getFullYear();
+      const allInvoices = Object.values(clientData).flatMap(d=>d.invoices);
+      const allUpdates  = Object.values(clientData).flatMap(d=>d.updates);
+      const allRequests = Object.values(clientData).flatMap(d=>d.requests);
+
+      const now        = new Date();
+      const thisMonth  = now.getMonth();
+      const thisYear   = now.getFullYear();
+
+      const paid       = allInvoices.filter(i=>(i.status||'').toLowerCase()==='paid');
+      const unpaid     = allInvoices.filter(i=>(i.status||'').toLowerCase()==='unpaid'||(i.status||'').toLowerCase()==='overdue');
+      const overdue    = allInvoices.filter(i=>(i.status||'').toLowerCase()==='overdue');
+      const collTM     = paid.filter(i=>i.paid_date&&new Date(i.paid_date).getMonth()===thisMonth&&new Date(i.paid_date).getFullYear()===thisYear).reduce((s,i)=>s+parseFloat(i.amount||0),0);
+      const outstanding= unpaid.reduce((s,i)=>s+parseFloat(i.amount||0),0);
+      const mrr        = active.reduce((s,c)=>s+parseFloat(c.monthly_rate||0),0);
+      const annual     = mrr * 12;
+
+      // Sites — only count clients that HAVE a domain
+      const withDomain = realClients.filter(c=>c.domain);
+      const onlineCount= withDomain.filter(c=>(c.site_status||'Online').toLowerCase()==='online' && (c.ssl_status||'Active').toLowerCase()==='active').length;
 
       // ── KPIs ──
-      const mrr         = active.reduce((s,c)=>s+parseFloat(c.monthly_rate||0),0);
-      const paid        = allInvoices.filter(i=>(i.status||'').toLowerCase()==='paid');
-      const unpaid      = allInvoices.filter(i=>(i.status||'').toLowerCase()==='unpaid'||(i.status||'').toLowerCase()==='overdue');
-      const overdue     = allInvoices.filter(i=>(i.status||'').toLowerCase()==='overdue');
-      const collectedTM = paid.filter(i=>i.paid_date&&new Date(i.paid_date).getMonth()===thisMonth&&new Date(i.paid_date).getFullYear()===thisYear).reduce((s,i)=>s+parseFloat(i.amount||0),0);
-      const outstanding = unpaid.reduce((s,i)=>s+parseFloat(i.amount||0),0);
-      const online      = clients.filter(c=>(c.site_status||'Online').toLowerCase()==='online').length;
-
       document.getElementById('kpiMRR').textContent          = '$'+mrr.toFixed(2);
-      document.getElementById('kpiMRRSub').textContent       = active.length+' active clients × avg $'+(active.length?( mrr/active.length).toFixed(0):0)+'/mo';
-      document.getElementById('kpiCollected').textContent    = '$'+collectedTM.toFixed(2);
+      document.getElementById('kpiMRRSub').textContent       = active.length+' active client'+(active.length!==1?'s':'');
+      document.getElementById('kpiCollected').textContent    = '$'+collTM.toFixed(2);
       document.getElementById('kpiCollectedSub').textContent = MONTHS[thisMonth]+' '+thisYear;
       document.getElementById('kpiOutstanding').textContent  = '$'+outstanding.toFixed(2);
-      document.getElementById('kpiOutstandingSub').textContent= overdue.length+' overdue invoice'+(overdue.length!==1?'s':'');
+      document.getElementById('kpiOutstandingSub').textContent= overdue.length+' overdue';
+      document.getElementById('kpiAnnual').textContent       = '$'+annual.toFixed(2);
+      document.getElementById('kpiAnnualSub').textContent    = 'at current MRR';
       document.getElementById('kpiActive').textContent       = active.length;
-      document.getElementById('kpiActiveSub').textContent    = (clients.length-active.length)+' inactive';
-      document.getElementById('kpiTotal').textContent        = clients.length;
-      document.getElementById('kpiTotalSub').textContent     = 'all time';
-      document.getElementById('kpiOnline').textContent       = online+'/'+clients.filter(c=>c.domain).length;
-      document.getElementById('kpiOnlineSub').textContent    = clients.filter(c=>c.domain).length-online>0?(clients.filter(c=>c.domain).length-online)+' need attention':'All sites healthy ✓';
+      document.getElementById('kpiActiveSub').textContent    = realClients.length+' total clients';
+      document.getElementById('kpiOnline').textContent       = onlineCount+'/'+withDomain.length;
+      document.getElementById('kpiOnlineSub').textContent    = withDomain.length-onlineCount>0?(withDomain.length-onlineCount)+' need attention':'All healthy ✓';
+      document.getElementById('kpiUpdates').textContent      = allUpdates.length;
+      document.getElementById('kpiUpdatesSub').textContent   = 'across all clients';
+      document.getElementById('kpiRequests').textContent     = allRequests.length;
+      document.getElementById('kpiRequestsSub').textContent  = allRequests.filter(r=>(r.status||'').toLowerCase()==='open').length+' open';
       document.getElementById('lastUpdated').textContent     = 'Updated '+now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
 
-      // ── REVENUE BAR CHART ── last 6 months
-      const months6 = [];
-      for (let i=5;i>=0;i--){
-        const d  = new Date(thisYear,thisMonth-i,1);
-        const m  = d.getMonth(), y = d.getFullYear();
-        const amt= paid.filter(inv=>inv.paid_date&&new Date(inv.paid_date).getMonth()===m&&new Date(inv.paid_date).getFullYear()===y).reduce((s,inv)=>s+parseFloat(inv.amount||0),0);
-        months6.push({label:MONTHS[m],amt});
-      }
-      const maxAmt = Math.max(...months6.map(m=>m.amt),1);
-      const total6m= months6.reduce((s,m)=>s+m.amt,0);
-      document.getElementById('totalCollected6m').textContent = '$'+total6m.toFixed(2);
-      document.getElementById('avgMonthly').textContent       = '$'+(total6m/6).toFixed(2);
-      document.getElementById('revenueChart').innerHTML = months6.map(m=>{
-        const pct = Math.max((m.amt/maxAmt)*100,m.amt>0?4:1);
-        const color = m.label===MONTHS[thisMonth]?'linear-gradient(180deg,#F97316,#ea580c)':'linear-gradient(180deg,rgba(167,139,250,0.8),rgba(109,40,217,0.8))';
-        return `<div class="bar-wrap">
-          <div class="bar-col" data-tip="$${m.amt.toFixed(2)}" style="height:${pct}%;background:${color};"></div>
-          <div class="bar-label">${m.label}</div>
+      // ── PROJECTIONS ──
+      const months3  = mrr*3, months6  = mrr*6, months12 = mrr*12;
+      const totalPaid= paid.reduce((s,i)=>s+parseFloat(i.amount||0),0);
+      document.getElementById('projectionGrid').innerHTML = `
+        <div class="projection-card">
+          <div style="font-size:11px;color:rgba(249,115,22,0.7);text-transform:uppercase;letter-spacing:0.08em;margin:0 0 8px;">3-month projection</div>
+          <div style="font-size:32px;font-weight:700;color:#fff;">$${months3.toFixed(2)}</div>
+          <div style="font-size:12px;color:rgba(148,163,184,0.5);margin-top:4px;">at $${mrr.toFixed(2)}/mo MRR</div>
+        </div>
+        <div class="projection-card">
+          <div style="font-size:11px;color:rgba(167,139,250,0.7);text-transform:uppercase;letter-spacing:0.08em;margin:0 0 8px;">6-month projection</div>
+          <div style="font-size:32px;font-weight:700;color:#fff;">$${months6.toFixed(2)}</div>
+          <div style="font-size:12px;color:rgba(148,163,184,0.5);margin-top:4px;">at current growth rate</div>
+        </div>
+        <div class="projection-card">
+          <div style="font-size:11px;color:rgba(45,212,191,0.7);text-transform:uppercase;letter-spacing:0.08em;margin:0 0 8px;">12-month projection</div>
+          <div style="font-size:32px;font-weight:700;color:#fff;">$${months12.toFixed(2)}</div>
+          <div style="font-size:12px;color:rgba(148,163,184,0.5);margin-top:4px;">Total collected so far: $${totalPaid.toFixed(2)}</div>
         </div>`;
+
+      // ── REVENUE BAR CHART ──
+      const months6data = [];
+      for (let i=5;i>=0;i--){
+        const d=new Date(thisYear,thisMonth-i,1),m=d.getMonth(),y=d.getFullYear();
+        const amt=paid.filter(inv=>inv.paid_date&&new Date(inv.paid_date).getMonth()===m&&new Date(inv.paid_date).getFullYear()===y).reduce((s,inv)=>s+parseFloat(inv.amount||0),0);
+        months6data.push({label:MONTHS[m],amt,isCurrent:m===thisMonth&&y===thisYear});
+      }
+      const maxAmt=Math.max(...months6data.map(m=>m.amt),1);
+      const total6m=months6data.reduce((s,m)=>s+m.amt,0);
+      document.getElementById('total6m').textContent='$'+total6m.toFixed(2);
+      document.getElementById('avg6m').textContent  ='$'+(total6m/6).toFixed(2);
+      document.getElementById('revenueChart').innerHTML=months6data.map(m=>{
+        const pct=Math.max((m.amt/maxAmt)*100,m.amt>0?4:1);
+        const color=m.isCurrent?'linear-gradient(180deg,#F97316,#ea580c)':'linear-gradient(180deg,rgba(167,139,250,0.8),rgba(109,40,217,0.8))';
+        return `<div class="bar-wrap"><div class="bar-col" data-tip="$${m.amt.toFixed(2)}" style="height:${pct}%;background:${color};"></div><div class="bar-label">${m.label}</div></div>`;
       }).join('');
 
       // ── DONUT ──
-      const paidTotal    = paid.reduce((s,i)=>s+parseFloat(i.amount||0),0);
-      const unpaidTotal  = unpaid.filter(i=>(i.status||'').toLowerCase()==='unpaid').reduce((s,i)=>s+parseFloat(i.amount||0),0);
-      const overdueTotal = overdue.reduce((s,i)=>s+parseFloat(i.amount||0),0);
-      const grandTotal   = paidTotal+unpaidTotal+overdueTotal||1;
-      drawDonut([
-        {label:'Paid',val:paidTotal,color:'#22C55E'},
-        {label:'Unpaid',val:unpaidTotal,color:'#FBBF24'},
-        {label:'Overdue',val:overdueTotal,color:'#EF4444'},
-      ],grandTotal);
-      const collRate = Math.round((paidTotal/grandTotal)*100);
-      document.getElementById('collectionRate').textContent = collRate+'%';
-      document.getElementById('collectionBar').style.width  = collRate+'%';
+      const paidTotal  =paid.reduce((s,i)=>s+parseFloat(i.amount||0),0);
+      const unpaidTotal=unpaid.filter(i=>(i.status||'').toLowerCase()==='unpaid').reduce((s,i)=>s+parseFloat(i.amount||0),0);
+      const overdueTotal=overdue.reduce((s,i)=>s+parseFloat(i.amount||0),0);
+      const grandTotal =paidTotal+unpaidTotal+overdueTotal||1;
+      drawDonut([{label:'Paid',val:paidTotal,color:'#22C55E'},{label:'Unpaid',val:unpaidTotal,color:'#FBBF24'},{label:'Overdue',val:overdueTotal,color:'#EF4444'}],grandTotal);
+      const cRate=Math.round((paidTotal/grandTotal)*100);
+      document.getElementById('collectionRate').textContent=cRate+'%';
+      document.getElementById('collectionBar').style.width=cRate+'%';
 
-      // ── SITE HEALTH RINGS ──
-      const total   = clients.filter(c=>c.domain).length||1;
-      const onlineN = clients.filter(c=>c.domain&&(c.site_status||'Online').toLowerCase()==='online').length;
-      const sslOkN  = clients.filter(c=>c.domain&&(c.ssl_status||'Active').toLowerCase()==='active').length;
-      const activeN = active.filter(c=>c.domain).length;
-      document.getElementById('siteHealthRings').innerHTML = [
-        {label:'Sites online', val:onlineN, total, color:'#22C55E'},
-        {label:'SSL active',   val:sslOkN,  total, color:'#4FC3F7'},
-        {label:'Active plans', val:activeN, total:clients.filter(c=>c.domain).length||1, color:'#A78BFA'},
-      ].map(r=>{
+      // ── PER-CLIENT DEEP DIVE ──
+      document.getElementById('clientDeepDive').innerHTML = realClients.map(c=>{
+        const d        = clientData[c.client_id];
+        const cPaid    = d.invoices.filter(i=>(i.status||'').toLowerCase()==='paid').reduce((s,i)=>s+parseFloat(i.amount||0),0);
+        const cUnpaid  = d.invoices.filter(i=>(i.status||'').toLowerCase()!=='paid').reduce((s,i)=>s+parseFloat(i.amount||0),0);
+        const cMRR     = parseFloat(c.monthly_rate||0);
+        const cAnnual  = cMRR*12;
+        const cUpdates = d.updates.length;
+        const cRequests= d.requests.length;
+        const cOpen    = d.requests.filter(r=>(r.status||'').toLowerCase()==='open').length;
+        const siteOk   = (c.site_status||'Online').toLowerCase()==='online';
+        const sslOk    = (c.ssl_status||'Active').toLowerCase()==='active';
+        const isActive = (c.status||'Active').toLowerCase()==='active';
+        // LTV estimate — total paid + projected 12mo
+        const ltv = cPaid + cAnnual;
+        return `<div class="client-deep-card">
+          <div class="client-deep-header">
+            <div>
+              <div class="client-deep-domain">${c.domain||c.business_name||c.client_name}</div>
+              <div class="client-deep-name">${c.client_name||''}</div>
+            </div>
+            <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
+              <span class="badge ${isActive?'badge-g':'badge-m'}">${c.status||'Active'}</span>
+              <span class="badge ${siteOk?'badge-g':'badge-r'}">${siteOk?'Online':'Offline'}</span>
+              <span class="badge ${sslOk?'badge-g':'badge-y'}">${sslOk?'SSL ✓':'SSL ⚠'}</span>
+              ${c.plan_name?`<span class="badge badge-b">${c.plan_name}</span>`:''}
+            </div>
+          </div>
+          <div class="client-deep-grid">
+            <div class="client-deep-stat">
+              <div class="client-deep-stat-label">Monthly rate</div>
+              <div class="client-deep-stat-value" style="color:var(--orange);">$${cMRR.toFixed(0)}</div>
+            </div>
+            <div class="client-deep-stat">
+              <div class="client-deep-stat-label">Annual value</div>
+              <div class="client-deep-stat-value" style="color:var(--purple);">$${cAnnual.toFixed(0)}</div>
+            </div>
+            <div class="client-deep-stat">
+              <div class="client-deep-stat-label">Total collected</div>
+              <div class="client-deep-stat-value" style="color:var(--green);">$${cPaid.toFixed(0)}</div>
+            </div>
+            <div class="client-deep-stat">
+              <div class="client-deep-stat-label">Outstanding</div>
+              <div class="client-deep-stat-value" style="color:${cUnpaid>0?'#FBBF24':'var(--muted)'};">$${cUnpaid.toFixed(0)}</div>
+            </div>
+            <div class="client-deep-stat">
+              <div class="client-deep-stat-label">Est. LTV</div>
+              <div class="client-deep-stat-value" style="color:var(--teal);">$${ltv.toFixed(0)}</div>
+            </div>
+            <div class="client-deep-stat">
+              <div class="client-deep-stat-label">Updates posted</div>
+              <div class="client-deep-stat-value" style="color:var(--gold);">${cUpdates}</div>
+            </div>
+            <div class="client-deep-stat">
+              <div class="client-deep-stat-label">Support tickets</div>
+              <div class="client-deep-stat-value">${cRequests}</div>
+            </div>
+            <div class="client-deep-stat">
+              <div class="client-deep-stat-label">Open tickets</div>
+              <div class="client-deep-stat-value" style="color:${cOpen>0?'#FCA5A5':'var(--muted)'};">${cOpen}</div>
+            </div>
+          </div>
+          ${d.updates.length ? `
+          <div style="margin-top:4px;">
+            <div style="font-size:10px;color:rgba(148,163,184,0.4);text-transform:uppercase;letter-spacing:0.06em;margin:0 0 8px;">Recent updates</div>
+            ${d.updates.slice(0,3).map(u=>`
+              <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.04);">
+                <span style="font-size:14px;">${u.category==='Design'?'🎨':u.category==='Feature'?'⚡':u.category==='Fix'?'🔧':u.category==='Content'?'📝':u.category==='Performance'?'🚀':u.category==='Security'?'🔒':'📋'}</span>
+                <div style="flex:1;">
+                  <div style="font-size:12px;color:#fff;">${u.title}</div>
+                  <div style="font-size:11px;color:rgba(148,163,184,0.4);">${new Date(u.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</div>
+                </div>
+                <span class="badge badge-p" style="font-size:10px;">${u.category||'General'}</span>
+              </div>`).join('')}
+          </div>` : ''}
+        </div>`;
+      }).join('') || '<div style="color:rgba(148,163,184,0.4);padding:20px 0;text-align:center;">No client data yet.</div>';
+
+      // ── WORK BY CLIENT — UPDATES ──
+      const maxUpdates = Math.max(...realClients.map(c=>clientData[c.client_id].updates.length),1);
+      document.getElementById('workByClient').innerHTML = realClients.length
+        ? realClients.sort((a,b)=>clientData[b.client_id].updates.length-clientData[a.client_id].updates.length).map(c=>{
+            const count=clientData[c.client_id].updates.length;
+            const cats={};
+            clientData[c.client_id].updates.forEach(u=>{cats[u.category||'General']=(cats[u.category||'General']||0)+1;});
+            const topCat=Object.entries(cats).sort((a,b)=>b[1]-a[1])[0];
+            return `<div class="progress-row" style="margin-bottom:14px;">
+              <div class="progress-label" title="${c.domain||c.client_name}">${c.domain||c.client_name}</div>
+              <div style="flex:1;">
+                <div class="progress-track"><div class="progress-fill" style="width:${Math.max(Math.round((count/maxUpdates)*100),count>0?4:0)}%;background:linear-gradient(90deg,#FBBF24,#F97316);"></div></div>
+                ${topCat?`<div style="font-size:10px;color:rgba(148,163,184,0.4);margin-top:3px;">Top: ${topCat[0]} (${topCat[1]})</div>`:'<div style="font-size:10px;color:rgba(148,163,184,0.3);margin-top:3px;">No updates yet</div>'}
+              </div>
+              <div class="progress-val">${count}</div>
+            </div>`;
+          }).join('')
+        : '<div style="color:rgba(148,163,184,0.4);font-size:13px;padding:10px 0;">No data yet.</div>';
+
+      // ── SUPPORT BY CLIENT ──
+      const maxReqs=Math.max(...realClients.map(c=>clientData[c.client_id].requests.length),1);
+      document.getElementById('supportByClient').innerHTML = realClients.length
+        ? realClients.sort((a,b)=>clientData[b.client_id].requests.length-clientData[a.client_id].requests.length).map(c=>{
+            const reqs  =clientData[c.client_id].requests;
+            const open  =reqs.filter(r=>(r.status||'').toLowerCase()==='open').length;
+            const resolved=reqs.filter(r=>(r.status||'').toLowerCase()==='resolved'||(r.status||'').toLowerCase()==='closed').length;
+            return `<div class="progress-row" style="margin-bottom:14px;">
+              <div class="progress-label" title="${c.domain||c.client_name}">${c.domain||c.client_name}</div>
+              <div style="flex:1;">
+                <div class="progress-track"><div class="progress-fill" style="width:${Math.max(Math.round((reqs.length/maxReqs)*100),reqs.length>0?4:0)}%;background:linear-gradient(90deg,#A78BFA,#6D28D9);"></div></div>
+                <div style="font-size:10px;color:rgba(148,163,184,0.4);margin-top:3px;">${open>0?`${open} open · `:''}${resolved} resolved</div>
+              </div>
+              <div class="progress-val">${reqs.length}</div>
+            </div>`;
+          }).join('')
+        : '<div style="color:rgba(148,163,184,0.4);font-size:13px;padding:10px 0;">No data yet.</div>';
+
+      // ── HEALTH RINGS — only clients with domains ──
+      const domainClients = realClients.filter(c=>c.domain);
+      const domainTotal   = domainClients.length||1;
+      const rings = [
+        {label:'Sites online', val:domainClients.filter(c=>(c.site_status||'Online').toLowerCase()==='online').length, total:domainTotal, color:'#22C55E'},
+        {label:'SSL active',   val:domainClients.filter(c=>(c.ssl_status||'Active').toLowerCase()==='active').length,  total:domainTotal, color:'#4FC3F7'},
+        {label:'Active plans', val:active.filter(c=>c.domain).length, total:domainTotal, color:'#A78BFA'},
+      ];
+      document.getElementById('healthRings').innerHTML=rings.map(r=>{
         const pct=Math.round((r.val/r.total)*100);
-        const circ=2*Math.PI*26;
-        const dash=circ*(pct/100);
+        const circ=2*Math.PI*26,dash=circ*(pct/100);
         return `<div class="health-item">
           <div class="ring-wrap">
             <svg width="64" height="64" viewBox="0 0 64 64">
@@ -385,8 +553,8 @@
         </div>`;
       }).join('');
 
-      // ── PER-CLIENT SITE STATUS TABLE ──
-      document.getElementById('siteHealthTable').innerHTML = clients.filter(c=>c.domain).map(c=>{
+      // Site health table
+      document.getElementById('siteHealthTable').innerHTML=domainClients.map(c=>{
         const sOk=(c.site_status||'Online').toLowerCase()==='online';
         const lOk=(c.ssl_status||'Active').toLowerCase()==='active';
         return `<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04);">
@@ -399,92 +567,81 @@
             <span class="badge ${lOk?'badge-g':'badge-y'}">${lOk?'SSL ✓':'SSL ⚠'}</span>
           </div>
         </div>`;
-      }).join('') || '<div style="color:rgba(148,163,184,0.4);font-size:13px;padding:10px 0;">No clients with domains.</div>';
-
-      // ── REVENUE BY CLIENT ──
-      const clientRevenue = clients.map(c=>{
-        const cPaid = paid.filter(i=>i.client_id===c.client_id).reduce((s,i)=>s+parseFloat(i.amount||0),0);
-        return {name:c.domain||c.business_name||c.client_name, client_name:c.client_name||'', rate:parseFloat(c.monthly_rate||0), total:cPaid};
-      }).filter(c=>c.total>0||c.rate>0).sort((a,b)=>b.total-a.total);
-      const maxRev = Math.max(...clientRevenue.map(c=>c.total),1);
-      document.getElementById('revenueByClient').innerHTML = clientRevenue.length
-        ? clientRevenue.map(c=>`
-          <div class="progress-row">
-            <div class="progress-label" title="${c.name}">${c.name}</div>
-            <div class="progress-track">
-              <div class="progress-fill" style="width:${Math.round((c.total/maxRev)*100)}%;background:linear-gradient(90deg,#F97316,#A78BFA);"></div>
-            </div>
-            <div class="progress-val">$${c.total.toFixed(0)}</div>
-          </div>`).join('')
-        : '<div style="color:rgba(148,163,184,0.4);font-size:13px;padding:10px 0;">No paid invoices yet.</div>';
+      }).join('')||'<div style="color:rgba(148,163,184,0.4);font-size:13px;padding:10px 0;">No clients with domains.</div>';
 
       // ── PLAN DISTRIBUTION ──
-      const planMap = {};
-      active.forEach(c=>{ const p=c.plan_name||'No plan'; planMap[p]=(planMap[p]||0)+1; });
+      const planMap={};
+      active.forEach(c=>{const p=c.plan_name||'No plan';planMap[p]=(planMap[p]||0)+1;});
       const planColors=['#F97316','#A78BFA','#4FC3F7','#2DD4BF','#FBBF24','#22C55E'];
-      document.getElementById('planDistribution').innerHTML = Object.keys(planMap).length
-        ? Object.entries(planMap).sort((a,b)=>b[1]-a[1]).map((([name,count],i)=>`
+      document.getElementById('planDistribution').innerHTML=Object.keys(planMap).length
+        ?Object.entries(planMap).sort((a,b)=>b[1]-a[1]).map(([name,count],i)=>`
           <div class="progress-row">
-            <div class="progress-label" title="${name}">${name}</div>
-            <div class="progress-track">
-              <div class="progress-fill" style="width:${Math.round((count/active.length)*100)}%;background:${planColors[i%planColors.length]};"></div>
-            </div>
+            <div class="progress-label">${name}</div>
+            <div class="progress-track"><div class="progress-fill" style="width:${Math.round((count/active.length)*100)}%;background:${planColors[i%planColors.length]};"></div></div>
             <div class="progress-val">${count} client${count!==1?'s':''}</div>
-          </div>`)).join('')
-        : '<div style="color:rgba(148,163,184,0.4);font-size:13px;padding:10px 0;">No active clients.</div>';
+          </div>`).join('')
+        :'<div style="color:rgba(148,163,184,0.4);font-size:13px;padding:10px 0;">No active clients.</div>';
 
       // ── INVOICE AGE ──
-      const ageGroups = {'Current (0-7d)':0,'1-2 weeks':0,'2-4 weeks':0,'1-2 months':0,'2+ months':0};
+      const ageGroups={'Current (0-7d)':0,'1–2 weeks':0,'2–4 weeks':0,'1–2 months':0,'2+ months':0};
+      const ageColors={'Current (0-7d)':'#22C55E','1–2 weeks':'#FBBF24','2–4 weeks':'#F97316','1–2 months':'#EF4444','2+ months':'#A78BFA'};
       unpaid.forEach(inv=>{
-        if (!inv.due_date) return;
-        const days = Math.floor((now-new Date(inv.due_date))/(1000*60*60*24));
-        if(days<=7) ageGroups['Current (0-7d)']+=parseFloat(inv.amount||0);
-        else if(days<=14) ageGroups['1-2 weeks']+=parseFloat(inv.amount||0);
-        else if(days<=28) ageGroups['2-4 weeks']+=parseFloat(inv.amount||0);
-        else if(days<=60) ageGroups['1-2 months']+=parseFloat(inv.amount||0);
+        if(!inv.due_date)return;
+        const days=Math.floor((now-new Date(inv.due_date))/(1000*60*60*24));
+        if(days<=7)ageGroups['Current (0-7d)']+=parseFloat(inv.amount||0);
+        else if(days<=14)ageGroups['1–2 weeks']+=parseFloat(inv.amount||0);
+        else if(days<=28)ageGroups['2–4 weeks']+=parseFloat(inv.amount||0);
+        else if(days<=60)ageGroups['1–2 months']+=parseFloat(inv.amount||0);
         else ageGroups['2+ months']+=parseFloat(inv.amount||0);
       });
-      const ageColors={'Current (0-7d)':'#22C55E','1-2 weeks':'#FBBF24','2-4 weeks':'#F97316','1-2 months':'#EF4444','2+ months':'#A78BFA'};
       const maxAge=Math.max(...Object.values(ageGroups),1);
-      document.getElementById('invoiceAge').innerHTML = Object.entries(ageGroups).map(([label,amt])=>`
+      document.getElementById('invoiceAge').innerHTML=Object.entries(ageGroups).map(([label,amt])=>`
         <div class="progress-row">
           <div class="progress-label">${label}</div>
-          <div class="progress-track">
-            <div class="progress-fill" style="width:${amt>0?Math.max(Math.round((amt/maxAge)*100),4):0}%;background:${ageColors[label]};"></div>
-          </div>
+          <div class="progress-track"><div class="progress-fill" style="width:${amt>0?Math.max(Math.round((amt/maxAge)*100),4):0}%;background:${ageColors[label]};"></div></div>
           <div class="progress-val">$${amt.toFixed(0)}</div>
         </div>`).join('');
 
       // ── ACTIVITY TIMELINE ──
-      const activities = [];
-      paid.forEach(i=>activities.push({date:new Date(i.paid_date),type:'paid',text:`Payment received — ${i._c?.domain||i._c?.business_name||i.client_id}`,sub:'$'+parseFloat(i.amount||0).toFixed(2)+' · '+i.invoice_id,color:'#22C55E'}));
-      unpaid.forEach(i=>activities.push({date:new Date(i.created_at),type:'invoice',text:`Invoice sent — ${i._c?.domain||i._c?.business_name||i.client_id}`,sub:'$'+parseFloat(i.amount||0).toFixed(2)+' due · '+i.invoice_id,color:'#FBBF24'}));
+      const activities=[];
+      paid.forEach(i=>{
+        const c=realClients.find(cl=>cl.client_id===i.client_id);
+        activities.push({date:new Date(i.paid_date),type:'paid',text:`Payment received — ${c?.domain||c?.business_name||i.client_id}`,sub:'$'+parseFloat(i.amount||0).toFixed(2)+' · '+i.invoice_id,color:'#22C55E'});
+      });
+      allUpdates.forEach(u=>{
+        const c=realClients.find(cl=>cl.client_id===u.client_id);
+        activities.push({date:new Date(u.created_at),type:'update',text:`Update posted — ${c?.domain||c?.client_name||u.client_id}`,sub:u.title,color:'#FBBF24'});
+      });
+      allRequests.forEach(r=>{
+        const c=realClients.find(cl=>cl.client_id===r.client_id);
+        activities.push({date:new Date(r.created_at),type:'request',text:`Support request — ${c?.domain||c?.client_name||r.client_id}`,sub:r.subject,color:'#A78BFA'});
+      });
       activities.sort((a,b)=>b.date-a.date);
-      document.getElementById('activityTimeline').innerHTML = activities.slice(0,10).map(a=>`
+      document.getElementById('activityTimeline').innerHTML=activities.slice(0,15).map(a=>`
         <div class="timeline-item">
           <div class="timeline-dot" style="background:${a.color};"></div>
-          <div class="timeline-content">
+          <div>
             <div class="timeline-title">${a.text}</div>
             <div class="timeline-sub">${a.sub} &nbsp;·&nbsp; ${a.date.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</div>
           </div>
-        </div>`).join('') || '<div style="color:rgba(148,163,184,0.4);font-size:13px;padding:10px 0;">No activity yet.</div>';
+        </div>`).join('')||'<div style="color:rgba(148,163,184,0.4);font-size:13px;padding:10px 0;">No activity yet.</div>';
 
-      // ── CLIENT SUMMARY TABLE ──
-      document.getElementById('clientSummaryBody').innerHTML = clients.map(c=>{
-        const cPaid    = paid.filter(i=>i.client_id===c.client_id).reduce((s,i)=>s+parseFloat(i.amount||0),0);
-        const cUnpaid  = unpaid.filter(i=>i.client_id===c.client_id).reduce((s,i)=>s+parseFloat(i.amount||0),0);
-        const sOk      = (c.site_status||'Online').toLowerCase()==='online';
-        const lOk      = (c.ssl_status||'Active').toLowerCase()==='active';
-        const isActive = (c.status||'Active').toLowerCase()==='active';
+      // ── FULL CLIENT TABLE ──
+      document.getElementById('clientTableBody').innerHTML=realClients.map(c=>{
+        const d      =clientData[c.client_id];
+        const cPaid  =d.invoices.filter(i=>(i.status||'').toLowerCase()==='paid').reduce((s,i)=>s+parseFloat(i.amount||0),0);
+        const cUnpaid=d.invoices.filter(i=>(i.status||'').toLowerCase()!=='paid').reduce((s,i)=>s+parseFloat(i.amount||0),0);
+        const sOk=(c.site_status||'Online').toLowerCase()==='online';
+        const lOk=(c.ssl_status||'Active').toLowerCase()==='active';
         return `<tr>
-          <td>
-            <div style="font-size:13px;font-weight:500;color:#fff;">${c.domain||'—'}</div>
-          </td>
+          <td><div style="font-size:13px;font-weight:500;color:#fff;">${c.domain||'—'}</div></td>
           <td style="color:rgba(148,163,184,0.7);font-size:12px;">${c.client_name||'—'}</td>
           <td>${c.plan_name?`<span class="badge badge-b">${c.plan_name}</span>`:'<span class="badge badge-m">None</span>'}</td>
-          <td style="text-align:right;font-weight:500;">${c.monthly_rate?'$'+parseFloat(c.monthly_rate).toFixed(2):'—'}</td>
+          <td style="text-align:right;font-weight:500;color:var(--orange);">${c.monthly_rate?'$'+parseFloat(c.monthly_rate).toFixed(2):'—'}</td>
           <td style="text-align:right;color:#86EFAC;font-weight:500;">$${cPaid.toFixed(2)}</td>
-          <td style="text-align:right;color:${cUnpaid>0?'#FBBF24':'rgba(148,163,184,0.5)'};">$${cUnpaid.toFixed(2)}</td>
+          <td style="text-align:right;color:${cUnpaid>0?'#FBBF24':'rgba(148,163,184,0.4)'};">$${cUnpaid.toFixed(2)}</td>
+          <td style="text-align:right;color:var(--gold);">${d.updates.length}</td>
+          <td style="text-align:right;color:var(--purple);">${d.requests.length}</td>
           <td><span class="badge ${sOk?'badge-g':'badge-r'}">${sOk?'Online':'Offline'}</span></td>
           <td><span class="badge ${lOk?'badge-g':'badge-y'}">${lOk?'Active':'Check'}</span></td>
         </tr>`;
@@ -493,35 +650,19 @@
     } catch(e){ console.error(e); }
   }
 
-  function drawDonut(segments, total) {
-    const canvas = document.getElementById('donutCanvas');
-    const ctx    = canvas.getContext('2d');
-    const cx=60, cy=60, r=48, inner=32;
+  function drawDonut(segments,total){
+    const canvas=document.getElementById('donutCanvas'),ctx=canvas.getContext('2d');
+    const cx=60,cy=60,r=48,inner=32;
     ctx.clearRect(0,0,120,120);
-    let angle = -Math.PI/2;
+    let angle=-Math.PI/2;
     segments.forEach(seg=>{
-      const slice = (seg.val/total)*Math.PI*2;
-      ctx.beginPath();
-      ctx.moveTo(cx,cy);
-      ctx.arc(cx,cy,r,angle,angle+slice);
-      ctx.closePath();
-      ctx.fillStyle=seg.color;
-      ctx.fill();
-      angle+=slice;
+      const slice=(seg.val/total)*Math.PI*2;
+      ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,angle,angle+slice);ctx.closePath();
+      ctx.fillStyle=seg.color;ctx.fill();angle+=slice;
     });
-    // Hole
-    ctx.beginPath();
-    ctx.arc(cx,cy,inner,0,Math.PI*2);
-    ctx.fillStyle='rgba(8,16,28,1)';
-    ctx.fill();
-
-    // Legend
-    document.getElementById('donutLegend').innerHTML = segments.map(s=>`
-      <div class="legend-item">
-        <div class="legend-dot" style="background:${s.color};"></div>
-        ${s.label}
-        <span class="legend-val">$${s.val.toFixed(2)}</span>
-      </div>`).join('');
+    ctx.beginPath();ctx.arc(cx,cy,inner,0,Math.PI*2);ctx.fillStyle='rgba(8,16,28,1)';ctx.fill();
+    document.getElementById('donutLegend').innerHTML=segments.map(s=>`
+      <div class="legend-item"><div class="legend-dot" style="background:${s.color};"></div>${s.label}<span class="legend-val">$${s.val.toFixed(2)}</span></div>`).join('');
   }
 
   load();
