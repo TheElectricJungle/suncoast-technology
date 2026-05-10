@@ -7,7 +7,7 @@
   <meta name="description" content="Custom websites, client portals, and AI-powered web applications built for small businesses." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@400;500&family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&family=Inter:wght@600;700;800;900&display=swap" rel="stylesheet" />
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
     :root{
@@ -262,7 +262,104 @@
     }
 
   
-    /* ── GEMINI BUTTON ── */
+    /* ── PORTFOLIO ── */
+    .portfolio-section{padding:120px 24px;max-width:1200px;margin:0 auto;}
+    .portfolio-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(520px,1fr));gap:24px;margin-top:60px;}
+    .portfolio-card{background:rgba(8,14,24,0.85);border:1px solid rgba(255,255,255,0.07);border-radius:20px;overflow:hidden;transition:transform 0.3s,border-color 0.3s;backdrop-filter:blur(20px);display:flex;flex-direction:column;}
+    .portfolio-card:hover{transform:translateY(-4px);border-color:rgba(255,255,255,0.15);}
+    /* Preview window */
+    .pv-wrap{height:240px;overflow:hidden;position:relative;flex-shrink:0;}
+    .pv-sg{background:linear-gradient(145deg,#EBF6FD,#D2ECFA);}
+    .pv-portal{background:#04080F;}
+    /* Shared card body */
+    .portfolio-body{padding:22px;display:flex;flex-direction:column;gap:0;}
+    .portfolio-tag{font-size:10px;color:var(--orange);font-weight:500;letter-spacing:0.12em;text-transform:uppercase;margin:0 0 6px;}
+    .portfolio-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:500;color:#fff;margin:0 0 8px;letter-spacing:-0.01em;}
+    .portfolio-desc{font-size:13px;color:var(--muted);line-height:1.65;font-weight:300;margin:0 0 12px;}
+    .portfolio-features{display:flex;flex-direction:column;gap:5px;margin:0 0 16px;}
+    .portfolio-feature{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:rgba(148,163,184,0.8);}
+    .portfolio-feature svg{flex-shrink:0;margin-top:2px;}
+    .portfolio-footer{display:flex;align-items:center;justify-content:space-between;padding-top:14px;border-top:1px solid rgba(255,255,255,0.06);margin-top:auto;}
+    .portfolio-tech{display:flex;gap:6px;flex-wrap:wrap;}
+    .portfolio-tech-pill{font-size:10px;padding:3px 9px;border-radius:20px;background:rgba(255,255,255,0.05);color:rgba(148,163,184,0.6);border:1px solid rgba(255,255,255,0.07);}
+    .portfolio-link{font-size:12px;color:#4FC3F7;text-decoration:none;font-weight:500;white-space:nowrap;display:inline-flex;align-items:center;gap:4px;}
+    .portfolio-link:hover{color:#fff;}
+
+    /* ── PTP hero preview ── */
+    .pv-ptp{background:#ffffff;overflow:hidden;}
+    .ptp-hero-only{width:100%;height:100%;display:flex;flex-direction:column;font-family:'Inter',sans-serif;background:#fff;}
+    .ptp-hero-topbar{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;border-bottom:1px solid rgba(0,0,0,0.07);flex-shrink:0;}
+    .ptp-hero-logo{font-size:15px;font-weight:800;background:linear-gradient(45deg,#e91e63,#9c27b0,#ff8c00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .ptp-hero-btn{background:linear-gradient(45deg,#e91e63,#9c27b0,#ff8c00);color:#fff;padding:5px 14px;border-radius:50px;font-size:11px;font-weight:700;}
+    .ptp-hero-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px;text-align:center;}
+    .ptp-hero-title{font-size:42px;font-weight:800;line-height:1.1;background:linear-gradient(90deg,#e91e63 0%,#9c27b0 25%,#ff8c00 50%,rgba(0,0,0,0.85) 60%,#ff8c00 70%,#9c27b0 85%,#e91e63 100%);background-size:300% 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:ptpshimmer 5s ease-in-out infinite;}
+    @keyframes ptpshimmer{0%{background-position:-300% 0;}50%{background-position:300% 0;}100%{background-position:-300% 0;}}
+    .ptp-hero-sub{font-size:13px;color:#718096;margin-top:8px;max-width:300px;line-height:1.5;}
+
+    /* ── EJ hero preview ── */
+    .pv-ej{background:#ffffff;overflow:hidden;}
+    .ej-hero-only{width:100%;height:100%;display:flex;flex-direction:column;font-family:'Fredoka One',cursive,sans-serif;background:#fff;}
+    .ej-hero-ticker{background:#111;overflow:hidden;padding:5px 0;border-bottom:3px solid #ffe600;flex-shrink:0;}
+    .ej-hero-track{display:inline-flex;white-space:nowrap;animation:ejtick 14s linear infinite;}
+    .ej-hero-track span{font-family:'Fredoka One',cursive,sans-serif;font-size:11px;letter-spacing:2px;color:#ffe600;padding:0 14px;}
+    @keyframes ejtick{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+    .ej-hero-nav{background:#ff2d78;display:flex;align-items:center;justify-content:space-between;padding:8px 16px;border-bottom:3px solid #111;flex-shrink:0;}
+    .ej-hero-brand{font-family:'Fredoka One',cursive,sans-serif;font-size:14px;color:#fff;text-shadow:1px 1px 0 #111;}
+    .ej-hero-cta{background:#ffe600;color:#111;font-size:10px;font-weight:900;padding:4px 12px;border:2px solid #111;font-family:'Nunito',sans-serif;}
+    .ej-hero-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px;}
+    .ej-hero-the{font-family:'Fredoka One',cursive,sans-serif;font-size:14px;letter-spacing:10px;color:#111;margin-bottom:2px;}
+    .ej-hero-electric{font-family:'Fredoka One',cursive,sans-serif;font-size:58px;color:#ff2d78;text-shadow:3px 3px 0 #111,5px 5px 0 #111;line-height:0.9;animation:ejwobble 4s ease-in-out infinite;}
+    .ej-hero-jungle{font-family:'Fredoka One',cursive,sans-serif;font-size:58px;color:#00e676;text-shadow:3px 3px 0 #111,5px 5px 0 #111;line-height:0.9;}
+    @keyframes ejwobble{0%,100%{transform:rotate(0);}25%{transform:rotate(-1deg);}75%{transform:rotate(1deg);}}
+
+    /* ── SG UI ── */
+    .sg-ui{width:100%;height:100%;display:flex;flex-direction:column;font-family:'Nunito',sans-serif;}
+    .sg-nav{display:flex;align-items:center;justify-content:space-between;padding:7px 12px;background:rgba(255,255,255,0.94);border-bottom:1.5px solid rgba(59,158,224,0.12);flex-shrink:0;}
+    .sg-nav-logo{font-size:10px;}
+    .sg-nav-btn{background:#F47B20;color:#fff;font-size:7px;font-weight:800;padding:3px 9px;border-radius:20px;}
+    .sg-hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6px;position:relative;}
+    .sg-hero-title{font-family:'Nunito',sans-serif;font-size:32px;font-weight:900;color:#F47B20;letter-spacing:-2px;line-height:1;}
+    .sg-hero-sub{font-size:10px;font-weight:900;color:#1A6FA8;letter-spacing:0.5px;margin-bottom:4px;}
+    .sg-tagline{font-size:9px;font-style:italic;color:#3B6282;font-weight:700;margin-bottom:6px;}
+    .sg-tagline em{color:#F47B20;font-style:italic;}
+    .sg-bubbles-row{display:flex;gap:6px;align-items:center;justify-content:center;}
+    .sg-bub{border-radius:50%;border:1.5px solid;}
+    .sg-bub-lg{width:20px;height:20px;}
+    .sg-bub-md{width:15px;height:15px;}
+    .sg-bub-sm{width:10px;height:10px;}
+    .sg-blue{background:rgba(59,158,224,0.15);border-color:rgba(59,158,224,0.5);animation:sgb 3s ease-in-out infinite;}
+    .sg-orange{background:rgba(244,123,32,0.15);border-color:rgba(244,123,32,0.5);animation:sgb 3s ease-in-out infinite 0.6s;}
+    @keyframes sgb{0%,100%{transform:translateY(0);}50%{transform:translateY(-5px);}}
+    .sg-shimmer-bar{background:linear-gradient(90deg,#C4601A,#F47B20,#FF9A45,#F47B20,#C4601A);background-size:300% 100%;animation:sgshimmer 3s linear infinite;padding:5px 10px;font-size:8px;font-weight:900;color:#fff;text-align:center;flex-shrink:0;}
+    @keyframes sgshimmer{0%{background-position:100% 0;}100%{background-position:-100% 0;}}
+    .sg-icons-row{display:flex;justify-content:center;gap:10px;padding:6px 10px;background:rgba(255,255,255,0.6);border-top:1px solid rgba(59,158,224,0.1);flex-shrink:0;}
+    .sg-icon-item{display:flex;flex-direction:column;align-items:center;gap:1px;font-size:10px;}
+    .sg-icon-item span:last-child{font-size:6px;font-weight:800;color:#3B6282;text-transform:uppercase;letter-spacing:0.5px;}
+
+    /* ── Portal UI ── */
+    .portal-ui{width:100%;height:100%;display:flex;flex-direction:column;font-family:'DM Sans',sans-serif;background:#04080F;}
+    .portal-topbar{display:flex;align-items:center;justify-content:space-between;padding:7px 12px;background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.06);flex-shrink:0;}
+    .portal-layout{flex:1;display:grid;grid-template-columns:90px 1fr;overflow:hidden;}
+    .portal-sidebar{background:rgba(4,8,15,0.8);border-right:1px solid rgba(255,255,255,0.05);padding:8px 0;}
+    .portal-nav-item{padding:5px 8px;font-size:8px;color:rgba(148,163,184,0.45);cursor:default;}
+    .portal-nav-active{color:#F97316;background:rgba(249,115,22,0.08);border-right:2px solid #F97316;}
+    .portal-main{padding:10px;overflow:hidden;}
+    .portal-page-title{font-size:13px;font-weight:500;color:#fff;margin-bottom:8px;}
+    .portal-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-bottom:8px;}
+    .portal-stat{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:6px;padding:5px 6px;}
+    .portal-stat-lbl{font-size:6px;color:rgba(148,163,184,0.4);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:2px;}
+    .portal-stat-num{font-size:14px;font-weight:600;color:#fff;line-height:1;}
+    .portal-section-lbl{font-size:7px;color:rgba(148,163,184,0.35);letter-spacing:0.1em;text-transform:uppercase;margin:6px 0 4px;}
+    .portal-site-row{display:flex;flex-direction:column;gap:3px;margin-bottom:6px;}
+    .portal-site{display:flex;align-items:center;gap:5px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);border-radius:5px;padding:4px 6px;}
+    .portal-site-dot{width:6px;height:6px;border-radius:50%;background:#22C55E;flex-shrink:0;}
+    .portal-site-name{font-size:8px;color:rgba(255,255,255,0.7);flex:1;}
+    .portal-badge-g{font-size:7px;padding:1px 5px;border-radius:8px;background:rgba(34,197,94,0.12);color:#86EFAC;}
+    .portal-actions{display:flex;gap:4px;flex-wrap:wrap;}
+    .portal-action{font-size:7px;padding:3px 7px;border-radius:5px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.6);}
+
+    @media(max-width:900px){.portfolio-grid{grid-template-columns:1fr;}}
+
     .btn-gemini{
       position:relative;
       display:inline-flex;
@@ -350,6 +447,7 @@
     <div class="nav-links">
       <a href="#capabilities">Capabilities</a>
       <a href="#how">Process</a>
+      <a href="#work">Work</a>
       <a href="#contact">Contact</a>
     </div>
     <a href="login.html" class="nav-portal">
@@ -697,6 +795,228 @@
   </div>
 </section>
 
+<!-- PORTFOLIO -->
+<section class="portfolio-section" id="work">
+  <div class="caps-header reveal" style="text-align:center;">
+    <div class="section-label">Our Work</div>
+    <h2 class="section-title">Real sites,<br><em>real businesses.</em></h2>
+    <p class="section-sub">Every project built from scratch — no templates, no shortcuts.</p>
+  </div>
+  <div class="portfolio-grid reveal">
+
+    <!-- ── PictureThisPet ── -->
+    <div class="portfolio-card">
+      <div class="pv-wrap pv-ptp">
+        <div class="ptp-hero-only">
+          <div class="ptp-hero-topbar">
+            <span class="ptp-hero-logo">PictureThisPet<span style="color:#e91e63;font-size:0.5em;vertical-align:super;">®</span></span>
+            <div style="display:flex;gap:16px;align-items:center;">
+              <span style="font-size:12px;color:#4a5568;">Portfolio</span>
+              <span style="font-size:12px;color:#4a5568;">Pricing</span>
+              <span style="font-size:12px;color:#4a5568;">Guide</span>
+              <span class="ptp-hero-btn">Book Now</span>
+            </div>
+          </div>
+          <div class="ptp-hero-body">
+            <div class="ptp-hero-title">Welcome to<br>PictureThisPet</div>
+            <div class="ptp-hero-sub">Stunning, timeless photographs of your pets across Denver.</div>
+          </div>
+        </div>
+      </div>
+      <div class="portfolio-body">
+        <div class="portfolio-tag">Pet Photography · Denver, CO</div>
+        <div class="portfolio-title">PictureThisPet</div>
+        <div class="portfolio-desc">Full-featured pet photography platform with portfolio gallery, Instagram feed, session prep guide, pop-up event cards, and a coupon modal system.</div>
+        <div class="portfolio-features">
+          <div class="portfolio-feature"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#e91e63" stroke-width="1.5"><path d="M13 11l-5 3-5-3V5l5-3 5 3v6z"/></svg>Auto-scrolling Instagram feed with touch swipe</div>
+          <div class="portfolio-feature"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#9c27b0" stroke-width="1.5"><rect x="2" y="4" width="12" height="9" rx="1.5"/><path d="M2 6.5h12"/></svg>Coupon modal with click-to-copy discount code</div>
+          <div class="portfolio-feature"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#ff8c00" stroke-width="1.5"><circle cx="8" cy="8" r="6.5"/><path d="M8 5v3l2 2"/></svg>Pop-up event pages, prep guide & portfolio gallery</div>
+        </div>
+        <div class="portfolio-footer">
+          <div class="portfolio-tech">
+            <span class="portfolio-tech-pill">GitHub Pages</span>
+            <span class="portfolio-tech-pill">Cloudflare</span>
+            <span class="portfolio-tech-pill">Instagram</span>
+          </div>
+          <a href="https://picturethispet.co" target="_blank" class="portfolio-link">Visit site <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── The Electric Jungle ── -->
+    <div class="portfolio-card">
+      <div class="pv-wrap pv-ej">
+        <div class="ej-hero-only">
+          <div class="ej-hero-ticker">
+            <div class="ej-hero-track">
+              <span>🌿 MOBILE PLANT SHOP</span><span style="color:#ff2d78;"> ★ </span>
+              <span>⚡ RUDSTA CUSTOM BUILDS</span><span style="color:#ff2d78;"> ★ </span>
+              <span>💡 GROW LIGHTS INCLUDED</span><span style="color:#ff2d78;"> ★ </span>
+              <span>🛡️ 60-DAY WARRANTY</span><span style="color:#ff2d78;"> ★ </span>
+              <span>🌿 MOBILE PLANT SHOP</span><span style="color:#ff2d78;"> ★ </span>
+              <span>⚡ RUDSTA CUSTOM BUILDS</span><span style="color:#ff2d78;"> ★ </span>
+            </div>
+          </div>
+          <div class="ej-hero-nav">
+            <span class="ej-hero-brand">⚡ The Electric Jungle</span>
+            <span class="ej-hero-cta">Get a Build ⚡</span>
+          </div>
+          <div class="ej-hero-body">
+            <div class="ej-hero-the">THE</div>
+            <div class="ej-hero-electric">ELECTRIC</div>
+            <div class="ej-hero-jungle">JUNGLE</div>
+          </div>
+        </div>
+      </div>
+      <div class="portfolio-body">
+        <div class="portfolio-tag">Mobile Plant Shop · Broomfield, CO</div>
+        <div class="portfolio-title">The Electric Jungle</div>
+        <div class="portfolio-desc">Bold Memphis neobrutalist design for a mobile plant shop selling custom smart-home IKEA Rudsta habitats with automated grow lighting and climate control.</div>
+        <div class="portfolio-features">
+          <div class="portfolio-feature"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#ff2d78" stroke-width="1.5"><path d="M13 11l-5 3-5-3V5l5-3 5 3v6z"/></svg>Animated ticker marquee & Memphis neobrutalist design</div>
+          <div class="portfolio-feature"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#00c8ff" stroke-width="1.5"><rect x="2" y="4" width="12" height="9" rx="1.5"/><path d="M2 6.5h12"/></svg>Full product spec sheet with terminal VT323 typography</div>
+          <div class="portfolio-feature"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#00e676" stroke-width="1.5"><path d="M14 10a2 2 0 01-2 2H4.5L2 14V4a2 2 0 012-2h8a2 2 0 012 2v6z"/></svg>Email waitlist → Google Apps Script backend</div>
+        </div>
+        <div class="portfolio-footer">
+          <div class="portfolio-tech">
+            <span class="portfolio-tech-pill">GitHub Pages</span>
+            <span class="portfolio-tech-pill">Apps Script</span>
+            <span class="portfolio-tech-pill">Cloudflare</span>
+          </div>
+          <a href="https://theelectricjungle.com" target="_blank" class="portfolio-link">Visit site <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── S.G. Cleaning Services ── -->
+    <div class="portfolio-card">
+      <div class="pv-wrap pv-sg">
+        <div class="sg-ui">
+          <!-- Nav -->
+          <div class="sg-nav">
+            <div class="sg-nav-logo"><span style="color:#F47B20;font-weight:900;">S.G.</span> <span style="color:#1A6FA8;font-weight:800;">Cleaning Services</span></div>
+            <div class="sg-nav-btn">Get a Quote</div>
+          </div>
+          <!-- Hero -->
+          <div class="sg-hero">
+            <div class="sg-hero-title">S.G.</div>
+            <div class="sg-hero-sub">Cleaning Services</div>
+            <div class="sg-tagline">If it's Dirty, <em>we clean it.</em></div>
+            <!-- Bubbles -->
+            <div class="sg-bubbles-row">
+              <div class="sg-bub sg-bub-lg sg-blue"></div>
+              <div class="sg-bub sg-bub-sm sg-orange"></div>
+              <div class="sg-bub sg-bub-md sg-blue"></div>
+              <div class="sg-bub sg-bub-sm sg-blue"></div>
+              <div class="sg-bub sg-bub-lg sg-orange"></div>
+            </div>
+          </div>
+          <!-- Shimmer bar -->
+          <div class="sg-shimmer-bar">⛽ <strong>No Travel Fees — Ever.</strong> We come to you, anywhere in Colorado.</div>
+          <!-- Service icons -->
+          <div class="sg-icons-row">
+            <div class="sg-icon-item"><span>🏠</span><span>Residential</span></div>
+            <div class="sg-icon-item"><span>🔨</span><span>Remodels</span></div>
+            <div class="sg-icon-item"><span>✈️</span><span>Aircraft</span></div>
+            <div class="sg-icon-item"><span>⛵</span><span>Watercraft</span></div>
+            <div class="sg-icon-item"><span>🚐</span><span>RV</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="portfolio-body">
+        <div class="portfolio-tag">Home & Commercial Cleaning · Colorado</div>
+        <div class="portfolio-title">S.G. Cleaning Services</div>
+        <div class="portfolio-desc">Warm, animated brand site for a Colorado-wide cleaning business with floating bubble animation, glowing quote form, Nextdoor reviews, and eco-friendly options.</div>
+        <div class="portfolio-features">
+          <div class="portfolio-feature"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#3B9EE0" stroke-width="1.5"><path d="M13 11l-5 3-5-3V5l5-3 5 3v6z"/></svg>Animated floating bubbles with pop-on-click effect</div>
+          <div class="portfolio-feature"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#F47B20" stroke-width="1.5"><rect x="2" y="4" width="12" height="9" rx="1.5"/><path d="M2 6.5h12"/></svg>Quote form with service selector & eco option → Apps Script</div>
+          <div class="portfolio-feature"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#2E9E6B" stroke-width="1.5"><path d="M8 2l1.8 3.6L14 6.5l-3 2.9.7 4.1L8 11.5l-3.7 1.9.7-4.1L2 6.5l4.2-.9z"/></svg>Shimmer banner, Nextdoor verified reviews & glowing form</div>
+        </div>
+        <div class="portfolio-footer">
+          <div class="portfolio-tech">
+            <span class="portfolio-tech-pill">GitHub Pages</span>
+            <span class="portfolio-tech-pill">Apps Script</span>
+            <span class="portfolio-tech-pill">Cloudflare</span>
+          </div>
+          <a href="https://mycleanersue.com" target="_blank" class="portfolio-link">Visit site <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Suncoast Client Portal ── -->
+    <div class="portfolio-card">
+      <div class="pv-wrap pv-portal">
+        <div class="portal-ui">
+          <!-- Topbar -->
+          <div class="portal-topbar">
+            <div style="display:flex;align-items:center;gap:6px;">
+              <svg width="18" height="18" viewBox="0 0 36 36" fill="none"><circle cx="18" cy="18" r="17" fill="#0D1B2A" stroke="rgba(249,115,22,0.5)" stroke-width="1.5"/><path d="M7 22 Q18 10 29 22" stroke="#F97316" stroke-width="2" stroke-linecap="round" fill="none"/><circle cx="18" cy="27" r="2.5" fill="#F97316"/></svg>
+              <span style="font-size:10px;color:#fff;font-weight:500;">Suncoast <span style="color:#F97316;">Technology</span></span>
+            </div>
+            <span style="font-size:8px;color:rgba(148,163,184,0.5);">ADMIN PANEL</span>
+          </div>
+          <!-- Layout -->
+          <div class="portal-layout">
+            <!-- Sidebar -->
+            <div class="portal-sidebar">
+              <div class="portal-nav-item portal-nav-active">Dashboard</div>
+              <div class="portal-nav-item">Clients</div>
+              <div class="portal-nav-item">Invoices</div>
+              <div class="portal-nav-item">Analytics</div>
+              <div class="portal-nav-item">Services</div>
+              <div class="portal-nav-item">Support</div>
+            </div>
+            <!-- Main -->
+            <div class="portal-main">
+              <div class="portal-page-title">Admin <span style="color:#F97316;">dashboard</span></div>
+              <!-- Stat cards -->
+              <div class="portal-stats">
+                <div class="portal-stat"><div class="portal-stat-lbl">TOTAL CLIENTS</div><div class="portal-stat-num">3</div></div>
+                <div class="portal-stat"><div class="portal-stat-lbl">ACTIVE</div><div class="portal-stat-num">3</div></div>
+                <div class="portal-stat"><div class="portal-stat-lbl">OUTSTANDING</div><div class="portal-stat-num">$0.00</div></div>
+                <div class="portal-stat"><div class="portal-stat-lbl">MRR</div><div class="portal-stat-num" style="color:#F97316;">$50</div></div>
+              </div>
+              <!-- Site status -->
+              <div class="portal-section-lbl">CLIENT SITE STATUS</div>
+              <div class="portal-site-row">
+                <div class="portal-site"><span class="portal-site-dot"></span><span class="portal-site-name">theelectricjungle.com</span><span class="portal-badge-g">Online</span><span class="portal-badge-g">SSL ✓</span></div>
+                <div class="portal-site"><span class="portal-site-dot"></span><span class="portal-site-name">mycleanersue.com</span><span class="portal-badge-g">Online</span><span class="portal-badge-g">SSL ✓</span></div>
+              </div>
+              <!-- Quick actions -->
+              <div class="portal-section-lbl">QUICK ACTIONS</div>
+              <div class="portal-actions">
+                <div class="portal-action">+ Add client</div>
+                <div class="portal-action">📄 Create invoice</div>
+                <div class="portal-action">📢 Post update</div>
+                <div class="portal-action">⭐ Services</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="portfolio-body">
+        <div class="portfolio-tag">SaaS Platform · Client Management</div>
+        <div class="portfolio-title">Suncoast Client Portal</div>
+        <div class="portfolio-desc">Full-stack client management system powering this business. Login, billing, Stripe subscriptions, invoicing, support queue, email automation, and admin analytics.</div>
+        <div class="portfolio-features">
+          <div class="portfolio-feature"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#4FC3F7" stroke-width="1.5"><rect x="2" y="4" width="12" height="9" rx="1.5"/><path d="M2 6.5h12"/></svg>Stripe subscriptions, auto-invoicing & revenue projections</div>
+          <div class="portfolio-feature"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#A78BFA" stroke-width="1.5"><circle cx="8" cy="6" r="3"/><path d="M2 14c0-3.31 2.69-6 6-6s6 2.69 6 6"/></svg>Secure session-token auth with per-client private portals</div>
+          <div class="portfolio-feature"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#2DD4BF" stroke-width="1.5"><path d="M2 10h4M2 6h12M2 14h8"/></svg>MRR tracking, analytics dashboard & support ticket queue</div>
+        </div>
+        <div class="portfolio-footer">
+          <div class="portfolio-tech">
+            <span class="portfolio-tech-pill">Apps Script</span>
+            <span class="portfolio-tech-pill">Stripe</span>
+            <span class="portfolio-tech-pill">Google Sheets</span>
+          </div>
+          <a href="login.html" class="portfolio-link">View portal <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
 <!-- CTA -->
 <section class="cta-section" id="contact">
   <div class="cta-bg"></div>
@@ -821,6 +1141,7 @@
   <div class="footer-links">
     <a href="#capabilities">Capabilities</a>
     <a href="#how">Process</a>
+    <a href="#work">Work</a>
     <a href="#contact">Contact</a>
     <a href="login.html">Client portal</a>
   </div>
@@ -892,7 +1213,6 @@ window.addEventListener('scroll', () => {
     scrollY > 40 ? 'rgba(4,8,15,0.85)' : 'rgba(4,8,15,0.6)';
 });
 
-// ── INQUIRY MODAL ──
 const API_INQUIRY = 'https://script.google.com/macros/s/AKfycbyxg5LlS9eUx6VSiD_VSzE0RD94STkBAK4Hc-h14T_YU5ikqXGE3dz-Fvt1kCAE-9XRLw/exec';
 
 function openInquiry() {
@@ -982,7 +1302,7 @@ async function handleConsultSubmit() {
 }
 </script>
 
-<div style="text-align:center;padding:12px;font-size:11px;color:rgba(148,163,184,0.15);">Suncoast Technology · index.html · v2.8modalmodal</div>
+<div style="text-align:center;padding:12px;font-size:11px;color:rgba(148,163,184,0.15);">Suncoast Technology · index.html · v2.9</div>
 
 <script>
   // Lock horizontal scroll
