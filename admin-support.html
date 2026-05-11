@@ -225,11 +225,7 @@
     const res=await fetch(API,{method:'POST',body:JSON.stringify({action,token,client_id:clientId,...extra})});
     return res.json();
   }
-  function handleLogout(){
-    fetch(API,{method:'POST',body:JSON.stringify({action:'logout',token})});
-    localStorage.clear();
-    window.location.href='login.html';
-  }
+ 
 
   let allRequests = [];
   let currentRequest = null;
@@ -353,6 +349,7 @@
   document.documentElement.style.overflowX = 'hidden';
 </script>
 
+<script src="sidebar.js"></script>  <!-- ADD THIS -->
 <script src="ai-assistant.js"></script>
 </body>
 </html>
