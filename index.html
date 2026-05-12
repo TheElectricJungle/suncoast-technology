@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Suncoast Technology — AI-Powered Web Development</title>
-  <meta name="description" content="Custom websites, client portals, and AI-powered web applications built for small businesses." />
+  <meta name="description" content="Bespoke digital products built for scale. High-fidelity UI/UX, custom full-stack development, and native SEO engineered as one seamless pipeline." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@400;500&family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&family=Inter:wght@600;700;800;900&display=swap" rel="stylesheet" />
@@ -64,7 +64,7 @@
     .hero-headline .w1{display:block;color:#fff;font-weight:400;}
     .hero-headline .w2{display:block;font-weight:500;position:relative;}
     .gradient-text{background:linear-gradient(135deg,#4FC3F7 0%,#A78BFA 35%,#F472B6 65%,#F97316 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;background-size:200% 200%;animation:gradShift 6s ease-in-out infinite;}
-    @keyframes gradShift{0%,100%{background-position:0% 50%;}50%{background-position:100% 50%};}
+    @keyframes gradShift{0%,100%{background-position:0% 50%;}50%{background-position:100% 50%};} 
 
     .hero-sub{font-size:clamp(16px,2vw,20px);color:rgba(148,163,184,0.85);max-width:540px;line-height:1.75;margin:0 0 52px;font-weight:300;animation:fadeUp 1s ease 0.3s both;}
 
@@ -76,6 +76,8 @@
     .btn-ghost{display:inline-flex;align-items:center;gap:8px;padding:15px 32px;border-radius:10px;font-size:15px;font-weight:400;text-decoration:none;color:rgba(255,255,255,0.7);background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);transition:all 0.2s;backdrop-filter:blur(10px);}
     .btn-ghost:hover{background:rgba(255,255,255,0.08);color:#fff;border-color:rgba(255,255,255,0.2);}
 
+    /* Orbiting rings */
+    .orbit-ring{position:absolute;border-radius:50%;border:1px solid;pointer-events:none;animation:spin linear infinite;}
     @keyframes spin{from{transform:translate(-50%,-50%) rotate(0deg);}to{transform:translate(-50%,-50%) rotate(360deg);}}
 
     /* ── CAPABILITIES ── */
@@ -85,6 +87,25 @@
     .section-title{font-family:'Playfair Display',serif;font-size:clamp(34px,4vw,56px);line-height:1.05;letter-spacing:-0.02em;color:#fff;margin:0 0 16px;}
     .section-title em{font-style:normal;background:linear-gradient(135deg,#4FC3F7,#A78BFA);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
     .section-sub{font-size:17px;color:var(--muted);max-width:500px;margin:0 auto;line-height:1.7;font-weight:300;}
+
+    .caps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.06);border-radius:24px;overflow:hidden;}
+    .cap-item{background:rgba(4,8,15,0.8);padding:36px 32px;position:relative;overflow:hidden;transition:background 0.3s;}
+    .cap-item::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity 0.3s;pointer-events:none;}
+    .cap-item:hover{background:rgba(255,255,255,0.03);}
+    .cap-item:hover::before{opacity:1;}
+    .cap-item.c1::before{background:radial-gradient(circle at 0% 0%,rgba(79,195,247,0.08),transparent 60%);}
+    .cap-item.c2::before{background:radial-gradient(circle at 50% 0%,rgba(167,139,250,0.08),transparent 60%);}
+    .cap-item.c3::before{background:radial-gradient(circle at 100% 0%,rgba(244,114,182,0.08),transparent 60%);}
+    .cap-item.c4::before{background:radial-gradient(circle at 0% 100%,rgba(45,212,191,0.08),transparent 60%);}
+    .cap-item.c5::before{background:radial-gradient(circle at 50% 100%,rgba(249,115,22,0.08),transparent 60%);}
+    .cap-item.c6::before{background:radial-gradient(circle at 100% 100%,rgba(251,191,36,0.08),transparent 60%);}
+    .cap-icon-wrap{margin:0 0 20px;}
+    .cap-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;}
+    .cap-title{font-size:17px;font-weight:500;color:#fff;margin:0 0 10px;letter-spacing:-0.01em;}
+    .cap-desc{font-size:14px;color:var(--muted);line-height:1.7;font-weight:300;}
+    .cap-features{list-style:none;margin:16px 0 0;display:flex;flex-direction:column;gap:7px;}
+    .cap-features li{font-size:12px;color:rgba(148,163,184,0.6);display:flex;align-items:center;gap:7px;}
+    .cap-features li::before{content:'';width:4px;height:4px;border-radius:50%;flex-shrink:0;}
 
     /* ── HOW IT WORKS ── */
     .how-section{padding:120px 24px;max-width:1200px;margin:0 auto;}
@@ -206,11 +227,16 @@
       footer{flex-direction:column;text-align:center;padding:24px;}
       .footer-links{justify-content:center;}
     }
-
+  
     /* ── MOBILE LOCK ── */
-    html, body{overflow-x:hidden;max-width:100vw;}
-    img, video, iframe, table{max-width:100%;}
-
+    html, body {
+      overflow-x: hidden;
+      max-width: 100vw;
+    }
+    img, video, iframe, table {
+      max-width: 100%;
+    }
+  
     /* ── BENTO GRID ── */
     .bento-grid{display:grid;grid-template-columns:repeat(12,1fr);grid-template-rows:auto;gap:14px;margin-top:60px;}
     .bento-card{background:rgba(8,14,24,0.85);border:1px solid rgba(255,255,255,0.07);border-radius:20px;padding:28px;position:relative;overflow:hidden;transition:border-color 0.3s,transform 0.3s;backdrop-filter:blur(20px);}
@@ -235,6 +261,7 @@
       .bento-booking,.bento-portal,.bento-showcase,.bento-sm{grid-column:span 1;}
     }
 
+  
     /* ── FIXED LEFT NAV ── */
     .left-nav{position:fixed;left:0;top:0;bottom:0;width:56px;z-index:150;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:20px 0;transition:width 0.25s ease,background 0.25s ease;}
     .left-nav:hover{width:180px;background:rgba(4,8,15,0.92);backdrop-filter:blur(20px);border-right:1px solid rgba(255,255,255,0.06);}
@@ -246,6 +273,7 @@
     .left-nav-item:hover .left-nav-dot{background:#fff;}
     .left-nav-label{opacity:0;transition:opacity 0.2s;}
     .left-nav:hover .left-nav-label{opacity:1;}
+    /* Mobile nav toggle */
     .mobile-nav-toggle{display:none;position:fixed;bottom:24px;right:24px;z-index:300;width:48px;height:48px;border-radius:50%;background:var(--orange);border:none;cursor:pointer;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(249,115,22,0.4);}
     .mobile-nav-overlay{display:none;position:fixed;inset:0;z-index:250;background:rgba(4,8,15,0.97);backdrop-filter:blur(20px);flex-direction:column;align-items:center;justify-content:center;gap:8px;}
     .mobile-nav-overlay.open{display:flex;}
@@ -259,15 +287,28 @@
     @media(min-width:901px){
       .content{padding-left:56px;}
     }
+    /* ── AI ASSISTANT SECTION ── */
+    .ai-section-card{padding:48px;}
+    .ai-section-inner{display:flex;gap:48px;align-items:center;position:relative;z-index:1;}
+    .ai-section-copy{flex:1;min-width:0;position:relative;z-index:1;}
+    .ai-section-chat{flex-shrink:0;width:320px;position:relative;z-index:1;}
+    .ai-chat-window{width:100%;background:rgba(6,10,20,0.98);border:1px solid rgba(167,139,250,0.25);border-radius:16px;overflow:hidden;box-shadow:0 0 40px rgba(167,139,250,0.1),0 24px 60px rgba(0,0,0,0.5);}
+    @media(max-width:900px){
+      .ai-section-card{padding:28px 20px;}
+      .ai-section-inner{flex-direction:column;gap:32px;}
+      .ai-section-chat{width:100%;}
+    }
 
     /* ── PORTFOLIO ── */
     .portfolio-section{padding:120px 24px;max-width:1200px;margin:0 auto;}
     .portfolio-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(520px,1fr));gap:24px;margin-top:60px;}
     .portfolio-card{background:rgba(8,14,24,0.85);border:1px solid rgba(255,255,255,0.07);border-radius:20px;overflow:hidden;transition:transform 0.3s,border-color 0.3s;backdrop-filter:blur(20px);display:flex;flex-direction:column;}
     .portfolio-card:hover{transform:translateY(-4px);border-color:rgba(255,255,255,0.15);}
+    /* Preview window */
     .pv-wrap{height:240px;overflow:hidden;position:relative;flex-shrink:0;}
     .pv-sg{background:linear-gradient(145deg,#EBF6FD,#D2ECFA);}
     .pv-portal{background:#04080F;}
+    /* Shared card body */
     .portfolio-body{padding:22px;display:flex;flex-direction:column;gap:0;}
     .portfolio-tag{font-size:10px;color:var(--orange);font-weight:500;letter-spacing:0.12em;text-transform:uppercase;margin:0 0 6px;}
     .portfolio-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:500;color:#fff;margin:0 0 8px;letter-spacing:-0.01em;}
@@ -280,7 +321,6 @@
     .portfolio-tech-pill{font-size:10px;padding:3px 9px;border-radius:20px;background:rgba(255,255,255,0.05);color:rgba(148,163,184,0.6);border:1px solid rgba(255,255,255,0.07);}
     .portfolio-link{font-size:12px;color:#4FC3F7;text-decoration:none;font-weight:500;white-space:nowrap;display:inline-flex;align-items:center;gap:4px;}
     .portfolio-link:hover{color:#fff;}
-    @media(max-width:900px){.portfolio-grid{grid-template-columns:1fr;}}
 
     /* ── PTP hero preview ── */
     .pv-ptp{background:#ffffff;overflow:hidden;}
@@ -355,59 +395,60 @@
     .portal-actions{display:flex;gap:4px;flex-wrap:wrap;}
     .portal-action{font-size:7px;padding:3px 7px;border-radius:5px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.6);}
 
-    /* ── GEMINI BUTTON ── */
-    .btn-gemini{position:relative;display:inline-flex;align-items:center;justify-content:center;padding:2px;border-radius:12px;background:linear-gradient(135deg,#4FC3F7,#A78BFA,#F472B6,#F97316);background-size:300% 300%;animation:gradientShift 4s ease infinite;border:none;cursor:pointer;text-decoration:none;box-shadow:0 0 30px rgba(167,139,250,0.25),0 0 60px rgba(79,195,247,0.1);transition:box-shadow 0.3s,transform 0.2s;}
-    .btn-gemini:hover{box-shadow:0 0 40px rgba(167,139,250,0.4),0 0 80px rgba(79,195,247,0.2);transform:translateY(-2px);}
-    .btn-gemini-text{display:block;background:#04080F;border-radius:10px;padding:13px 32px;font-size:15px;font-weight:500;color:#fff;font-family:'DM Sans',sans-serif;letter-spacing:0.2px;white-space:nowrap;}
-    .btn-gemini:hover .btn-gemini-text{background:rgba(4,8,15,0.85);}
-    @keyframes gradientShift{0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
+    @media(max-width:900px){.portfolio-grid{grid-template-columns:1fr;}}
 
-    /* ── AI ASSISTANT MOBILE FIX ── */
-    .ai-inner{
-      display:flex;
-      gap:48px;
+    .btn-gemini{
+      position:relative;
+      display:inline-flex;
       align-items:center;
-      position:relative;
-      z-index:1;
+      justify-content:center;
+      padding:2px;
+      border-radius:12px;
+      background:linear-gradient(135deg,#4FC3F7,#A78BFA,#F472B6,#F97316);
+      background-size:300% 300%;
+      animation:gradientShift 4s ease infinite;
+      border:none;
+      cursor:pointer;
+      text-decoration:none;
+      box-shadow:0 0 30px rgba(167,139,250,0.25),0 0 60px rgba(79,195,247,0.1);
+      transition:box-shadow 0.3s,transform 0.2s;
     }
-    .ai-copy{
-      flex:1;
-      min-width:0;
-      position:relative;
-      z-index:1;
+    .btn-gemini:hover{
+      box-shadow:0 0 40px rgba(167,139,250,0.4),0 0 80px rgba(79,195,247,0.2);
+      transform:translateY(-2px);
     }
-    .ai-chat{
-      flex-shrink:0;
-      width:320px;
-      position:relative;
-      z-index:1;
+    .btn-gemini-text{
+      display:block;
+      background:#04080F;
+      border-radius:10px;
+      padding:13px 32px;
+      font-size:15px;
+      font-weight:500;
+      color:#fff;
+      font-family:'DM Sans',sans-serif;
+      letter-spacing:0.2px;
+      white-space:nowrap;
     }
-    .ai-chat-inner{
-      width:100%;
-      background:rgba(6,10,20,0.98);
-      border:1px solid rgba(167,139,250,0.25);
-      border-radius:16px;
-      overflow:hidden;
-      box-shadow:0 0 40px rgba(167,139,250,0.1),0 24px 60px rgba(0,0,0,0.5);
+    .btn-gemini:hover .btn-gemini-text{
+      background:rgba(4,8,15,0.85);
     }
-    @media(max-width:900px){
-      .ai-inner{
-        flex-direction:column;
-        gap:32px;
-      }
-      .ai-chat{
-        width:100%;
-      }
+    @keyframes gradientShift{
+      0%{background-position:0% 50%;}
+      50%{background-position:100% 50%;}
+      100%{background-position:0% 50%;}
     }
+
   </style>
 
 <script>
+  // Prevent pinch zoom
   document.addEventListener('touchmove', function(e) {
     if (e.touches.length > 1) e.preventDefault();
   }, { passive: false });
   document.addEventListener('gesturestart', function(e) {
     e.preventDefault();
   });
+  // Reset zoom on load/refresh
   document.addEventListener('DOMContentLoaded', function() {
     var meta = document.querySelector('meta[name="viewport"]');
     if (meta) {
@@ -418,6 +459,7 @@
 </head>
 <body>
 
+<!-- Gemini aurora canvas -->
 <div class="scene">
   <canvas id="aurora"></canvas>
   <div class="grain"></div>
@@ -481,22 +523,23 @@
 
 <!-- HERO -->
 <section class="hero">
+  <!-- Orbit rings -->
   <div style="position:absolute;top:50%;left:50%;width:600px;height:600px;border-radius:50%;border:1px solid rgba(79,195,247,0.06);transform:translate(-50%,-50%);animation:spin 400s linear infinite;pointer-events:none;"></div>
   <div style="position:absolute;top:50%;left:50%;width:900px;height:900px;border-radius:50%;border:1px solid rgba(167,139,250,0.04);transform:translate(-50%,-50%);animation:spin 300s linear infinite reverse;pointer-events:none;"></div>
   <div style="position:absolute;top:50%;left:50%;width:1200px;height:1200px;border-radius:50%;border:1px solid rgba(249,115,22,0.03);transform:translate(-50%,-50%);animation:spin 400s linear infinite;pointer-events:none;"></div>
 
   <div class="hero-eyebrow">
     <div class="eyebrow-line"></div>
-    <span class="eyebrow-text">AI-powered · custom-built · fully yours</span>
+    <span class="eyebrow-text">Full-stack · UI/UX · SEO · Custom-built · Fully yours</span>
     <div class="eyebrow-line r"></div>
   </div>
 
   <h1 class="hero-headline">
-    <span class="w1">Your vision,</span>
-    <span class="w2"><span class="gradient-text">beautifully built.</span></span>
+    <span class="w1">Bespoke digital products,</span>
+    <span class="w2"><span class="gradient-text">built for scale.</span></span>
   </h1>
 
-  <p class="hero-sub">Websites, booking systems, client portals, online stores, custom domains, and email — everything your business needs online, built with AI and delivered fast.</p>
+  <p class="hero-sub">High-fidelity UI/UX, custom full-stack development, and native SEO — engineered as one seamless pipeline. No agency bloat, no siloed handoffs. Enterprise-grade execution without the enterprise price tag.</p>
 
   <div class="hero-actions">
     <a href="#contact" class="btn-gemini">
@@ -514,13 +557,16 @@
     <p class="section-sub">From a simple landing page to a production-grade platform with real-time data, payments, and automation.</p>
   </div>
 
+  <!-- BENTO GRID -->
   <div class="bento-grid reveal">
 
+    <!-- ROW 1: Booking (wide) + Portal (tall) -->
     <div class="bento-card bento-booking">
       <div class="bento-glow" style="background:radial-gradient(circle at 20% 50%,rgba(167,139,250,0.15),transparent 60%);"></div>
       <div class="bento-label" style="color:#A78BFA;border-color:rgba(167,139,250,0.2);background:rgba(167,139,250,0.08);">Booking & calendar systems</div>
       <h3 class="bento-title">Online booking that<br>works while you sleep.</h3>
       <p class="bento-desc">Clients pick a time, pay a deposit, get a confirmation — all automatically. Your calendar stays up to date. No double bookings, no back-and-forth. It just works.</p>
+      <!-- Mini calendar mockup -->
       <div class="bento-mockup" style="margin-top:24px;">
         <div style="background:rgba(167,139,250,0.06);border:1px solid rgba(167,139,250,0.15);border-radius:12px;padding:16px;">
           <div style="display:flex;align-items:center;justify-content:space-between;margin:0 0 12px 0;">
@@ -544,11 +590,13 @@
       </div>
     </div>
 
+    <!-- Client portal (tall right) -->
     <div class="bento-card bento-portal">
       <div class="bento-glow" style="background:radial-gradient(circle at 80% 20%,rgba(45,212,191,0.12),transparent 60%);"></div>
       <div class="bento-label" style="color:#2DD4BF;border-color:rgba(45,212,191,0.2);background:rgba(45,212,191,0.07);">Client portals</div>
       <h3 class="bento-title">Your clients,<br>always in the loop.</h3>
       <p class="bento-desc">Give your clients their own private login. They can view invoices, make payments, see their site status, and send you requests — all without emailing you directly.</p>
+      <!-- Portal mockup -->
       <div class="bento-mockup" style="margin-top:20px;">
         <div style="background:rgba(8,16,28,0.9);border:1px solid rgba(255,255,255,0.08);border-radius:10px;overflow:hidden;">
           <div style="display:flex;align-items:center;gap:5px;padding:8px 10px;background:rgba(255,255,255,0.02);border-bottom:1px solid rgba(255,255,255,0.05);">
@@ -578,13 +626,26 @@
         </div>
       </div>
       <div style="margin-top:16px;display:flex;flex-direction:column;gap:7px;">
-        <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:rgba(148,163,184,0.7);"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#2DD4BF" stroke-width="1.5"><path d="M13 11l-5 3-5-3V5l5-3 5 3v6z"/></svg>Admin dashboard to manage all clients</div>
-        <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:rgba(148,163,184,0.7);"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#2DD4BF" stroke-width="1.5"><rect x="2" y="4" width="12" height="9" rx="1.5"/><path d="M2 6.5h12"/></svg>Send invoices and collect payment online</div>
-        <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:rgba(148,163,184,0.7);"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#2DD4BF" stroke-width="1.5"><path d="M14 10a2 2 0 01-2 2H4.5L2 14V4a2 2 0 012-2h8a2 2 0 012 2v6z"/></svg>Built-in support ticket system</div>
-        <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:rgba(148,163,184,0.7);"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#2DD4BF" stroke-width="1.5"><circle cx="8" cy="6" r="3"/><path d="M2 14c0-3.31 2.69-6 6-6s6 2.69 6 6"/></svg>Each client gets their own secure login</div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:rgba(148,163,184,0.7);">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#2DD4BF" stroke-width="1.5"><path d="M13 11l-5 3-5-3V5l5-3 5 3v6z"/></svg>
+          Admin dashboard to manage all clients
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:rgba(148,163,184,0.7);">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#2DD4BF" stroke-width="1.5"><rect x="2" y="4" width="12" height="9" rx="1.5"/><path d="M2 6.5h12"/></svg>
+          Send invoices and collect payment online
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:rgba(148,163,184,0.7);">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#2DD4BF" stroke-width="1.5"><path d="M14 10a2 2 0 01-2 2H4.5L2 14V4a2 2 0 012-2h8a2 2 0 012 2v6z"/></svg>
+          Built-in support ticket system
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:rgba(148,163,184,0.7);">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#2DD4BF" stroke-width="1.5"><circle cx="8" cy="6" r="3"/><path d="M2 14c0-3.31 2.69-6 6-6s6 2.69 6 6"/></svg>
+          Each client gets their own secure login
+        </div>
       </div>
     </div>
 
+    <!-- ROW 2: Payments + Websites + Stores -->
     <div class="bento-card bento-sm">
       <div class="bento-glow" style="background:radial-gradient(circle at 50% 0%,rgba(244,114,182,0.12),transparent 70%);"></div>
       <div class="bento-label" style="color:#F472B6;border-color:rgba(244,114,182,0.2);background:rgba(244,114,182,0.07);">Payments</div>
@@ -621,6 +682,7 @@
       </div>
     </div>
 
+    <!-- ROW 3: Suncoast showcase (wide) + Email + Automation -->
     <div class="bento-card bento-showcase">
       <div class="bento-glow" style="background:radial-gradient(circle at 30% 50%,rgba(249,115,22,0.1),transparent 60%);"></div>
       <div class="bento-label" style="color:#F97316;border-color:rgba(249,115,22,0.2);background:rgba(249,115,22,0.08);">Built with this site</div>
@@ -660,97 +722,113 @@
       </div>
     </div>
 
+
   </div>
 </section>
 
 <!-- AI ASSISTANT -->
 <section style="padding:0 24px 80px;max-width:1200px;margin:0 auto;">
-  <div class="reveal" style="background:rgba(8,14,24,0.85);border:1px solid rgba(167,139,250,0.25);border-radius:20px;padding:48px;backdrop-filter:blur(20px);position:relative;overflow:hidden;">
+  <div class="reveal ai-section-card" style="background:rgba(8,14,24,0.85);border:1px solid rgba(167,139,250,0.25);border-radius:20px;backdrop-filter:blur(20px);position:relative;overflow:hidden;">
+    <!-- glow -->
     <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 65% 50%,rgba(167,139,250,0.09),transparent 60%),radial-gradient(ellipse at 10% 80%,rgba(79,195,247,0.05),transparent 50%);pointer-events:none;"></div>
-
-    <div class="ai-inner">
-      <!-- Copy -->
-      <div class="ai-copy">
-        <div class="bento-label" style="color:#A78BFA;border-color:rgba(167,139,250,0.25);background:rgba(167,139,250,0.08);display:inline-flex;">AI assistants</div>
-        <h3 class="bento-title" style="font-size:clamp(26px,3vw,42px);line-height:1.05;margin-top:12px;">Your site gets<br>its own AI brain.</h3>
-        <p class="bento-desc" style="font-size:15px;margin-top:14px;line-height:1.8;max-width:420px;">We build custom AI assistants directly into your website — trained on your business, your services, and your voice. Customers get instant answers 24/7. You stop answering the same questions over and over.</p>
-        <p style="font-size:12px;color:rgba(167,139,250,0.6);margin-top:8px;">Powered by Claude AI · Live on your site · Fully customized to you.</p>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:20px;">
-          <span style="background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.2);border-radius:20px;padding:5px 14px;font-size:12px;color:#A78BFA;">Answers questions 24/7</span>
-          <span style="background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.2);border-radius:20px;padding:5px 14px;font-size:12px;color:#A78BFA;">Books appointments</span>
-          <span style="background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.2);border-radius:20px;padding:5px 14px;font-size:12px;color:#A78BFA;">Captures leads</span>
-          <span style="background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.2);border-radius:20px;padding:5px 14px;font-size:12px;color:#A78BFA;">Works while you sleep</span>
-          <span style="background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.2);border-radius:20px;padding:5px 14px;font-size:12px;color:#A78BFA;">Trained on your business</span>
-        </div>
+    <div class="ai-section-inner">
+    <!-- Left copy -->
+    <div class="ai-section-copy">
+      <div class="bento-label" style="color:#A78BFA;border-color:rgba(167,139,250,0.25);background:rgba(167,139,250,0.08);display:inline-flex;">Next-gen development</div>
+      <h3 class="bento-title" style="font-size:clamp(26px,3vw,42px);line-height:1.05;margin-top:12px;">AI-accelerated builds.<br>Human strategic control.</h3>
+      <p class="bento-desc" style="font-size:15px;margin-top:14px;line-height:1.8;max-width:420px;">We use state-of-the-art AI to handle the heavy code syntax — eliminating human error and compressing timelines dramatically. That frees us to focus entirely on what actually drives revenue: elite UI/UX design, airtight database architecture, and SEO baked into the foundation from day one — not tacked on later.</p>
+      <p style="font-size:12px;color:rgba(167,139,250,0.6);margin-top:8px;">Powered by Claude AI · Strategic human oversight · Revenue-focused execution.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:20px;">
+        <span style="background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.2);border-radius:20px;padding:5px 14px;font-size:12px;color:#A78BFA;">Zero coding errors</span>
+        <span style="background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.2);border-radius:20px;padding:5px 14px;font-size:12px;color:#A78BFA;">10× faster delivery</span>
+        <span style="background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.2);border-radius:20px;padding:5px 14px;font-size:12px;color:#A78BFA;">Elite UI/UX focus</span>
+        <span style="background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.2);border-radius:20px;padding:5px 14px;font-size:12px;color:#A78BFA;">Native SEO built-in</span>
+        <span style="background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.2);border-radius:20px;padding:5px 14px;font-size:12px;color:#A78BFA;">Scales with your business</span>
       </div>
-
-      <!-- Sonny chat widget -->
-      <div class="ai-chat">
-        <div class="ai-chat-inner">
-          <div style="padding:14px 16px;background:rgba(167,139,250,0.07);border-bottom:1px solid rgba(167,139,250,0.12);display:flex;align-items:center;gap:10px;">
-            <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#A78BFA,#4FC3F7);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:#fff;flex-shrink:0;">S</div>
-            <div>
-              <div style="font-size:13px;font-weight:500;color:#fff;">Sonny</div>
-              <div style="font-size:10px;color:#A78BFA;display:flex;align-items:center;gap:5px;"><span style="width:5px;height:5px;border-radius:50%;background:#A78BFA;display:inline-block;animation:blink 2s infinite;flex-shrink:0;"></span>AI assistant · always on</div>
+    </div>
+    <!-- Right: Sonny chat -->
+    <div class="ai-section-chat">
+      <div class="ai-chat-window">
+        <!-- Header -->
+        <div style="padding:14px 16px;background:rgba(167,139,250,0.07);border-bottom:1px solid rgba(167,139,250,0.12);display:flex;align-items:center;gap:10px;">
+          <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#A78BFA,#4FC3F7);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:#fff;flex-shrink:0;">S</div>
+          <div>
+            <div style="font-size:13px;font-weight:500;color:#fff;">Sonny</div>
+            <div style="font-size:10px;color:#A78BFA;display:flex;align-items:center;gap:5px;">
+              <span style="width:5px;height:5px;border-radius:50%;background:#A78BFA;display:inline-block;animation:blink 2s infinite;flex-shrink:0;"></span>AI assistant · always on
             </div>
           </div>
-          <div style="padding:14px;display:flex;flex-direction:column;gap:10px;">
-            <div style="display:flex;justify-content:flex-start;">
-              <div style="max-width:80%;padding:9px 13px;border-radius:14px;border-bottom-left-radius:4px;font-size:12px;line-height:1.5;background:rgba(167,139,250,0.1);border:1px solid rgba(167,139,250,0.15);color:rgba(255,255,255,0.85);">Hey! I'm Sonny 👋 What can I help you with today?</div>
-            </div>
-            <div style="display:flex;justify-content:flex-end;">
-              <div style="max-width:80%;padding:9px 13px;border-radius:14px;border-bottom-right-radius:4px;font-size:12px;line-height:1.5;background:linear-gradient(135deg,rgba(167,139,250,0.25),rgba(79,195,247,0.15));border:1px solid rgba(167,139,250,0.25);color:#fff;">What services do you offer?</div>
-            </div>
-            <div style="display:flex;justify-content:flex-start;">
-              <div style="max-width:80%;padding:9px 13px;border-radius:14px;border-bottom-left-radius:4px;font-size:12px;line-height:1.5;background:rgba(167,139,250,0.1);border:1px solid rgba(167,139,250,0.15);color:rgba(255,255,255,0.85);">We build custom websites, booking systems, client portals, and online stores — all from scratch. Want me to help figure out what you need? 🚀</div>
-            </div>
-            <div style="display:flex;justify-content:flex-end;">
-              <div style="max-width:80%;padding:9px 13px;border-radius:14px;border-bottom-right-radius:4px;font-size:12px;line-height:1.5;background:linear-gradient(135deg,rgba(167,139,250,0.25),rgba(79,195,247,0.15));border:1px solid rgba(167,139,250,0.25);color:#fff;">How fast can you launch?</div>
-            </div>
-            <div style="display:flex;justify-content:flex-start;">
-              <div style="max-width:80%;padding:9px 13px;border-radius:14px;border-bottom-left-radius:4px;font-size:12px;line-height:1.5;background:rgba(167,139,250,0.1);border:1px solid rgba(167,139,250,0.15);color:rgba(255,255,255,0.85);">Most projects ship in days, not months. Want to get started? I can connect you right now ✨</div>
-            </div>
+        </div>
+        <!-- Messages -->
+        <div style="padding:14px;display:flex;flex-direction:column;gap:10px;">
+          <div style="display:flex;justify-content:flex-start;">
+            <div style="max-width:80%;padding:9px 13px;border-radius:14px;border-bottom-left-radius:4px;font-size:12px;line-height:1.5;background:rgba(167,139,250,0.1);border:1px solid rgba(167,139,250,0.15);color:rgba(255,255,255,0.85);">Hey! I'm Sonny 👋 What can I help you with today?</div>
           </div>
-          <div style="display:flex;gap:6px;padding:8px 14px;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,0.05);">
-            <span style="font-size:11px;padding:4px 10px;border-radius:20px;background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.2);color:#A78BFA;white-space:nowrap;">See pricing</span>
-            <span style="font-size:11px;padding:4px 10px;border-radius:20px;background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.2);color:#A78BFA;white-space:nowrap;">Book a call</span>
-            <span style="font-size:11px;padding:4px 10px;border-radius:20px;background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.2);color:#A78BFA;white-space:nowrap;">View portfolio</span>
+          <div style="display:flex;justify-content:flex-end;">
+            <div style="max-width:80%;padding:9px 13px;border-radius:14px;border-bottom-right-radius:4px;font-size:12px;line-height:1.5;background:linear-gradient(135deg,rgba(167,139,250,0.25),rgba(79,195,247,0.15));border:1px solid rgba(167,139,250,0.25);color:#fff;">What services do you offer?</div>
           </div>
-          <div style="display:flex;align-items:center;gap:8px;padding:10px 14px;border-top:1px solid rgba(255,255,255,0.05);">
-            <div style="flex:1;font-size:12px;color:rgba(148,163,184,0.4);background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:8px 12px;">Ask me anything...</div>
-            <div style="width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#A78BFA,#4FC3F7);display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;">
-              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2L2 8l4 2 2 4 6-12z" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </div>
+          <div style="display:flex;justify-content:flex-start;">
+            <div style="max-width:80%;padding:9px 13px;border-radius:14px;border-bottom-left-radius:4px;font-size:12px;line-height:1.5;background:rgba(167,139,250,0.1);border:1px solid rgba(167,139,250,0.15);color:rgba(255,255,255,0.85);">We build custom websites, booking systems, client portals, and online stores — all from scratch. Want me to help figure out what you need? 🚀</div>
+          </div>
+          <div style="display:flex;justify-content:flex-end;">
+            <div style="max-width:80%;padding:9px 13px;border-radius:14px;border-bottom-right-radius:4px;font-size:12px;line-height:1.5;background:linear-gradient(135deg,rgba(167,139,250,0.25),rgba(79,195,247,0.15));border:1px solid rgba(167,139,250,0.25);color:#fff;">How fast can you launch?</div>
+          </div>
+          <div style="display:flex;justify-content:flex-start;">
+            <div style="max-width:80%;padding:9px 13px;border-radius:14px;border-bottom-left-radius:4px;font-size:12px;line-height:1.5;background:rgba(167,139,250,0.1);border:1px solid rgba(167,139,250,0.15);color:rgba(255,255,255,0.85);">Most projects ship in days, not months. Want to get started? I can connect you right now ✨</div>
+          </div>
+        </div>
+        <!-- Chips -->
+        <div style="display:flex;gap:6px;padding:8px 14px;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,0.05);">
+          <span style="font-size:11px;padding:4px 10px;border-radius:20px;background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.2);color:#A78BFA;white-space:nowrap;">See pricing</span>
+          <span style="font-size:11px;padding:4px 10px;border-radius:20px;background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.2);color:#A78BFA;white-space:nowrap;">Book a call</span>
+          <span style="font-size:11px;padding:4px 10px;border-radius:20px;background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.2);color:#A78BFA;white-space:nowrap;">View portfolio</span>
+        </div>
+        <!-- Input -->
+        <div style="display:flex;align-items:center;gap:8px;padding:10px 14px;border-top:1px solid rgba(255,255,255,0.05);">
+          <div style="flex:1;font-size:12px;color:rgba(148,163,184,0.4);background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:8px 12px;">Ask me anything...</div>
+          <div style="width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#A78BFA,#4FC3F7);display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2L2 8l4 2 2 4 6-12z" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </div>
         </div>
       </div>
     </div>
+    </div><!-- /ai-section-inner -->
   </div>
 </section>
-
-<!-- HOW IT WORKS -->
 <section class="how-section" id="how">
   <div class="caps-header reveal">
     <div class="section-label">The process</div>
-    <h2 class="section-title">Shipped fast.<br><em>Built to last.</em></h2>
+    <h2 class="section-title">End-to-end pipeline.<br><em>Zero handoff gaps.</em></h2>
   </div>
   <div class="how-inner">
     <div class="how-steps reveal">
       <div class="how-step">
         <div class="step-num" style="background:rgba(79,195,247,0.08);border:1px solid rgba(79,195,247,0.15);color:#4FC3F7;">01</div>
-        <div><div class="step-title">Discovery</div><div class="step-desc">We talk through your goals, current pain points, and what success looks like. No jargon, no upsells — just an honest conversation about what will actually work for your business.</div></div>
+        <div>
+          <div class="step-title">Discovery</div>
+          <div class="step-desc">We talk through your goals, current pain points, and what success looks like. No jargon, no upsells — just an honest conversation about what will actually work for your business.</div>
+        </div>
       </div>
       <div class="how-step">
         <div class="step-num" style="background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.15);color:#A78BFA;">02</div>
-        <div><div class="step-title">Design & build</div><div class="step-desc">AI-assisted development means we move fast without cutting corners. Every component is built for your specific use case — not copied from a template.</div></div>
+        <div>
+          <div class="step-title">Design & build</div>
+          <div class="step-desc">AI-assisted development means we move fast without cutting corners. Every component is built for your specific use case — not copied from a template.</div>
+        </div>
       </div>
       <div class="how-step">
         <div class="step-num" style="background:rgba(244,114,182,0.08);border:1px solid rgba(244,114,182,0.15);color:#F472B6;">03</div>
-        <div><div class="step-title">Launch</div><div class="step-desc">We handle the full deployment — domain, DNS, hosting, SSL, and email setup. You own everything. No vendor lock-in, no monthly platform fees.</div></div>
+        <div>
+          <div class="step-title">Launch</div>
+          <div class="step-desc">We handle the full deployment — domain, DNS, hosting, SSL, and email setup. You own everything. No vendor lock-in, no monthly platform fees.</div>
+        </div>
       </div>
       <div class="how-step">
         <div class="step-num" style="background:rgba(45,212,191,0.08);border:1px solid rgba(45,212,191,0.15);color:#2DD4BF;">04</div>
-        <div><div class="step-title">Ongoing</div><div class="step-desc">Updates, new features, and maintenance — managed through your client portal. Submit a request through your portal and we get to work.</div></div>
+        <div>
+          <div class="step-title">Ongoing</div>
+          <div class="step-desc">Updates, new features, and maintenance — managed through your client portal. Submit a request through your portal and we get to work.</div>
+        </div>
       </div>
     </div>
     <div class="how-visual reveal">
@@ -774,10 +852,22 @@
             <div class="mock-label">Current invoice</div>
             <div class="mock-amount">$120</div>
             <div class="mock-due">Due June 1, 2026</div>
-            <div class="mock-row" style="margin-top:14px;"><span class="mock-row-label">Plan</span><span class="mock-row-val">Pro Care</span></div>
-            <div class="mock-row"><span class="mock-row-label">Site status</span><span class="mock-badge mb-green">Online</span></div>
-            <div class="mock-row"><span class="mock-row-label">SSL</span><span class="mock-badge mb-green">Active</span></div>
-            <div class="mock-row"><span class="mock-row-label">Last update</span><span class="mock-badge mb-gold">2 days ago</span></div>
+            <div class="mock-row" style="margin-top:14px;">
+              <span class="mock-row-label">Plan</span>
+              <span class="mock-row-val">Pro Care</span>
+            </div>
+            <div class="mock-row">
+              <span class="mock-row-label">Site status</span>
+              <span class="mock-badge mb-green">Online</span>
+            </div>
+            <div class="mock-row">
+              <span class="mock-row-label">SSL</span>
+              <span class="mock-badge mb-green">Active</span>
+            </div>
+            <div class="mock-row">
+              <span class="mock-row-label">Last update</span>
+              <span class="mock-badge mb-gold">2 days ago</span>
+            </div>
             <div class="mock-btn">Pay with card →</div>
           </div>
         </div>
@@ -790,28 +880,28 @@
 <section class="diff-section">
   <div class="caps-header reveal">
     <div class="section-label">Why Suncoast</div>
-    <h2 class="section-title">The numbers<br><em>speak clearly.</em></h2>
+    <h2 class="section-title">No agency bloat.<br><em>Just results.</em></h2>
   </div>
   <div class="diff-grid">
     <div class="diff-card reveal">
       <div class="diff-number" style="background:linear-gradient(135deg,#4FC3F7,#A78BFA);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">10×</div>
       <div class="diff-label">Faster than agencies</div>
-      <div class="diff-desc">AI-assisted development moves at a pace traditional agencies can't match. Most projects launch in days, not months.</div>
+      <div class="diff-desc">Traditional agencies pass projects between designers, developers, and SEO teams — adding weeks of delay. We handle the entire pipeline solo, and ship in days.</div>
     </div>
     <div class="diff-card reveal">
       <div class="diff-number" style="background:linear-gradient(135deg,#F472B6,#F97316);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">100%</div>
       <div class="diff-label">You own everything</div>
-      <div class="diff-desc">Your code, your domain, your hosting. No platform lock-in, no monthly SaaS fees, no dependency on anyone but yourself.</div>
+      <div class="diff-desc">Your code, your domain, your data. No platform lock-in, no monthly SaaS fees. Walk away with full ownership of everything we build — no strings attached.</div>
     </div>
     <div class="diff-card reveal">
       <div class="diff-number" style="background:linear-gradient(135deg,#2DD4BF,#4FC3F7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">$0</div>
       <div class="diff-label">Hidden fees</div>
-      <div class="diff-desc">Transparent pricing, flat rates, and honest scoping. What we quote is what you pay — no surprise invoices mid-project.</div>
+      <div class="diff-desc">Flat-rate pricing. What we quote is exactly what you pay — no surprise invoices, no scope creep billing, no nickel-and-diming for revisions.</div>
     </div>
     <div class="diff-card reveal">
-      <div class="diff-number" style="background:linear-gradient(135deg,#FBBF24,#F97316);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">24h</div>
-      <div class="diff-label">Average response time</div>
-      <div class="diff-desc">Real human support, not a ticket queue. Submit a request through your portal and we're on it — usually the same day.</div>
+      <div class="diff-number" style="background:linear-gradient(135deg,#FBBF24,#F97316);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">1</div>
+      <div class="diff-label">Point of contact</div>
+      <div class="diff-desc">You talk to the same person who designs, codes, and deploys your site. No account managers, no miscommunication, no lost context between departments.</div>
     </div>
   </div>
 </section>
@@ -819,8 +909,8 @@
 <!-- TECH STACK -->
 <section class="tech-section">
   <div class="caps-header reveal" style="text-align:center;">
-    <div class="section-label">Built on</div>
-    <h2 class="section-title" style="font-size:clamp(28px,3vw,40px);">Enterprise tech,<em> small business price.</em></h2>
+    <div class="section-label">The stack</div>
+    <h2 class="section-title" style="font-size:clamp(28px,3vw,40px);">Enterprise capabilities.<em> Zero agency bloat.</em></h2>
   </div>
   <div class="tech-pills reveal">
     <div class="tech-pill"><span class="pill-dot" style="background:#4FC3F7;"></span>GitHub Pages</div>
@@ -836,6 +926,92 @@
   </div>
 </section>
 
+<!-- TOOLKIT + PRICING -->
+<section style="padding:80px 24px 0;max-width:1200px;margin:0 auto;">
+
+  <!-- What's in every build -->
+  <div class="caps-header reveal" style="text-align:center;margin-bottom:48px;">
+    <div class="section-label">What you're actually getting</div>
+    <h2 class="section-title">Engineered into<br><em>every single build.</em></h2>
+    <p class="section-sub">This isn't a checklist of add-ons. It's the baseline — baked into every project from the first line of code.</p>
+  </div>
+
+  <div class="reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-bottom:80px;">
+
+    <div style="background:rgba(8,14,24,0.85);border:1px solid rgba(79,195,247,0.15);border-radius:16px;padding:28px;backdrop-filter:blur(20px);position:relative;overflow:hidden;">
+      <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#4FC3F7,transparent);"></div>
+      <div style="font-size:28px;margin-bottom:14px;">🎯</div>
+      <div style="font-size:15px;font-weight:500;color:#fff;margin-bottom:8px;letter-spacing:-0.01em;">UI/UX Strategy</div>
+      <div style="font-size:13px;color:rgba(148,163,184,0.75);line-height:1.7;font-weight:300;">Intentional user journeys and high-fidelity interfaces designed to capture attention and convert visitors into paying clients — not just look good in a screenshot.</div>
+    </div>
+
+    <div style="background:rgba(8,14,24,0.85);border:1px solid rgba(167,139,250,0.15);border-radius:16px;padding:28px;backdrop-filter:blur(20px);position:relative;overflow:hidden;">
+      <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#A78BFA,transparent);"></div>
+      <div style="font-size:28px;margin-bottom:14px;">💻</div>
+      <div style="font-size:15px;font-weight:500;color:#fff;margin-bottom:8px;letter-spacing:-0.01em;">Custom Full-Stack Architecture</div>
+      <div style="font-size:13px;color:rgba(148,163,184,0.75);line-height:1.7;font-weight:300;">Secure, high-performance database logic and dynamic backend systems built to scale — client portals, booking engines, payment flows, automated workflows. Not a drag-and-drop template.</div>
+    </div>
+
+    <div style="background:rgba(8,14,24,0.85);border:1px solid rgba(45,212,191,0.15);border-radius:16px;padding:28px;backdrop-filter:blur(20px);position:relative;overflow:hidden;">
+      <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#2DD4BF,transparent);"></div>
+      <div style="font-size:28px;margin-bottom:14px;">🚀</div>
+      <div style="font-size:15px;font-weight:500;color:#fff;margin-bottom:8px;letter-spacing:-0.01em;">Structural SEO</div>
+      <div style="font-size:13px;color:rgba(148,163,184,0.75);line-height:1.7;font-weight:300;">Lightning-fast load times, clean metadata, and Google-optimized site architecture written into the core code from day one — not tacked on as an afterthought once the site is live.</div>
+    </div>
+
+    <div style="background:rgba(8,14,24,0.85);border:1px solid rgba(249,115,22,0.15);border-radius:16px;padding:28px;backdrop-filter:blur(20px);position:relative;overflow:hidden;">
+      <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#F97316,transparent);"></div>
+      <div style="font-size:28px;margin-bottom:14px;">📱</div>
+      <div style="font-size:15px;font-weight:500;color:#fff;margin-bottom:8px;letter-spacing:-0.01em;">Cross-Platform Responsiveness</div>
+      <div style="font-size:13px;color:rgba(148,163,184,0.75);line-height:1.7;font-weight:300;">Fluid, pixel-perfect layouts across every device and screen size — mobile, desktop, and everything in between. Your site looks intentional everywhere, not just on a 1440p monitor.</div>
+    </div>
+
+  </div>
+
+  <!-- Pricing tiers -->
+  <div class="caps-header reveal" style="text-align:center;margin-bottom:48px;">
+    <div class="section-label">Investment</div>
+    <h2 class="section-title">Flat-rate tiers.<br><em>No surprises.</em></h2>
+    <p class="section-sub">Every tier is a complete, production-ready deliverable. Pick the scope that fits — and know exactly what you're paying before we start.</p>
+  </div>
+
+  <div class="reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-bottom:80px;">
+
+    <div style="background:rgba(8,14,24,0.85);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:32px;backdrop-filter:blur(20px);display:flex;flex-direction:column;gap:0;position:relative;overflow:hidden;transition:border-color 0.3s,transform 0.3s;" onmouseenter="this.style.borderColor='rgba(79,195,247,0.3)';this.style.transform='translateY(-3px)'" onmouseleave="this.style.borderColor='rgba(255,255,255,0.08)';this.style.transform='translateY(0)'">
+      <div style="font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:#4FC3F7;margin-bottom:12px;">Single-Page Starter</div>
+      <div style="font-family:'Playfair Display',serif;font-size:36px;font-weight:500;color:#fff;line-height:1;margin-bottom:6px;">$850<span style="font-size:18px;color:rgba(148,163,184,0.5);"> – $1,200</span></div>
+      <div style="font-size:12px;color:rgba(148,163,184,0.5);margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid rgba(255,255,255,0.06);">Flat rate · no hidden fees</div>
+      <div style="font-size:13px;color:rgba(148,163,184,0.8);line-height:1.7;flex:1;">A high-converting single-page site — ideal for a clean web presence, lead capture forms, social integration, and making a sharp first impression.</div>
+    </div>
+
+    <div style="background:rgba(8,14,24,0.85);border:1px solid rgba(167,139,250,0.25);border-radius:20px;padding:32px;backdrop-filter:blur(20px);display:flex;flex-direction:column;gap:0;position:relative;overflow:hidden;transition:border-color 0.3s,transform 0.3s;" onmouseenter="this.style.borderColor='rgba(167,139,250,0.5)';this.style.transform='translateY(-3px)'" onmouseleave="this.style.borderColor='rgba(167,139,250,0.25)';this.style.transform='translateY(0)'">
+      <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#A78BFA,transparent);"></div>
+      <div style="font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:#A78BFA;margin-bottom:12px;">Core Business Solution</div>
+      <div style="font-family:'Playfair Display',serif;font-size:36px;font-weight:500;color:#fff;line-height:1;margin-bottom:6px;">$1,800<span style="font-size:18px;color:rgba(148,163,184,0.5);"> – $3,000</span></div>
+      <div style="font-size:12px;color:rgba(148,163,184,0.5);margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid rgba(255,255,255,0.06);">Most popular · full site build</div>
+      <div style="font-size:13px;color:rgba(148,163,184,0.8);line-height:1.7;flex:1;">A complete 4–6 page custom site — Home, About, Services, Gallery, Contact — with native SEO baked in and fully responsive across every device.</div>
+      <div style="margin-top:20px;display:inline-flex;align-items:center;gap:6px;font-size:11px;color:#A78BFA;font-weight:500;"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 3L6 10l-3-3" stroke-linecap="round"/></svg>Most popular</div>
+    </div>
+
+    <div style="background:rgba(8,14,24,0.85);border:1px solid rgba(249,115,22,0.15);border-radius:20px;padding:32px;backdrop-filter:blur(20px);display:flex;flex-direction:column;gap:0;position:relative;overflow:hidden;transition:border-color 0.3s,transform 0.3s;" onmouseenter="this.style.borderColor='rgba(249,115,22,0.4)';this.style.transform='translateY(-3px)'" onmouseleave="this.style.borderColor='rgba(249,115,22,0.15)';this.style.transform='translateY(0)'">
+      <div style="font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:#F97316;margin-bottom:12px;">Full-Stack Portal</div>
+      <div style="font-family:'Playfair Display',serif;font-size:36px;font-weight:500;color:#fff;line-height:1;margin-bottom:6px;">$3,500<span style="font-size:18px;color:rgba(148,163,184,0.5);">+</span></div>
+      <div style="font-size:12px;color:rgba(148,163,184,0.5);margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid rgba(255,255,255,0.06);">Advanced build · custom backend</div>
+      <div style="font-size:13px;color:rgba(148,163,184,0.8);line-height:1.7;flex:1;">Full site plus functional backend tools — custom client portals, booking systems, payment flows, and automated workflows. This is the full-stack treatment.</div>
+    </div>
+
+    <div style="background:linear-gradient(135deg,rgba(249,115,22,0.06),rgba(251,191,36,0.04));border:1px solid rgba(249,115,22,0.2);border-radius:20px;padding:32px;backdrop-filter:blur(20px);display:flex;flex-direction:column;gap:0;position:relative;overflow:hidden;transition:border-color 0.3s,transform 0.3s;" onmouseenter="this.style.borderColor='rgba(249,115,22,0.5)';this.style.transform='translateY(-3px)'" onmouseleave="this.style.borderColor='rgba(249,115,22,0.2)';this.style.transform='translateY(0)'">
+      <div style="font-size:18px;margin-bottom:8px;">🏎️</div>
+      <div style="font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:#FBBF24;margin-bottom:12px;">Rush Upgrade <span style="color:rgba(251,191,36,0.5);font-size:9px;">ADD-ON</span></div>
+      <div style="font-family:'Playfair Display',serif;font-size:36px;font-weight:500;color:#fff;line-height:1;margin-bottom:6px;">+$500<span style="font-size:18px;color:rgba(148,163,184,0.5);"> – $750</span></div>
+      <div style="font-size:12px;color:rgba(148,163,184,0.5);margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid rgba(255,255,255,0.06);">Live in 5–7 business days</div>
+      <div style="font-size:13px;color:rgba(148,163,184,0.8);line-height:1.7;flex:1;">Clear the queue and fast-track your build to front of line. Add this to any tier and we prioritize your project for launch in under a week.</div>
+    </div>
+
+  </div>
+
+</section>
+
 <!-- PORTFOLIO -->
 <section class="portfolio-section" id="work">
   <div class="caps-header reveal" style="text-align:center;">
@@ -845,6 +1021,7 @@
   </div>
   <div class="portfolio-grid reveal">
 
+    <!-- ── PictureThisPet ── -->
     <div class="portfolio-card">
       <div class="pv-wrap pv-ptp">
         <div class="ptp-hero-only">
@@ -873,18 +1050,28 @@
           <div class="portfolio-feature"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#ff8c00" stroke-width="1.5"><circle cx="8" cy="8" r="6.5"/><path d="M8 5v3l2 2"/></svg>Pop-up event pages, prep guide & portfolio gallery</div>
         </div>
         <div class="portfolio-footer">
-          <div class="portfolio-tech"><span class="portfolio-tech-pill">GitHub Pages</span><span class="portfolio-tech-pill">Cloudflare</span><span class="portfolio-tech-pill">Instagram</span></div>
+          <div class="portfolio-tech">
+            <span class="portfolio-tech-pill">GitHub Pages</span>
+            <span class="portfolio-tech-pill">Cloudflare</span>
+            <span class="portfolio-tech-pill">Instagram</span>
+          </div>
           <a href="https://picturethispet.co" target="_blank" class="portfolio-link">Visit site <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
         </div>
       </div>
     </div>
 
+    <!-- ── The Electric Jungle ── -->
     <div class="portfolio-card">
       <div class="pv-wrap pv-ej">
         <div class="ej-hero-only">
           <div class="ej-hero-ticker">
             <div class="ej-hero-track">
-              <span>🌿 MOBILE PLANT SHOP</span><span style="color:#ff2d78;"> ★ </span><span>⚡ RUDSTA CUSTOM BUILDS</span><span style="color:#ff2d78;"> ★ </span><span>💡 GROW LIGHTS INCLUDED</span><span style="color:#ff2d78;"> ★ </span><span>🛡️ 60-DAY WARRANTY</span><span style="color:#ff2d78;"> ★ </span><span>🌿 MOBILE PLANT SHOP</span><span style="color:#ff2d78;"> ★ </span><span>⚡ RUDSTA CUSTOM BUILDS</span><span style="color:#ff2d78;"> ★ </span>
+              <span>🌿 MOBILE PLANT SHOP</span><span style="color:#ff2d78;"> ★ </span>
+              <span>⚡ RUDSTA CUSTOM BUILDS</span><span style="color:#ff2d78;"> ★ </span>
+              <span>💡 GROW LIGHTS INCLUDED</span><span style="color:#ff2d78;"> ★ </span>
+              <span>🛡️ 60-DAY WARRANTY</span><span style="color:#ff2d78;"> ★ </span>
+              <span>🌿 MOBILE PLANT SHOP</span><span style="color:#ff2d78;"> ★ </span>
+              <span>⚡ RUDSTA CUSTOM BUILDS</span><span style="color:#ff2d78;"> ★ </span>
             </div>
           </div>
           <div class="ej-hero-nav">
@@ -908,28 +1095,42 @@
           <div class="portfolio-feature"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#00e676" stroke-width="1.5"><path d="M14 10a2 2 0 01-2 2H4.5L2 14V4a2 2 0 012-2h8a2 2 0 012 2v6z"/></svg>Email waitlist → Google Apps Script backend</div>
         </div>
         <div class="portfolio-footer">
-          <div class="portfolio-tech"><span class="portfolio-tech-pill">GitHub Pages</span><span class="portfolio-tech-pill">Apps Script</span><span class="portfolio-tech-pill">Cloudflare</span></div>
+          <div class="portfolio-tech">
+            <span class="portfolio-tech-pill">GitHub Pages</span>
+            <span class="portfolio-tech-pill">Apps Script</span>
+            <span class="portfolio-tech-pill">Cloudflare</span>
+          </div>
           <a href="https://theelectricjungle.com" target="_blank" class="portfolio-link">Visit site <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
         </div>
       </div>
     </div>
 
+    <!-- ── S.G. Cleaning Services ── -->
     <div class="portfolio-card">
       <div class="pv-wrap pv-sg">
         <div class="sg-ui">
+          <!-- Nav -->
           <div class="sg-nav">
             <div class="sg-nav-logo"><span style="color:#F47B20;font-weight:900;">S.G.</span> <span style="color:#1A6FA8;font-weight:800;">Cleaning Services</span></div>
             <div class="sg-nav-btn">Get a Quote</div>
           </div>
+          <!-- Hero -->
           <div class="sg-hero">
             <div class="sg-hero-title">S.G.</div>
             <div class="sg-hero-sub">Cleaning Services</div>
             <div class="sg-tagline">If it's Dirty, <em>we clean it.</em></div>
+            <!-- Bubbles -->
             <div class="sg-bubbles-row">
-              <div class="sg-bub sg-bub-lg sg-blue"></div><div class="sg-bub sg-bub-sm sg-orange"></div><div class="sg-bub sg-bub-md sg-blue"></div><div class="sg-bub sg-bub-sm sg-blue"></div><div class="sg-bub sg-bub-lg sg-orange"></div>
+              <div class="sg-bub sg-bub-lg sg-blue"></div>
+              <div class="sg-bub sg-bub-sm sg-orange"></div>
+              <div class="sg-bub sg-bub-md sg-blue"></div>
+              <div class="sg-bub sg-bub-sm sg-blue"></div>
+              <div class="sg-bub sg-bub-lg sg-orange"></div>
             </div>
           </div>
+          <!-- Shimmer bar -->
           <div class="sg-shimmer-bar">⛽ <strong>No Travel Fees — Ever.</strong> We come to you, anywhere in Colorado.</div>
+          <!-- Service icons -->
           <div class="sg-icons-row">
             <div class="sg-icon-item"><span>🏠</span><span>Residential</span></div>
             <div class="sg-icon-item"><span>🔨</span><span>Remodels</span></div>
@@ -949,15 +1150,21 @@
           <div class="portfolio-feature"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#2E9E6B" stroke-width="1.5"><path d="M8 2l1.8 3.6L14 6.5l-3 2.9.7 4.1L8 11.5l-3.7 1.9.7-4.1L2 6.5l4.2-.9z"/></svg>Shimmer banner, Nextdoor verified reviews & glowing form</div>
         </div>
         <div class="portfolio-footer">
-          <div class="portfolio-tech"><span class="portfolio-tech-pill">GitHub Pages</span><span class="portfolio-tech-pill">Apps Script</span><span class="portfolio-tech-pill">Cloudflare</span></div>
+          <div class="portfolio-tech">
+            <span class="portfolio-tech-pill">GitHub Pages</span>
+            <span class="portfolio-tech-pill">Apps Script</span>
+            <span class="portfolio-tech-pill">Cloudflare</span>
+          </div>
           <a href="https://mycleanersue.com" target="_blank" class="portfolio-link">Visit site <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
         </div>
       </div>
     </div>
 
+    <!-- ── Suncoast Client Portal ── -->
     <div class="portfolio-card">
       <div class="pv-wrap pv-portal">
         <div class="portal-ui">
+          <!-- Topbar -->
           <div class="portal-topbar">
             <div style="display:flex;align-items:center;gap:6px;">
               <svg width="18" height="18" viewBox="0 0 36 36" fill="none"><circle cx="18" cy="18" r="17" fill="#0D1B2A" stroke="rgba(249,115,22,0.5)" stroke-width="1.5"/><path d="M7 22 Q18 10 29 22" stroke="#F97316" stroke-width="2" stroke-linecap="round" fill="none"/><circle cx="18" cy="27" r="2.5" fill="#F97316"/></svg>
@@ -965,7 +1172,9 @@
             </div>
             <span style="font-size:8px;color:rgba(148,163,184,0.5);">ADMIN PANEL</span>
           </div>
+          <!-- Layout -->
           <div class="portal-layout">
+            <!-- Sidebar -->
             <div class="portal-sidebar">
               <div class="portal-nav-item portal-nav-active">Dashboard</div>
               <div class="portal-nav-item">Clients</div>
@@ -974,19 +1183,23 @@
               <div class="portal-nav-item">Services</div>
               <div class="portal-nav-item">Support</div>
             </div>
+            <!-- Main -->
             <div class="portal-main">
               <div class="portal-page-title">Admin <span style="color:#F97316;">dashboard</span></div>
+              <!-- Stat cards -->
               <div class="portal-stats">
                 <div class="portal-stat"><div class="portal-stat-lbl">TOTAL CLIENTS</div><div class="portal-stat-num">3</div></div>
                 <div class="portal-stat"><div class="portal-stat-lbl">ACTIVE</div><div class="portal-stat-num">3</div></div>
                 <div class="portal-stat"><div class="portal-stat-lbl">OUTSTANDING</div><div class="portal-stat-num">$0.00</div></div>
                 <div class="portal-stat"><div class="portal-stat-lbl">MRR</div><div class="portal-stat-num" style="color:#F97316;">$50</div></div>
               </div>
+              <!-- Site status -->
               <div class="portal-section-lbl">CLIENT SITE STATUS</div>
               <div class="portal-site-row">
                 <div class="portal-site"><span class="portal-site-dot"></span><span class="portal-site-name">theelectricjungle.com</span><span class="portal-badge-g">Online</span><span class="portal-badge-g">SSL ✓</span></div>
                 <div class="portal-site"><span class="portal-site-dot"></span><span class="portal-site-name">mycleanersue.com</span><span class="portal-badge-g">Online</span><span class="portal-badge-g">SSL ✓</span></div>
               </div>
+              <!-- Quick actions -->
               <div class="portal-section-lbl">QUICK ACTIONS</div>
               <div class="portal-actions">
                 <div class="portal-action">+ Add client</div>
@@ -1008,7 +1221,11 @@
           <div class="portfolio-feature"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#2DD4BF" stroke-width="1.5"><path d="M2 10h4M2 6h12M2 14h8"/></svg>MRR tracking, analytics dashboard & support ticket queue</div>
         </div>
         <div class="portfolio-footer">
-          <div class="portfolio-tech"><span class="portfolio-tech-pill">Apps Script</span><span class="portfolio-tech-pill">Stripe</span><span class="portfolio-tech-pill">Google Sheets</span></div>
+          <div class="portfolio-tech">
+            <span class="portfolio-tech-pill">Apps Script</span>
+            <span class="portfolio-tech-pill">Stripe</span>
+            <span class="portfolio-tech-pill">Google Sheets</span>
+          </div>
           <a href="login.html" class="portfolio-link">View portal <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
         </div>
       </div>
@@ -1044,12 +1261,16 @@
       </button>
     </div>
     <div class="modal-body">
+      <!-- Tabs -->
       <div class="modal-tabs">
         <button class="modal-tab active" onclick="switchInquiryTab('quote')">Site quote</button>
         <button class="modal-tab" onclick="switchInquiryTab('consult')">Consultation</button>
       </div>
+
       <div class="form-alert alert-success" id="formSuccess">Thanks! We'll be in touch within 24 hours.</div>
       <div class="form-alert alert-error" id="formError">Something went wrong. Please email us directly at info@suncoast.technology</div>
+
+      <!-- QUOTE FORM -->
       <div id="quoteForm">
         <div class="field-row">
           <div class="form-field"><label>Your name</label><input type="text" id="q_name" placeholder="Jane Smith" /></div>
@@ -1076,7 +1297,12 @@
           <label>Budget range</label>
           <select id="q_budget">
             <option value="">Select a range...</option>
-            <option>Under $500</option><option>$500 – $1,000</option><option>$1,000 – $2,500</option><option>$2,500 – $5,000</option><option>$5,000+</option><option>Not sure yet</option>
+            <option>Under $500</option>
+            <option>$500 – $1,000</option>
+            <option>$1,000 – $2,500</option>
+            <option>$2,500 – $5,000</option>
+            <option>$5,000+</option>
+            <option>Not sure yet</option>
           </select>
         </div>
         <div class="form-field">
@@ -1085,6 +1311,8 @@
         </div>
         <button class="form-submit" id="quoteSubmitBtn" onclick="handleQuoteSubmit()">Send quote request</button>
       </div>
+
+      <!-- CONSULTATION FORM -->
       <div id="consultForm" style="display:none;">
         <div class="field-row">
           <div class="form-field"><label>Your name</label><input type="text" id="c_name" placeholder="Jane Smith" /></div>
@@ -1095,14 +1323,23 @@
           <label>What would you like to discuss?</label>
           <select id="c_topic">
             <option value="">Select a topic...</option>
-            <option>Starting a new website project</option><option>Improving an existing site</option><option>Adding a booking or payment system</option><option>Building a client portal</option><option>Setting up custom email</option><option>AI-powered features</option><option>Not sure — just exploring</option>
+            <option>Starting a new website project</option>
+            <option>Improving an existing site</option>
+            <option>Adding a booking or payment system</option>
+            <option>Building a client portal</option>
+            <option>Setting up custom email</option>
+            <option>AI-powered features</option>
+            <option>Not sure — just exploring</option>
           </select>
         </div>
         <div class="form-field">
           <label>Best time to reach you</label>
           <select id="c_time">
             <option value="">Select a preference...</option>
-            <option>Mornings (8am – 12pm MT)</option><option>Afternoons (12pm – 5pm MT)</option><option>Evenings (5pm – 8pm MT)</option><option>Any time — just email me</option>
+            <option>Mornings (8am – 12pm MT)</option>
+            <option>Afternoons (12pm – 5pm MT)</option>
+            <option>Evenings (5pm – 8pm MT)</option>
+            <option>Any time — just email me</option>
           </select>
         </div>
         <div class="form-field">
@@ -1131,124 +1368,197 @@
 </div>
 
 <script>
-// ── AURORA ──
+// ── GEMINI AURORA ──
 const canvas = document.getElementById('aurora');
 const ctx = canvas.getContext('2d');
 let W, H, t = 0;
-function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
 resize();
-window.addEventListener('resize',resize);
-const blobs=[
-  {x:0.2,y:0.3,r:0.5,color:[79,195,247],speed:0.00005},
-  {x:0.8,y:0.2,r:0.45,color:[167,139,250],speed:0.00004},
-  {x:0.5,y:0.7,r:0.4,color:[244,114,182],speed:0.00006},
-  {x:0.1,y:0.8,r:0.35,color:[45,212,191],speed:0.000045},
-  {x:0.9,y:0.6,r:0.3,color:[249,115,22],speed:0.000055},
+window.addEventListener('resize', resize);
+
+const blobs = [
+  { x: 0.2, y: 0.3, r: 0.5, color: [79, 195, 247], speed: 0.00005 },
+  { x: 0.8, y: 0.2, r: 0.45, color: [167, 139, 250], speed: 0.00004 },
+  { x: 0.5, y: 0.7, r: 0.4, color: [244, 114, 182], speed: 0.00006 },
+  { x: 0.1, y: 0.8, r: 0.35, color: [45, 212, 191], speed: 0.000045 },
+  { x: 0.9, y: 0.6, r: 0.3, color: [249, 115, 22], speed: 0.000055 },
 ];
-function drawAurora(){
-  ctx.clearRect(0,0,W,H);t+=1;
-  blobs.forEach((b,i)=>{
-    const ox=Math.sin(t*b.speed*1000+i*1.2)*0.15;
-    const oy=Math.cos(t*b.speed*800+i*0.9)*0.12;
-    const cx=(b.x+ox)*W,cy=(b.y+oy)*H,rad=b.r*Math.min(W,H);
-    const grad=ctx.createRadialGradient(cx,cy,0,cx,cy,rad);
-    const[r,g,bl]=b.color;
-    grad.addColorStop(0,`rgba(${r},${g},${bl},0.22)`);
-    grad.addColorStop(0.4,`rgba(${r},${g},${bl},0.09)`);
-    grad.addColorStop(1,`rgba(${r},${g},${bl},0)`);
-    ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
+
+function drawAurora() {
+  ctx.clearRect(0, 0, W, H);
+  t += 1;
+
+  blobs.forEach((b, i) => {
+    const ox = Math.sin(t * b.speed * 1000 + i * 1.2) * 0.15;
+    const oy = Math.cos(t * b.speed * 800 + i * 0.9) * 0.12;
+    const cx = (b.x + ox) * W;
+    const cy = (b.y + oy) * H;
+    const rad = b.r * Math.min(W, H);
+
+    const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, rad);
+    const [r, g, bl] = b.color;
+    grad.addColorStop(0, `rgba(${r},${g},${bl},0.22)`);
+    grad.addColorStop(0.4, `rgba(${r},${g},${bl},0.09)`);
+    grad.addColorStop(1, `rgba(${r},${g},${bl},0)`);
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, W, H);
   });
+
   requestAnimationFrame(drawAurora);
 }
 drawAurora();
 
 // ── SCROLL REVEAL ──
-const reveals=document.querySelectorAll('.reveal');
-const io=new IntersectionObserver((entries)=>{
-  entries.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('on'),i*80);io.unobserve(e.target);}});
-},{threshold:0.08});
-reveals.forEach(el=>io.observe(el));
+const reveals = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('on'), i * 80);
+      io.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.08 });
+reveals.forEach(el => io.observe(el));
 
-// ── LEFT NAV SPY ──
-const leftNavItems=document.querySelectorAll('.left-nav-item[data-section]');
-const sections=[
-  {id:'hero',el:document.querySelector('.hero')},
-  {id:'capabilities',el:document.getElementById('capabilities')},
-  {id:'how',el:document.getElementById('how')},
-  {id:'work',el:document.getElementById('work')},
-  {id:'contact',el:document.getElementById('contact')},
+// ── LEFT NAV SCROLL SPY ──
+const leftNavItems = document.querySelectorAll('.left-nav-item[data-section]');
+const sections = [
+  { id: 'hero', el: document.querySelector('.hero') },
+  { id: 'capabilities', el: document.getElementById('capabilities') },
+  { id: 'how', el: document.getElementById('how') },
+  { id: 'work', el: document.getElementById('work') },
+  { id: 'contact', el: document.getElementById('contact') },
 ];
-function updateActiveNav(){
-  const scrollY=window.scrollY+window.innerHeight*0.4;
-  let current='hero';
-  sections.forEach(s=>{if(s.el&&s.el.offsetTop<=scrollY)current=s.id;});
-  leftNavItems.forEach(item=>{item.classList.toggle('active',item.dataset.section===current);});
+function updateActiveNav() {
+  const scrollY = window.scrollY + window.innerHeight * 0.4;
+  let current = 'hero';
+  sections.forEach(s => { if (s.el && s.el.offsetTop <= scrollY) current = s.id; });
+  leftNavItems.forEach(item => {
+    item.classList.toggle('active', item.dataset.section === current);
+  });
 }
-window.addEventListener('scroll',updateActiveNav,{passive:true});
+window.addEventListener('scroll', updateActiveNav, { passive: true });
 updateActiveNav();
 
 // ── MOBILE NAV ──
-function closeMobileNav(){document.getElementById('mobileNavOverlay').classList.remove('open');document.body.style.overflow='';}
-document.getElementById('mobileNavToggle').addEventListener('click',()=>{document.getElementById('mobileNavOverlay').classList.add('open');document.body.style.overflow='hidden';});
-document.getElementById('mobileNavClose').addEventListener('click',closeMobileNav);
+function closeMobileNav() {
+  document.getElementById('mobileNavOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.getElementById('mobileNavToggle').addEventListener('click', () => {
+  document.getElementById('mobileNavOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+});
+document.getElementById('mobileNavClose').addEventListener('click', closeMobileNav);
 
 // ── NAV SCROLL ──
-window.addEventListener('scroll',()=>{document.getElementById('nav').style.background=scrollY>40?'rgba(4,8,15,0.85)':'rgba(4,8,15,0.6)';});
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').style.background =
+    scrollY > 40 ? 'rgba(4,8,15,0.85)' : 'rgba(4,8,15,0.6)';
+});
 
-// ── MODAL ──
-const API_INQUIRY='https://script.google.com/macros/s/AKfycbyxg5LlS9eUx6VSiD_VSzE0RD94STkBAK4Hc-h14T_YU5ikqXGE3dz-Fvt1kCAE-9XRLw/exec';
-function openInquiry(){document.getElementById('inquiryModal').classList.add('open');document.body.style.overflow='hidden';}
-function closeInquiry(){document.getElementById('inquiryModal').classList.remove('open');document.body.style.overflow='';}
-function handleOverlayClick(e){if(e.target===document.getElementById('inquiryModal'))closeInquiry();}
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeInquiry();});
-function switchInquiryTab(tab){
-  document.querySelectorAll('.modal-tab').forEach((t,i)=>t.classList.toggle('active',['quote','consult'][i]===tab));
-  document.getElementById('quoteForm').style.display=tab==='quote'?'block':'none';
-  document.getElementById('consultForm').style.display=tab==='consult'?'block':'none';
-  document.getElementById('modalTitle').textContent=tab==='quote'?'Site inquiry':'Book a consultation';
-  document.getElementById('modalSub').textContent=tab==='quote'?"Tell us about your project and we'll get back to you within 24 hours.":'Schedule a free call to talk through your vision.';
-  ['formSuccess','formError'].forEach(id=>document.getElementById(id).classList.remove('show'));
+const API_INQUIRY = 'https://script.google.com/macros/s/AKfycbyxg5LlS9eUx6VSiD_VSzE0RD94STkBAK4Hc-h14T_YU5ikqXGE3dz-Fvt1kCAE-9XRLw/exec';
+
+function openInquiry() {
+  document.getElementById('inquiryModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
 }
-async function handleQuoteSubmit(){
-  const btn=document.getElementById('quoteSubmitBtn');
-  ['formSuccess','formError'].forEach(id=>document.getElementById(id).classList.remove('show'));
-  const name=document.getElementById('q_name').value.trim();
-  const email=document.getElementById('q_email').value.trim();
-  const desc=document.getElementById('q_desc').value.trim();
-  if(!name||!email){document.getElementById('formError').textContent='Name and email are required.';document.getElementById('formError').classList.add('show');return;}
-  const needs=['website','booking','portal','store','email','payments','forms','other'].filter(n=>document.getElementById('need_'+n).checked).map(n=>n.charAt(0).toUpperCase()+n.slice(1)).join(', ')||'Not specified';
-  btn.disabled=true;btn.textContent='Sending...';
-  try{
-    await fetch(API_INQUIRY,{method:'POST',body:JSON.stringify({action:'submitInquiry',type:'quote',name,email,business:document.getElementById('q_biz').value.trim(),phone:document.getElementById('q_phone').value.trim(),budget:document.getElementById('q_budget').value,needs,description:desc})});
-    document.getElementById('formSuccess').classList.add('show');btn.textContent='Sent ✓';
-  }catch(e){
-    document.getElementById('formError').textContent='Something went wrong. Please email us at info@suncoast.technology';
-    document.getElementById('formError').classList.add('show');btn.disabled=false;btn.textContent='Send quote request';
+function closeInquiry() {
+  document.getElementById('inquiryModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function handleOverlayClick(e) {
+  if (e.target === document.getElementById('inquiryModal')) closeInquiry();
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeInquiry(); });
+
+function switchInquiryTab(tab) {
+  document.querySelectorAll('.modal-tab').forEach((t, i) => t.classList.toggle('active', ['quote','consult'][i] === tab));
+  document.getElementById('quoteForm').style.display   = tab === 'quote' ? 'block' : 'none';
+  document.getElementById('consultForm').style.display = tab === 'consult' ? 'block' : 'none';
+  document.getElementById('modalTitle').textContent = tab === 'quote' ? 'Site inquiry' : 'Book a consultation';
+  document.getElementById('modalSub').textContent   = tab === 'quote'
+    ? 'Tell us about your project and we\'ll get back to you within 24 hours.'
+    : 'Schedule a free call to talk through your vision.';
+  ['formSuccess','formError'].forEach(id => document.getElementById(id).classList.remove('show'));
+}
+
+async function handleQuoteSubmit() {
+  const btn = document.getElementById('quoteSubmitBtn');
+  ['formSuccess','formError'].forEach(id => document.getElementById(id).classList.remove('show'));
+
+  const name   = document.getElementById('q_name').value.trim();
+  const email  = document.getElementById('q_email').value.trim();
+  const desc   = document.getElementById('q_desc').value.trim();
+  if (!name || !email) { document.getElementById('formError').textContent = 'Name and email are required.'; document.getElementById('formError').classList.add('show'); return; }
+
+  const needs = ['website','booking','portal','store','email','payments','forms','other']
+    .filter(n => document.getElementById('need_' + n).checked)
+    .map(n => n.charAt(0).toUpperCase() + n.slice(1))
+    .join(', ') || 'Not specified';
+
+  btn.disabled = true; btn.textContent = 'Sending...';
+  try {
+    await fetch(API_INQUIRY, { method: 'POST', body: JSON.stringify({
+      action: 'submitInquiry',
+      type: 'quote',
+      name, email,
+      business: document.getElementById('q_biz').value.trim(),
+      phone:    document.getElementById('q_phone').value.trim(),
+      budget:   document.getElementById('q_budget').value,
+      needs, description: desc
+    })});
+    document.getElementById('formSuccess').classList.add('show');
+    btn.textContent = 'Sent ✓';
+  } catch(e) {
+    document.getElementById('formError').textContent = 'Something went wrong. Please email us at info@suncoast.technology';
+    document.getElementById('formError').classList.add('show');
+    btn.disabled = false; btn.textContent = 'Send quote request';
   }
 }
-async function handleConsultSubmit(){
-  const btn=document.getElementById('consultSubmitBtn');
-  ['formSuccess','formError'].forEach(id=>document.getElementById(id).classList.remove('show'));
-  const name=document.getElementById('c_name').value.trim();
-  const email=document.getElementById('c_email').value.trim();
-  if(!name||!email){document.getElementById('formError').textContent='Name and email are required.';document.getElementById('formError').classList.add('show');return;}
-  btn.disabled=true;btn.textContent='Sending...';
-  try{
-    await fetch(API_INQUIRY,{method:'POST',body:JSON.stringify({action:'submitInquiry',type:'consultation',name,email,phone:document.getElementById('c_phone').value.trim(),topic:document.getElementById('c_topic').value,time:document.getElementById('c_time').value,notes:document.getElementById('c_notes').value.trim()})});
-    document.getElementById('formSuccess').classList.add('show');btn.textContent='Sent ✓';
-  }catch(e){
-    document.getElementById('formError').textContent='Something went wrong. Please email us at info@suncoast.technology';
-    document.getElementById('formError').classList.add('show');btn.disabled=false;btn.textContent='Request consultation';
+
+async function handleConsultSubmit() {
+  const btn = document.getElementById('consultSubmitBtn');
+  ['formSuccess','formError'].forEach(id => document.getElementById(id).classList.remove('show'));
+
+  const name  = document.getElementById('c_name').value.trim();
+  const email = document.getElementById('c_email').value.trim();
+  if (!name || !email) { document.getElementById('formError').textContent = 'Name and email are required.'; document.getElementById('formError').classList.add('show'); return; }
+
+  btn.disabled = true; btn.textContent = 'Sending...';
+  try {
+    await fetch(API_INQUIRY, { method: 'POST', body: JSON.stringify({
+      action: 'submitInquiry',
+      type: 'consultation',
+      name, email,
+      phone: document.getElementById('c_phone').value.trim(),
+      topic: document.getElementById('c_topic').value,
+      time:  document.getElementById('c_time').value,
+      notes: document.getElementById('c_notes').value.trim()
+    })});
+    document.getElementById('formSuccess').classList.add('show');
+    btn.textContent = 'Sent ✓';
+  } catch(e) {
+    document.getElementById('formError').textContent = 'Something went wrong. Please email us at info@suncoast.technology';
+    document.getElementById('formError').classList.add('show');
+    btn.disabled = false; btn.textContent = 'Request consultation';
   }
 }
 </script>
 
-<div style="text-align:center;padding:12px;font-size:11px;color:rgba(148,163,184,0.15);">Suncoast Technology · index.html · v3.0</div>
+<div style="text-align:center;padding:12px;font-size:11px;color:rgba(148,163,184,0.15);">Suncoast Technology · index.html · v3.2</div>
 
 <script>
-  document.addEventListener('touchstart',function(e){if(e.touches.length>1)e.preventDefault();},{passive:false});
-  document.body.style.overflowX='hidden';
-  document.documentElement.style.overflowX='hidden';
+  // Lock horizontal scroll
+  document.addEventListener('touchstart', function(e) {
+    if (e.touches.length > 1) e.preventDefault();
+  }, { passive: false });
+  document.body.style.overflowX = 'hidden';
+  document.documentElement.style.overflowX = 'hidden';
 </script>
 
 </body>
