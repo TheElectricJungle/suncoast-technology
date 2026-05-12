@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>Suncoast Technology — Bespoke Digital Products, Built for Scale</title>
-  <!-- Suncoast Technology | index.html | v3.7 -->
+  <!-- Suncoast Technology | index.html | v3.9 -->
   <meta name="description" content="High-fidelity UI/UX design, custom full-stack development, and data-driven SEO—engineered into a single, seamless pipeline. Enterprise-grade performance without agency bloat." />
   <meta property="og:title" content="Suncoast Technology — Bespoke Digital Products, Built for Scale" />
   <meta property="og:description" content="High-fidelity UI/UX, custom full-stack development, and native SEO engineered as one seamless pipeline." />
@@ -84,14 +84,18 @@
       color: #fff;
       text-decoration: none;
       letter-spacing: -0.3px;
+      flex-shrink: 0;
     }
     .nav-brand em { color: var(--orange); font-style: normal; }
 
     .nav-links {
       display: flex;
       align-items: center;
-      gap: 32px;
+      gap: 28px;
       list-style: none;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
     }
 
     .nav-links a {
@@ -99,6 +103,7 @@
       color: var(--muted);
       text-decoration: none;
       transition: color 0.2s;
+      white-space: nowrap;
     }
     .nav-links a:hover { color: #fff; }
 
@@ -307,7 +312,7 @@
 
     .caps-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      grid-template-columns: repeat(3, 1fr);
       gap: 16px;
     }
 
@@ -1271,10 +1276,94 @@
       color: rgba(148,163,184,0.15);
     }
 
+    /* ── HAMBURGER ── */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 36px;
+      height: 36px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      cursor: pointer;
+      padding: 8px;
+      flex-shrink: 0;
+    }
+    .hamburger span {
+      display: block;
+      width: 100%;
+      height: 1.5px;
+      background: #fff;
+      border-radius: 2px;
+      transition: transform 0.25s ease, opacity 0.25s ease;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    /* ── MOBILE DRAWER ── */
+    .mobile-drawer {
+      position: fixed;
+      top: 0; right: 0;
+      width: 280px;
+      height: 100vh;
+      background: rgba(4,8,15,0.97);
+      backdrop-filter: blur(24px);
+      border-left: 1px solid rgba(255,255,255,0.08);
+      z-index: 200;
+      transform: translateX(100%);
+      transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+      padding: 80px 32px 40px;
+      display: flex;
+      flex-direction: column;
+    }
+    .mobile-drawer.open { transform: translateX(0); }
+
+    .drawer-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 199;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(2px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .drawer-backdrop.open { opacity: 1; pointer-events: all; }
+
+    .mobile-nav-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .mobile-nav-links li a {
+      display: block;
+      padding: 14px 16px;
+      font-size: 16px;
+      font-weight: 500;
+      color: rgba(148,163,184,0.85);
+      text-decoration: none;
+      border-radius: 10px;
+      transition: background 0.15s, color 0.15s;
+    }
+    .mobile-nav-links li a:hover { background: rgba(255,255,255,0.05); color: #fff; }
+    .mobile-portal-link {
+      margin-top: 16px;
+      color: var(--orange) !important;
+      background: rgba(249,115,22,0.08) !important;
+      border: 1px solid rgba(249,115,22,0.2);
+      text-align: center;
+    }
+
     /* ── MOBILE ── */
     @media (max-width: 900px) {
       nav { padding: 14px 20px; }
       .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .nav-portal { display: none; }
 
       .ai-card {
         flex-direction: column;
@@ -1297,6 +1386,7 @@
       .pledge-icon-wrap { text-align: center; }
 
       .toolkit-grid { grid-template-columns: 1fr; }
+      .caps-grid { grid-template-columns: 1fr; }
 
       .project-scope-card {
         grid-template-columns: 1fr;
@@ -1373,18 +1463,36 @@
 <!-- NAV -->
 <nav id="mainNav">
   <a href="/" class="nav-brand">Suncoast <em>Technology</em></a>
-  <ul class="nav-links">
-    <li><a href="#capabilities">Services</a></li>
-    <li><a href="#portfolio">Work</a></li>
-    <li><a href="#pricing">Pricing</a></li>
-    <li><a href="#scope">Get a quote</a></li>
-    <li><a href="#contact">Contact</a></li>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#capabilities" onclick="closeMenu()">Services</a></li>
+    <li><a href="#portfolio" onclick="closeMenu()">Work</a></li>
+    <li><a href="#pricing" onclick="closeMenu()">Pricing</a></li>
+    <li><a href="#scope" onclick="closeMenu()">Get a quote</a></li>
+    <li><a href="#contact" onclick="closeMenu()">Contact</a></li>
   </ul>
-  <a href="/login.html" class="nav-portal">
-    <div class="portal-dot"></div>
-    Client portal
-  </a>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <a href="/login.html" class="nav-portal">
+      <div class="portal-dot"></div>
+      Client portal
+    </a>
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
 </nav>
+
+<!-- Mobile menu drawer -->
+<div class="mobile-drawer" id="mobileDrawer">
+  <ul class="mobile-nav-links">
+    <li><a href="#capabilities" onclick="closeMenu()">Services</a></li>
+    <li><a href="#portfolio" onclick="closeMenu()">Work</a></li>
+    <li><a href="#pricing" onclick="closeMenu()">Pricing</a></li>
+    <li><a href="#scope" onclick="closeMenu()">Get a quote</a></li>
+    <li><a href="#contact" onclick="closeMenu()">Contact</a></li>
+    <li><a href="/login.html" class="mobile-portal-link">Client portal →</a></li>
+  </ul>
+</div>
+<div class="drawer-backdrop" id="drawerBackdrop" onclick="closeMenu()"></div>
 
 <!-- ═══════════════════════════════════════════════
      1. HERO — "Bespoke Digital Products. Built for Scale."
@@ -1988,7 +2096,7 @@
     </ul>
     <div class="footer-eco">🌱 Proudly Carbon-Offset &amp; Powered by Eco-Conscious Development</div>
   </div>
-  <div class="version-tag">Suncoast Technology · index.html · v3.7</div>
+  <div class="version-tag">Suncoast Technology · index.html · v3.9</div>
 </footer>
 
 <!-- SCRIPTS -->
@@ -1998,6 +2106,25 @@
   window.addEventListener('scroll', () => {
     nav.classList.toggle('scrolled', window.scrollY > 40);
   });
+
+  // Mobile menu
+  function toggleMenu() {
+    const drawer   = document.getElementById('mobileDrawer');
+    const backdrop = document.getElementById('drawerBackdrop');
+    const burger   = document.getElementById('hamburger');
+    const isOpen   = drawer.classList.contains('open');
+    drawer.classList.toggle('open', !isOpen);
+    backdrop.classList.toggle('open', !isOpen);
+    burger.classList.toggle('open', !isOpen);
+    document.body.style.overflow = isOpen ? '' : 'hidden';
+  }
+
+  function closeMenu() {
+    document.getElementById('mobileDrawer').classList.remove('open');
+    document.getElementById('drawerBackdrop').classList.remove('open');
+    document.getElementById('hamburger').classList.remove('open');
+    document.body.style.overflow = '';
+  }
 
   // Scroll reveals — content always visible, animation is progressive enhancement
   // We add reveal-anim via JS only (never in HTML), so if JS fails content is still shown
