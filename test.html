@@ -1962,7 +1962,7 @@
   }, { threshold: 0.12 });
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-  // Contact form
+  // Contact form API
   const API = 'https://script.google.com/macros/s/AKfycbyxg5LlS9eUx6VSiD_VSzE0RD94STkBAK4Hc-h14T_YU5ikqXGE3dz-Fvt1kCAE-9XRLw/exec';
 
   // Scoping call intake form
@@ -2018,6 +2018,9 @@
       btn.disabled = false; btn.textContent = 'Request scoping call — it\'s free';
     }
   }
+
+  // Contact form submit
+  async function handleSubmit(e) {
     e.preventDefault();
     const btn = document.getElementById('submitBtn');
     const name  = document.getElementById('cName').value.trim();
@@ -2025,8 +2028,10 @@
     const biz   = document.getElementById('cBiz').value.trim();
     const budget= document.getElementById('cBudget').value;
     const desc  = document.getElementById('cDesc').value.trim();
+    
     ['formSuccess','formError'].forEach(id => document.getElementById(id).classList.remove('show'));
     if (!name || !email) return;
+    
     btn.disabled = true; btn.textContent = 'Sending...';
     try {
       const res = await fetch(API, {
