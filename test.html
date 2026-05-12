@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>Suncoast Technology — Bespoke Digital Products, Built for Scale</title>
-  <!-- Suncoast Technology | index.html | v3.4 -->
+  <!-- Suncoast Technology | index.html | v3.7 -->
   <meta name="description" content="High-fidelity UI/UX design, custom full-stack development, and data-driven SEO—engineered into a single, seamless pipeline. Enterprise-grade performance without agency bloat." />
   <meta property="og:title" content="Suncoast Technology — Bespoke Digital Products, Built for Scale" />
   <meta property="og:description" content="High-fidelity UI/UX, custom full-stack development, and native SEO engineered as one seamless pipeline." />
@@ -248,13 +248,22 @@
       to   { opacity:1; transform: translateY(0); }
     }
 
-    /* ── SCROLL REVEALS ── */
+    /* ── SCROLL REVEALS — visible by default, animate as enhancement ── */
     .reveal {
-      opacity: 0;
-      transform: translateY(28px);
+      opacity: 1;
+      transform: none;
       transition: opacity 0.7s ease, transform 0.7s ease;
     }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
+    @media (prefers-reduced-motion: no-preference) {
+      .reveal-anim {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+      .reveal-anim.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
     /* ── SECTION SHARED ── */
     .section-label {
@@ -486,7 +495,7 @@
 
     .how-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      grid-template-columns: repeat(4, 1fr);
       gap: 1px;
       background: rgba(255,255,255,0.06);
       border-radius: 20px;
@@ -528,8 +537,9 @@
 
     .diff-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      grid-template-columns: repeat(4, 1fr);
       gap: 16px;
+      justify-content: center;
     }
 
     .diff-card {
@@ -850,7 +860,7 @@
 
     .portfolio-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      grid-template-columns: repeat(2, 1fr);
       gap: 20px;
     }
 
@@ -875,6 +885,17 @@
       font-size: 48px;
       position: relative;
       overflow: hidden;
+    }
+    /* iframe inside thumb — clip to 320px wide at 0.25 scale = 1280px source */
+    .portfolio-thumb iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 1280px;
+      height: 800px;
+      border: none;
+      transform: scale(0.25);
+      transform-origin: top left;
+      pointer-events: none;
     }
     .portfolio-body { padding: 22px 24px; }
     .portfolio-tag {
@@ -1288,12 +1309,14 @@
       .contact-card { padding: 36px 24px; }
 
       .how-grid { grid-template-columns: 1fr 1fr; }
+      .diff-grid { grid-template-columns: 1fr 1fr; }
 
       .footer-inner { flex-direction: column; align-items: flex-start; gap: 16px; }
     }
 
     @media (max-width: 600px) {
-      .how-grid { grid-template-columns: 1fr; }
+      .how-grid  { grid-template-columns: 1fr; }
+      .diff-grid { grid-template-columns: 1fr 1fr; }
       .pricing-grid { grid-template-columns: 1fr; }
     }
 
@@ -1664,7 +1687,11 @@
   </div>
   <div class="portfolio-grid reveal">
     <a href="https://suncoast.technology" target="_blank" class="portfolio-card">
-      <div class="portfolio-thumb" style="background:linear-gradient(135deg,rgba(79,195,247,0.1),rgba(167,139,250,0.1));">🌊</div>
+      <div class="portfolio-thumb" style="background:linear-gradient(135deg,rgba(79,195,247,0.08),rgba(167,139,250,0.08));overflow:hidden;position:relative;">
+        <iframe src="https://suncoast.technology" scrolling="no" style="position:absolute;top:0;left:0;width:1280px;height:800px;border:none;transform:scale(0.25);transform-origin:top left;pointer-events:none;" loading="lazy" title="Suncoast Technology preview"></iframe>
+        <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 60%,rgba(8,16,28,0.9));pointer-events:none;"></div>
+        <div style="position:absolute;bottom:12px;right:12px;background:rgba(79,195,247,0.15);border:1px solid rgba(79,195,247,0.3);border-radius:8px;padding:4px 10px;font-size:11px;color:#4FC3F7;font-weight:500;">Live ↗</div>
+      </div>
       <div class="portfolio-body">
         <div class="portfolio-tag" style="background:rgba(79,195,247,0.1);color:#4FC3F7;border:1px solid rgba(79,195,247,0.2);">Full-stack + Portal</div>
         <div class="portfolio-title">Suncoast Technology</div>
@@ -1672,8 +1699,25 @@
         <div class="portfolio-link">suncoast.technology ↗</div>
       </div>
     </a>
+    <a href="https://picturethispet.co" target="_blank" class="portfolio-card">
+      <div class="portfolio-thumb" style="background:linear-gradient(135deg,rgba(233,30,99,0.08),rgba(244,114,182,0.08));overflow:hidden;position:relative;">
+        <iframe src="https://picturethispet.co" scrolling="no" style="position:absolute;top:0;left:0;width:1280px;height:800px;border:none;transform:scale(0.25);transform-origin:top left;pointer-events:none;" loading="lazy" title="PictureThisPet preview"></iframe>
+        <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 60%,rgba(8,16,28,0.9));pointer-events:none;"></div>
+        <div style="position:absolute;bottom:12px;right:12px;background:rgba(233,30,99,0.15);border:1px solid rgba(233,30,99,0.3);border-radius:8px;padding:4px 10px;font-size:11px;color:#F472B6;font-weight:500;">Live ↗</div>
+      </div>
+      <div class="portfolio-body">
+        <div class="portfolio-tag" style="background:rgba(244,114,182,0.1);color:#F472B6;border:1px solid rgba(244,114,182,0.2);">Pet Photography</div>
+        <div class="portfolio-title">PictureThisPet</div>
+        <div class="portfolio-desc">Full-featured pet photography platform with portfolio gallery, Instagram integration, session booking, pop-up event cards, and coupon modal system.</div>
+        <div class="portfolio-link">picturethispet.co ↗</div>
+      </div>
+    </a>
     <a href="https://mycleanersue.com" target="_blank" class="portfolio-card">
-      <div class="portfolio-thumb" style="background:linear-gradient(135deg,rgba(34,197,94,0.1),rgba(45,212,191,0.1));">🧹</div>
+      <div class="portfolio-thumb" style="background:linear-gradient(135deg,rgba(34,197,94,0.08),rgba(45,212,191,0.08));overflow:hidden;position:relative;">
+        <iframe src="https://mycleanersue.com" scrolling="no" style="position:absolute;top:0;left:0;width:1280px;height:800px;border:none;transform:scale(0.25);transform-origin:top left;pointer-events:none;" loading="lazy" title="My Cleaner Sue preview"></iframe>
+        <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 60%,rgba(8,16,28,0.9));pointer-events:none;"></div>
+        <div style="position:absolute;bottom:12px;right:12px;background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3);border-radius:8px;padding:4px 10px;font-size:11px;color:#86EFAC;font-weight:500;">Live ↗</div>
+      </div>
       <div class="portfolio-body">
         <div class="portfolio-tag" style="background:rgba(34,197,94,0.1);color:#86EFAC;border:1px solid rgba(34,197,94,0.2);">Business website</div>
         <div class="portfolio-title">My Cleaner Sue</div>
@@ -1682,7 +1726,11 @@
       </div>
     </a>
     <a href="https://theelectricjungle.com" target="_blank" class="portfolio-card">
-      <div class="portfolio-thumb" style="background:linear-gradient(135deg,rgba(251,191,36,0.1),rgba(249,115,22,0.1));">🎸</div>
+      <div class="portfolio-thumb" style="background:linear-gradient(135deg,rgba(251,191,36,0.08),rgba(249,115,22,0.08));overflow:hidden;position:relative;">
+        <iframe src="https://theelectricjungle.com" scrolling="no" style="position:absolute;top:0;left:0;width:1280px;height:800px;border:none;transform:scale(0.25);transform-origin:top left;pointer-events:none;" loading="lazy" title="The Electric Jungle preview"></iframe>
+        <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 60%,rgba(8,16,28,0.9));pointer-events:none;"></div>
+        <div style="position:absolute;bottom:12px;right:12px;background:rgba(251,191,36,0.15);border:1px solid rgba(251,191,36,0.3);border-radius:8px;padding:4px 10px;font-size:11px;color:#FBBF24;font-weight:500;">Live ↗</div>
+      </div>
       <div class="portfolio-body">
         <div class="portfolio-tag" style="background:rgba(251,191,36,0.1);color:#FBBF24;border:1px solid rgba(251,191,36,0.2);">Music / Creative</div>
         <div class="portfolio-title">The Electric Jungle</div>
@@ -1940,7 +1988,7 @@
     </ul>
     <div class="footer-eco">🌱 Proudly Carbon-Offset &amp; Powered by Eco-Conscious Development</div>
   </div>
-  <div class="version-tag">Suncoast Technology · index.html · v3.4</div>
+  <div class="version-tag">Suncoast Technology · index.html · v3.7</div>
 </footer>
 
 <!-- SCRIPTS -->
@@ -1951,18 +1999,23 @@
     nav.classList.toggle('scrolled', window.scrollY > 40);
   });
 
-  // Scroll reveals
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('visible');
-        observer.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.12 });
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  // Scroll reveals — content always visible, animation is progressive enhancement
+  // We add reveal-anim via JS only (never in HTML), so if JS fails content is still shown
+  const revealEls = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    revealEls.forEach(el => el.classList.add('reveal-anim'));
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
+    revealEls.forEach(el => observer.observe(el));
+  }
 
-  // Contact form API
+  // Contact form
   const API = 'https://script.google.com/macros/s/AKfycbyxg5LlS9eUx6VSiD_VSzE0RD94STkBAK4Hc-h14T_YU5ikqXGE3dz-Fvt1kCAE-9XRLw/exec';
 
   // Scoping call intake form
@@ -2018,9 +2071,6 @@
       btn.disabled = false; btn.textContent = 'Request scoping call — it\'s free';
     }
   }
-
-  // Contact form submit
-  async function handleSubmit(e) {
     e.preventDefault();
     const btn = document.getElementById('submitBtn');
     const name  = document.getElementById('cName').value.trim();
@@ -2028,10 +2078,8 @@
     const biz   = document.getElementById('cBiz').value.trim();
     const budget= document.getElementById('cBudget').value;
     const desc  = document.getElementById('cDesc').value.trim();
-    
     ['formSuccess','formError'].forEach(id => document.getElementById(id).classList.remove('show'));
     if (!name || !email) return;
-    
     btn.disabled = true; btn.textContent = 'Sending...';
     try {
       const res = await fetch(API, {
