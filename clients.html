@@ -1,680 +1,663 @@
 <!DOCTYPE html>
+<!-- Suncoast Technology | clients.html | v3.3 -->
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
-  <title>Clients — Suncoast Technology</title>
-  <!-- Suncoast Technology | clients.html | v3.2 -->
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet"/>
-  <style>
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-    :root{--navy:#04080F;--border:rgba(255,255,255,0.07);--muted:rgba(148,163,184,0.7);--light:#E8F0FF;--orange:#F97316;--gold:#FBBF24;--green:#22C55E;--red:#EF4444;--blue:#4FC3F7;--purple:#A78BFA;--teal:#2DD4BF;}
-    html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--light);}
-    canvas#aurora{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:0.7;}
-    .grid-overlay{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(79,195,247,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(79,195,247,0.02) 1px,transparent 1px);background-size:80px 80px;}
-    .shell{position:relative;z-index:10;display:grid;grid-template-columns:220px 1fr;min-height:100%;overflow-x:clip;}
-    .sidebar{background:rgba(4,8,15,0.85);backdrop-filter:blur(24px);border-right:1px solid var(--border);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto;flex-shrink:0;}
-    .sidebar-brand{padding:22px 20px 18px;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:10px;}
-    .brand-mark{width:34px;height:34px;flex-shrink:0;}
-    .brand-name{font-family:'Playfair Display',serif;font-size:14px;color:#fff;line-height:1.2;}
-    .brand-name em{color:var(--orange);font-style:normal;}
-    .brand-sub{font-size:9px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-top:2px;}
-    .nav{padding:14px 10px;flex:1;display:flex;flex-direction:column;gap:2px;overflow-y:auto;}
-    .nav-label{font-size:9px;font-weight:500;color:rgba(148,163,184,0.35);letter-spacing:0.12em;text-transform:uppercase;padding:10px 10px 5px;}
-    .nav-item{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:8px;font-size:13px;color:var(--muted);text-decoration:none;transition:all 0.15s;}
-    .nav-item:hover{background:rgba(255,255,255,0.05);color:#fff;}
-    .nav-item.active{background:rgba(249,115,22,0.1);color:var(--orange);}
-    .nav-item svg{width:15px;height:15px;flex-shrink:0;}
-    .sidebar-footer{padding:14px 16px;border-top:1px solid rgba(255,255,255,0.06);}
-    .user-row{display:flex;align-items:center;gap:10px;}
-    .user-avatar{width:30px;height:30px;border-radius:50%;background:rgba(249,115,22,0.15);border:1px solid rgba(249,115,22,0.25);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--orange);}
-    .user-name{font-size:12px;color:#fff;font-weight:500;flex:1;}
-    .logout-btn{background:none;border:none;color:var(--muted);cursor:pointer;padding:4px;display:flex;border-radius:4px;}
-    .logout-btn:hover{color:#fff;}
-    .main{padding:32px 36px;display:flex;flex-direction:column;gap:20px;min-width:0;}
-    .page-label{font-size:11px;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:4px;}
-    .page-title{font-family:'Playfair Display',serif;font-size:28px;font-weight:400;color:#fff;}
-    .page-title em{color:var(--orange);font-style:normal;}
-    .client-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
-    .client-card{background:rgba(8,16,28,0.85);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:20px;cursor:pointer;transition:border-color 0.15s,transform 0.15s;}
-    .client-card:hover{border-color:rgba(249,115,22,0.35);transform:translateY(-2px);}
-    .client-avatar{width:38px;height:38px;border-radius:10px;background:rgba(249,115,22,0.15);border:1px solid rgba(249,115,22,0.2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--orange);flex-shrink:0;}
-    .client-list-row{display:flex;align-items:center;gap:14px;padding:12px 16px;background:rgba(8,16,28,0.85);border:1px solid rgba(255,255,255,0.07);border-radius:10px;cursor:pointer;transition:all 0.15s;}
-    .client-list-row:hover{border-color:rgba(249,115,22,0.3);background:rgba(249,115,22,0.03);}
-    .view-toggle{display:flex;gap:4px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:3px;}
-    .view-btn{padding:6px 10px;border-radius:6px;border:none;background:none;color:var(--muted);cursor:pointer;font-size:12px;transition:all 0.15s;display:flex;align-items:center;gap:5px;font-family:'DM Sans',sans-serif;}
-    .view-btn.active{background:rgba(249,115,22,0.12);color:var(--orange);}
-    .add-btn{display:flex;align-items:center;gap:7px;padding:9px 18px;background:var(--orange);color:#fff;border:none;border-radius:9px;font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background 0.2s;}
-    .add-btn:hover{background:#ea6c0a;}
-    .modal-overlay{position:fixed;inset:0;z-index:500;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(2,5,10,0.92);backdrop-filter:blur(16px);}
-    .modal-overlay.open{display:flex;}
-    .modal-gemini{position:relative;width:100%;max-width:560px;border-radius:22px;padding:2px;background:linear-gradient(135deg,rgba(79,195,247,0.5),rgba(167,139,250,0.5),rgba(244,114,182,0.4),rgba(249,115,22,0.4));background-size:300% 300%;animation:gs 5s ease infinite;}
-    @keyframes gs{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
-    .modal-inner{background:#04080F;border-radius:20px;width:100%;max-height:88vh;overflow-y:auto;}
-    .modal-head{padding:24px 28px 0;display:flex;align-items:center;justify-content:space-between;}
-    .modal-title{font-family:'Playfair Display',serif;font-size:20px;color:#fff;}
-    .modal-close{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);color:var(--muted);cursor:pointer;padding:7px;border-radius:8px;display:flex;transition:all 0.2s;}
-    .modal-close:hover{color:#fff;}
-    .modal-body{padding:20px 28px 28px;}
-    .field{display:flex;flex-direction:column;gap:5px;margin:0 0 13px;}
-    .field label{font-size:10px;font-weight:600;color:rgba(148,163,184,0.6);text-transform:uppercase;letter-spacing:0.08em;}
-    .field input,.field select,.field textarea{width:100%;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:10px 14px;font-size:14px;font-family:'DM Sans',sans-serif;color:#fff;outline:none;transition:all 0.2s;}
-    .field input:focus,.field select:focus,.field textarea:focus{border-color:rgba(167,139,250,0.4);background:rgba(167,139,250,0.03);}
-    .field select option{background:#04080F;}
-    .field textarea{resize:vertical;min-height:70px;}
-    .field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-    .notify-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.07);border-radius:10px;margin:0 0 18px;}
-    .notify-label{font-size:13px;font-weight:500;color:#fff;}
-    .notify-sub{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.5;}
-    .toggle{position:relative;width:42px;height:24px;flex-shrink:0;}
-    .toggle input{opacity:0;width:0;height:0;}
-    .toggle-track{position:absolute;cursor:pointer;inset:0;background:rgba(255,255,255,0.1);border-radius:24px;transition:0.3s;}
-    .toggle-track::before{content:'';position:absolute;width:18px;height:18px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:0.3s;}
-    input:checked + .toggle-track{background:var(--orange);}
-    input:checked + .toggle-track::before{transform:translateX(18px);}
-    .submit-btn{width:100%;padding:12px;background:linear-gradient(135deg,#A78BFA,#6D28D9);border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;transition:opacity 0.2s;}
-    .submit-btn:hover{opacity:0.9;}
-    .submit-btn:disabled{opacity:0.5;cursor:not-allowed;}
-    .alert{padding:10px 14px;border-radius:8px;font-size:13px;display:none;margin:0 0 14px;}
-    .alert.show{display:block;}
-    .alert-s{background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);color:#86EFAC;}
-    .alert-e{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#FCA5A5;}
-    .detail-modal-gemini{position:relative;width:100%;max-width:680px;border-radius:22px;padding:2px;background:linear-gradient(135deg,rgba(79,195,247,0.5),rgba(167,139,250,0.5),rgba(244,114,182,0.4),rgba(249,115,22,0.4));background-size:300% 300%;animation:gs 5s ease infinite;}
-    .detail-tabs{display:flex;gap:4px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:3px;margin:0 0 20px;}
-    .detail-tab{flex:1;padding:8px;border-radius:8px;font-size:13px;color:var(--muted);background:none;border:none;cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif;}
-    .detail-tab.active{background:rgba(255,255,255,0.06);color:#fff;border:1px solid rgba(255,255,255,0.1);}
-    .detail-panel{display:none;}
-    .detail-panel.active{display:block;}
-    .info-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05);}
-    .info-row:last-child{border-bottom:none;}
-    .info-label{font-size:12px;color:var(--muted);}
-    .info-value{font-size:13px;font-weight:500;color:#fff;}
-    .cf-mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0;}
-    .cf-mini-stat{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:9px;padding:12px 14px;}
-    .cf-mini-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin:0 0 4px;}
-    .cf-mini-value{font-size:18px;font-weight:600;color:#fff;}
-    .welcome-btn{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:rgba(79,195,247,0.05);border:1px solid rgba(79,195,247,0.15);border-radius:10px;margin:0 0 16px;}
-    .welcome-send-btn{padding:7px 14px;background:rgba(79,195,247,0.1);border:1px solid rgba(79,195,247,0.2);border-radius:7px;color:var(--blue);font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;}
-    .welcome-send-btn:hover{background:rgba(79,195,247,0.2);}
-    .sbadge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:500;}
-    .sbadge-g{background:rgba(34,197,94,0.12);color:#86EFAC;border:1px solid rgba(34,197,94,0.2);}
-    .sbadge-r{background:rgba(239,68,68,0.12);color:#FCA5A5;border:1px solid rgba(239,68,68,0.2);}
-    .sbadge-y{background:rgba(251,191,36,0.12);color:#FBBF24;border:1px solid rgba(251,191,36,0.2);}
-    .sbadge-b{background:rgba(79,195,247,0.12);color:#4FC3F7;border:1px solid rgba(79,195,247,0.2);}
-    .sbadge-m{background:rgba(255,255,255,0.06);color:var(--muted);border:1px solid var(--border);}
-    .section-divider{font-size:10px;font-weight:600;color:rgba(148,163,184,0.4);text-transform:uppercase;letter-spacing:0.08em;margin:16px 0 10px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.05);}
-    html,body{overflow-x:hidden;max-width:100vw;}
-    *{max-width:100%;}
-    @media(max-width:768px){.shell{grid-template-columns:1fr}.sidebar{display:none}.main{padding:20px 16px}}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Clients — Suncoast Technology</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:#04080F; --navy2:#080f1a; --card:#0d1622; --border:rgba(255,255,255,0.07);
+  --orange:#F97316; --purple:#A78BFA; --teal:#2DD4BF; --blue:#4FC3F7; --green:#22C55E;
+  --red:#EF4444; --gold:#FBBF24; --muted:#94A3B8; --white:#ffffff;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',sans-serif;background:var(--navy);color:#e2e8f0;min-height:100vh;}
+.portal-shell{display:flex;min-height:100vh;}
+.sidebar-placeholder{width:240px;flex-shrink:0;}
+.main-content{flex:1;padding:32px 40px;overflow-x:hidden;}
+
+/* HEADER */
+.page-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;gap:16px;flex-wrap:wrap;}
+.page-top h1{font-size:24px;font-weight:700;color:#fff;}
+.page-top-right{display:flex;align-items:center;gap:10px;}
+.search-input{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;color:#fff;font-size:13px;padding:9px 14px;outline:none;width:220px;font-family:'Inter',sans-serif;}
+.search-input:focus{border-color:var(--orange);}
+.search-input::placeholder{color:var(--muted);}
+.view-toggle{display:flex;gap:2px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:8px;padding:3px;}
+.view-btn{padding:6px 10px;border-radius:6px;border:none;background:transparent;color:var(--muted);cursor:pointer;font-size:12px;transition:all .15s;}
+.view-btn.active{background:var(--card);color:#fff;}
+.btn-add{padding:9px 18px;border-radius:10px;border:none;background:var(--orange);color:#fff;font-size:13px;font-weight:600;cursor:pointer;transition:opacity .15s;white-space:nowrap;}
+.btn-add:hover{opacity:.85;}
+
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px;}
+@media(max-width:900px){.stats-row{grid-template-columns:repeat(2,1fr);}}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 20px;}
+.stat-label{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.stat-val{font-size:26px;font-weight:800;color:#fff;}
+.stat-sub{font-size:11px;color:var(--muted);margin-top:2px;}
+
+/* TILE GRID */
+.clients-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;}
+.client-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;cursor:pointer;transition:border-color .2s,transform .15s;}
+.client-card:hover{border-color:rgba(255,255,255,0.15);transform:translateY(-1px);}
+.cc-top{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.cc-avatar{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff;flex-shrink:0;}
+.cc-name{font-size:14px;font-weight:600;color:#fff;}
+.cc-biz{font-size:12px;color:var(--muted);}
+.cc-meta{display:flex;flex-direction:column;gap:5px;}
+.cc-row{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);}
+.cc-row a{color:var(--blue);text-decoration:none;}
+.plan-pill{display:inline-block;padding:3px 10px;border-radius:6px;font-size:11px;font-weight:600;margin-top:8px;}
+.status-dot{width:7px;height:7px;border-radius:50%;background:var(--green);display:inline-block;flex-shrink:0;}
+.status-dot.inactive{background:var(--muted);}
+
+/* LIST VIEW */
+.clients-list{display:none;flex-direction:column;gap:2px;}
+.clients-list.active{display:flex;}
+.clients-grid.list-mode{display:none;}
+.list-header{display:grid;grid-template-columns:2fr 2fr 1.5fr 1.2fr 1fr 80px;gap:12px;padding:8px 16px;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;}
+.list-row{display:grid;grid-template-columns:2fr 2fr 1.5fr 1.2fr 1fr 80px;gap:12px;padding:12px 16px;background:var(--card);border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:border-color .15s;align-items:center;font-size:13px;}
+.list-row:hover{border-color:rgba(255,255,255,0.15);}
+.list-row .client-name{font-weight:600;color:#fff;}
+.list-row .client-email{color:var(--muted);}
+
+/* EMPTY */
+.empty-state{text-align:center;padding:60px 20px;color:var(--muted);}
+.empty-state h3{font-size:18px;color:#fff;margin-bottom:8px;}
+
+/* MODAL OVERLAY */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);z-index:500;display:none;align-items:center;justify-content:center;padding:20px;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--navy2);border:1px solid var(--border);border-radius:20px;width:100%;max-width:620px;max-height:90vh;overflow-y:auto;}
+.modal-header{padding:24px 28px 0;display:flex;align-items:center;justify-content:space-between;}
+.modal-header h3{font-size:18px;font-weight:700;color:#fff;}
+.modal-close{width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:18px;cursor:pointer;}
+.modal-close:hover{color:#fff;}
+.modal-body{padding:20px 28px 28px;}
+.modal-tabs{display:flex;gap:4px;border-bottom:1px solid var(--border);margin-bottom:20px;}
+.modal-tab{padding:8px 16px;border:none;background:transparent;color:var(--muted);font-size:13px;font-weight:500;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;}
+.modal-tab.active{color:#fff;border-bottom-color:var(--orange);}
+.modal-tab-pane{display:none;}
+.modal-tab-pane.active{display:block;}
+
+/* FORM */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+@media(max-width:600px){.form-grid{grid-template-columns:1fr;}}
+.form-row{display:flex;flex-direction:column;gap:5px;}
+.form-row.full{grid-column:1/-1;}
+.form-label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;}
+.form-input,.form-select,.form-textarea{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;color:#fff;font-size:13px;padding:10px 14px;outline:none;font-family:'Inter',sans-serif;width:100%;}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--orange);}
+.form-select option{background:#0d1622;}
+.form-textarea{resize:vertical;min-height:80px;}
+.form-actions{display:flex;gap:10px;margin-top:20px;}
+.btn-cancel{flex:1;padding:11px;border-radius:10px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:13px;cursor:pointer;}
+.btn-cancel:hover{color:#fff;}
+.btn-save{flex:2;padding:11px;border-radius:10px;border:none;background:var(--orange);color:#fff;font-size:13px;font-weight:600;cursor:pointer;transition:opacity .15s;}
+.btn-save:hover{opacity:.85;}
+.btn-save:disabled{opacity:.5;cursor:not-allowed;}
+.btn-danger{padding:11px 20px;border-radius:10px;border:1px solid rgba(239,68,68,.3);background:transparent;color:var(--red);font-size:13px;font-weight:500;cursor:pointer;}
+.btn-danger:hover{background:rgba(239,68,68,.08);}
+
+/* PROFILE VIEW */
+.profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.profile-item{background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:10px;padding:12px 14px;}
+.profile-item-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.profile-item-val{font-size:13px;color:#fff;font-weight:500;}
+
+/* ADDON CHECKBOXES */
+.addons-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px;}
+.addon-check{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:8px;padding:10px 12px;cursor:pointer;transition:border-color .15s;}
+.addon-check:hover{border-color:rgba(249,115,22,.3);}
+.addon-check input{accent-color:var(--orange);width:14px;height:14px;cursor:pointer;}
+.addon-check-name{font-size:12px;color:#e2e8f0;flex:1;}
+.addon-check-price{font-size:11px;color:var(--orange);font-weight:600;}
+
+/* PLAN CHANGE NOTICE */
+.plan-change-notice{background:rgba(249,115,22,.07);border:1px solid rgba(249,115,22,.2);border-radius:10px;padding:12px 14px;font-size:12px;color:rgba(148,163,184,.9);line-height:1.6;margin-top:8px;display:none;}
+
+/* TOAST */
+.toast{position:fixed;bottom:28px;right:28px;background:#0d1622;border:1px solid var(--border);border-radius:12px;padding:14px 20px;font-size:13px;color:#fff;z-index:2000;display:none;align-items:center;gap:10px;box-shadow:0 8px 32px rgba(0,0,0,.4);}
+.toast.show{display:flex;}
+.toast.success{border-color:rgba(34,197,94,.4);}
+.toast.error{border-color:rgba(239,68,68,.4);}
+</style>
 </head>
 <body>
-<canvas id="aurora"></canvas>
-<div class="grid-overlay"></div>
-<div class="shell">
-  <aside class="sidebar" id="sc-sidebar"></aside>
+<div class="portal-shell">
+  <div id="sidebarMount"></div>
+  <div class="main-content">
 
-  <main class="main">
-    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
-      <div>
-        <div class="page-label">Admin</div>
-        <div class="page-title">Client <em>profiles</em></div>
-      </div>
-      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-        <div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:9px 14px;width:200px;">
-          <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6.5" cy="6.5" r="5"/><path d="M10.5 10.5L14 14" stroke-linecap="round"/></svg>
-          <input type="text" id="searchInput" placeholder="Search..." oninput="filterClients(this.value)" style="background:none;border:none;outline:none;font-size:13px;color:#fff;font-family:'DM Sans',sans-serif;width:100%;"/>
-        </div>
+    <div class="page-top">
+      <h1>Clients</h1>
+      <div class="page-top-right">
+        <input class="search-input" id="searchInput" placeholder="Search clients..." oninput="filterClients()">
         <div class="view-toggle">
-          <button class="view-btn active" id="tileBtn" onclick="setView('tile')">
-            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>Tile
-          </button>
-          <button class="view-btn" id="listBtn" onclick="setView('list')">
-            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 4h9M5 8h9M5 12h9M2 4h.01M2 8h.01M2 12h.01"/></svg>List
-          </button>
+          <button class="view-btn active" id="tileViewBtn" onclick="setView('tile')">⊞ Tile</button>
+          <button class="view-btn" id="listViewBtn" onclick="setView('list')">≡ List</button>
         </div>
-        <button class="add-btn" onclick="openAddModal()">
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2v12M2 8h12" stroke-linecap="round"/></svg>Add client
-        </button>
+        <button class="btn-add" onclick="openAddModal()">+ Add Client</button>
       </div>
     </div>
-    <div id="clientGrid" class="client-grid">
-      <div style="color:var(--muted);font-size:13px;grid-column:1/-1;padding:20px 0;">Loading clients...</div>
+
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-label">Total Clients</div><div class="stat-val" id="statTotal">—</div></div>
+      <div class="stat-card"><div class="stat-label">Active</div><div class="stat-val" id="statActive">—</div></div>
+      <div class="stat-card"><div class="stat-label">Monthly Revenue</div><div class="stat-val" id="statRevenue">—</div></div>
+      <div class="stat-card"><div class="stat-label">Plans Active</div><div class="stat-val" id="statPlans">—</div></div>
     </div>
-  </main>
+
+    <!-- TILE VIEW -->
+    <div class="clients-grid" id="clientsGrid"></div>
+
+    <!-- LIST VIEW -->
+    <div class="clients-list" id="clientsList">
+      <div class="list-header">
+        <span>Client</span><span>Email</span><span>Plan</span><span>Domain</span><span>Status</span><span></span>
+      </div>
+      <div id="clientsListBody"></div>
+    </div>
+
+    <div class="empty-state" id="emptyState" style="display:none;">
+      <h3>No clients yet</h3>
+      <p>Add your first client to get started.</p>
+    </div>
+
+  </div>
 </div>
 
 <!-- ADD CLIENT MODAL -->
-<div class="modal-overlay" id="addModal" onclick="if(event.target===this)closeAddModal()">
-  <div class="modal-gemini">
-    <div class="modal-inner">
-      <div class="modal-head">
-        <div class="modal-title">Add new client</div>
-        <button class="modal-close" onclick="closeAddModal()"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
-      </div>
-      <div class="modal-body">
-        <div class="alert alert-s" id="addSuccess"></div>
-        <div class="alert alert-e" id="addError"></div>
-        <div class="field-row">
-          <div class="field"><label>Full name *</label><input type="text" id="acName" placeholder="Jane Smith"/></div>
-          <div class="field"><label>Business name</label><input type="text" id="acBiz" placeholder="Jane's Cafe"/></div>
-        </div>
-        <div class="field-row">
-          <div class="field"><label>Email *</label><input type="email" id="acEmail" placeholder="jane@business.com"/></div>
-          <div class="field"><label>Phone</label><input type="tel" id="acPhone" placeholder="303-555-0100"/></div>
-        </div>
-        <div class="field"><label>Domain</label><input type="text" id="acDomain" placeholder="janescafe.com"/></div>
-        <div class="field"><label>Home address</label><input type="text" id="acHomeAddress" placeholder="123 Main St, Tampa FL 33601"/></div>
-        <div class="field"><label>Business / billing address</label><input type="text" id="acBizAddress" placeholder="456 Commerce Blvd, Tampa FL 33602"/></div>
-        <div class="field-row">
-          <div class="field"><label>Plan</label><input type="text" id="acPlan" placeholder="Pro Care"/></div>
-          <div class="field"><label>Monthly rate ($)</label><input type="number" id="acRate" placeholder="120"/></div>
-        </div>
-        <div class="field"><label>Status</label>
-          <select id="acStatus"><option value="Active">Active</option><option value="Inactive">Inactive</option></select>
-        </div>
-        <div style="background:rgba(167,139,250,0.05);border:1px solid rgba(167,139,250,0.15);border-radius:10px;padding:14px 16px;margin:0 0 14px;">
-          <div style="font-size:13px;font-weight:500;color:#fff;margin:0 0 8px;">📋 Attach a contract</div>
-          <div style="font-size:12px;color:rgba(148,163,184,0.6);margin:0 0 10px;line-height:1.6;">Send a service agreement for them to sign before getting portal access.</div>
-          <select id="acContract" style="width:100%;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:9px 12px;font-size:13px;font-family:'DM Sans',sans-serif;color:#fff;outline:none;">
-            <option value="">No contract — send portal access directly</option>
+<div class="modal-overlay" id="addModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Add New Client</h3>
+      <button class="modal-close" onclick="closeAddModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-row"><label class="form-label">Full Name *</label><input class="form-input" id="add-name" placeholder="Jane Smith"></div>
+        <div class="form-row"><label class="form-label">Business Name</label><input class="form-input" id="add-biz" placeholder="Smith & Co."></div>
+        <div class="form-row"><label class="form-label">Email *</label><input class="form-input" id="add-email" type="email" placeholder="jane@smithco.com"></div>
+        <div class="form-row"><label class="form-label">Phone</label><input class="form-input" id="add-phone" placeholder="(555) 000-0000"></div>
+        <div class="form-row"><label class="form-label">Domain</label><input class="form-input" id="add-domain" placeholder="smithco.com"></div>
+        <div class="form-row"><label class="form-label">Status</label>
+          <select class="form-select" id="add-status">
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
           </select>
         </div>
-        <div class="notify-row">
-          <div>
-            <div class="notify-label" id="notifyLabel">Send welcome email</div>
-            <div class="notify-sub" id="notifySub">Turn off to add silently — send the email later from their profile</div>
-          </div>
-          <label class="toggle"><input type="checkbox" id="acNotify" checked><span class="toggle-track"></span></label>
+        <div class="form-row"><label class="form-label">Retainer Plan</label>
+          <select class="form-select" id="add-plan" onchange="onPlanChange('add')">
+            <option value="">— None —</option>
+            <option value="Starter">Starter — $79/mo</option>
+            <option value="Pro Care">Pro Care — $139/mo</option>
+            <option value="Growth">Growth — $229/mo</option>
+            <option value="Studio">Studio — $399/mo</option>
+          </select>
         </div>
-        <button class="submit-btn" id="addSubmitBtn" onclick="handleAddClient()">Add client</button>
+        <div class="form-row"><label class="form-label">Monthly Rate ($)</label><input class="form-input" id="add-rate" type="number" placeholder="Auto-fills from plan" min="0"></div>
+        <div class="form-row"><label class="form-label">Billing Day</label>
+          <select class="form-select" id="add-billing-day">
+            ${Array.from({length:28},(_,i)=>`<option value="${i+1}">${i+1}${['st','nd','rd'][i]||'th'} of month</option>`).join('')}
+          </select>
+        </div>
+        <div class="form-row full"><label class="form-label">Notes</label><textarea class="form-textarea" id="add-notes" placeholder="Any notes about this client..."></textarea></div>
+      </div>
+      <div class="form-row" style="margin-top:14px;">
+        <label class="form-label">Monthly Add-Ons</label>
+        <div class="addons-grid" id="add-addons-grid"></div>
+      </div>
+      <div class="form-actions">
+        <button class="btn-cancel" onclick="closeAddModal()">Cancel</button>
+        <button class="btn-save" id="btnAddClient" onclick="submitAddClient()">Add Client</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- CLIENT DETAIL MODAL -->
-<div class="modal-overlay" id="detailModal" onclick="if(event.target===this)closeDetailModal()">
-  <div class="detail-modal-gemini">
-    <div class="modal-inner" style="max-width:680px;">
-      <div class="modal-head">
-        <div>
-          <div class="modal-title" id="detailName">Client profile</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:3px;" id="detailSub"></div>
-        </div>
-        <button class="modal-close" onclick="closeDetailModal()"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
+<!-- EDIT/VIEW CLIENT MODAL -->
+<div class="modal-overlay" id="clientModal">
+  <div class="modal" style="max-width:680px;">
+    <div class="modal-header">
+      <h3 id="modalClientName">Client</h3>
+      <button class="modal-close" onclick="closeClientModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-tabs">
+        <button class="modal-tab active" onclick="switchModalTab('profile')">Profile</button>
+        <button class="modal-tab" onclick="switchModalTab('billing')">Billing</button>
+        <button class="modal-tab" onclick="switchModalTab('edit')">Edit</button>
       </div>
-      <div class="modal-body">
-        <div class="detail-tabs">
-          <button class="detail-tab active" onclick="switchDetailTab('profile')">Profile</button>
-          <button class="detail-tab" onclick="switchDetailTab('site')">Site & Cloudflare</button>
-          <button class="detail-tab" onclick="switchDetailTab('billing')">Billing</button>
-          <button class="detail-tab" onclick="switchDetailTab('edit')">Edit</button>
-        </div>
 
-        <!-- PROFILE TAB -->
-        <div class="detail-panel active" id="tab-profile">
-          <div class="welcome-btn">
-            <div>
-              <div style="font-size:13px;font-weight:500;color:#fff;">Welcome email</div>
-              <div style="font-size:11px;color:var(--muted);margin-top:2px;">Send or resend with a fresh temp password</div>
-            </div>
-            <button class="welcome-send-btn" id="welcomeBtn" onclick="handleSendWelcome()">Send welcome</button>
-          </div>
-          <div class="alert alert-s" id="profileSuccess"></div>
-          <div class="alert alert-e" id="profileError"></div>
-          <div id="profileInfo"></div>
-        </div>
-
-        <!-- SITE TAB -->
-        <div class="detail-panel" id="tab-site">
-          <div id="siteInfo"></div>
-          <div id="cfInfo"><div style="color:var(--muted);font-size:13px;padding:20px 0;">Loading Cloudflare data...</div></div>
-        </div>
-
-        <!-- BILLING TAB -->
-        <div class="detail-panel" id="tab-billing">
-          <div id="billingInfo"></div>
-        </div>
-
-        <!-- EDIT TAB -->
-        <div class="detail-panel" id="tab-edit">
-          <div class="alert alert-s" id="editSuccess"></div>
-          <div class="alert alert-e" id="editError"></div>
-          <div class="field-row">
-            <div class="field"><label>Full name</label><input type="text" id="eName"/></div>
-            <div class="field"><label>Business</label><input type="text" id="eBiz"/></div>
-          </div>
-          <div class="field-row">
-            <div class="field"><label>Email</label><input type="email" id="eEmail"/></div>
-            <div class="field"><label>Phone</label><input type="tel" id="ePhone"/></div>
-          </div>
-          <div class="field"><label>Domain</label><input type="text" id="eDomain"/></div>
-          <div class="field"><label>Home address</label><input type="text" id="eHomeAddress" placeholder="123 Main St, Tampa FL 33601"/></div>
-          <div class="field"><label>Business / billing address</label><input type="text" id="eBizAddress" placeholder="456 Commerce Blvd, Tampa FL 33602"/></div>
-          <div class="field-row">
-            <div class="field"><label>Plan</label><input type="text" id="ePlan"/></div>
-            <div class="field"><label>Monthly rate ($)</label><input type="number" id="eRate"/></div>
-          </div>
-          <div class="field-row">
-            <div class="field"><label>Site status</label>
-              <select id="eSiteStatus"><option>Online</option><option>Offline</option><option>Maintenance</option></select>
-            </div>
-            <div class="field"><label>SSL status</label>
-              <select id="eSslStatus"><option>Active</option><option>Expired</option><option>Pending</option></select>
-            </div>
-          </div>
-          <div class="field"><label>Status</label>
-            <select id="eStatus"><option>Active</option><option>Inactive</option></select>
-          </div>
-          <div class="field"><label>Notes</label><textarea id="eNotes" placeholder="Internal notes..."></textarea></div>
-          <button class="submit-btn" id="editSaveBtn" onclick="handleEditSave()">Save changes</button>
+      <!-- PROFILE TAB -->
+      <div class="modal-tab-pane active" id="pane-profile">
+        <div class="profile-grid" id="profileGrid"></div>
+        <div style="margin-top:16px;display:flex;gap:10px;">
+          <button class="btn-save" style="flex:0;padding:9px 18px;font-size:12px;" onclick="sendWelcomeEmail()">Send Welcome Email</button>
+          <button class="btn-save" style="flex:0;padding:9px 18px;font-size:12px;background:var(--purple);" onclick="goToInvoice()">Create Invoice</button>
         </div>
       </div>
+
+      <!-- BILLING TAB -->
+      <div class="modal-tab-pane" id="pane-billing">
+        <div id="billingDetails"></div>
+      </div>
+
+      <!-- EDIT TAB -->
+      <div class="modal-tab-pane" id="pane-edit">
+        <div class="form-grid">
+          <div class="form-row"><label class="form-label">Full Name</label><input class="form-input" id="edit-name"></div>
+          <div class="form-row"><label class="form-label">Business Name</label><input class="form-input" id="edit-biz"></div>
+          <div class="form-row"><label class="form-label">Email</label><input class="form-input" id="edit-email" type="email"></div>
+          <div class="form-row"><label class="form-label">Phone</label><input class="form-input" id="edit-phone"></div>
+          <div class="form-row"><label class="form-label">Domain</label><input class="form-input" id="edit-domain"></div>
+          <div class="form-row"><label class="form-label">Status</label>
+            <select class="form-select" id="edit-status">
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
+            </select>
+          </div>
+          <div class="form-row"><label class="form-label">Retainer Plan</label>
+            <select class="form-select" id="edit-plan" onchange="onPlanChange('edit')">
+              <option value="">— None —</option>
+              <option value="Starter">Starter — $79/mo</option>
+              <option value="Pro Care">Pro Care — $139/mo</option>
+              <option value="Growth">Growth — $229/mo</option>
+              <option value="Studio">Studio — $399/mo</option>
+            </select>
+          </div>
+          <div class="form-row"><label class="form-label">Monthly Rate ($)</label><input class="form-input" id="edit-rate" type="number" min="0"></div>
+          <div class="form-row"><label class="form-label">Site Status</label>
+            <select class="form-select" id="edit-site-status">
+              <option>Online</option><option>Offline</option><option>Maintenance</option>
+            </select>
+          </div>
+          <div class="form-row"><label class="form-label">SSL Status</label>
+            <select class="form-select" id="edit-ssl-status">
+              <option>Active</option><option>Expired</option><option>Pending</option>
+            </select>
+          </div>
+          <div class="form-row full"><label class="form-label">Notes</label><textarea class="form-textarea" id="edit-notes"></textarea></div>
+        </div>
+        <div class="form-row" style="margin-top:14px;">
+          <label class="form-label">Monthly Add-Ons</label>
+          <div class="addons-grid" id="edit-addons-grid"></div>
+        </div>
+        <div class="plan-change-notice" id="planChangeNotice">
+          ⚡ Plan change detected. A prorated invoice will automatically be created for the difference and sent to the client.
+        </div>
+        <div class="form-actions">
+          <button class="btn-cancel" onclick="closeClientModal()">Cancel</button>
+          <button class="btn-save" id="btnSaveClient" onclick="submitEditClient()">Save Changes</button>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
 
-<script>
-  const API = 'https://script.google.com/macros/s/AKfycbyxg5LlS9eUx6VSiD_VSzE0RD94STkBAK4Hc-h14T_YU5ikqXGE3dz-Fvt1kCAE-9XRLw/exec';
-  const token    = localStorage.getItem('sc_token');
-  const clientId = localStorage.getItem('sc_client_id');
-  if (!token) window.location.href = 'login.html';
-
-  let allClients    = [];
-  let currentClient = null;
-  let currentView   = 'tile';
-
-  async function api(action, extra = {}) {
-    const res = await fetch(API, { method: 'POST', body: JSON.stringify({ action, token, client_id: clientId, ...extra }) });
-    return res.json();
-  }
-
-  function handleLogout() {
-    fetch(API, { method: 'POST', body: JSON.stringify({ action: 'logout', token }) });
-    localStorage.clear();
-    window.location.href = 'login.html';
-  }
-
-  async function loadClients() {
-    try {
-      const res = await api('adminGetClients');
-      if (!res.ok) { window.location.href = 'login.html'; return; }
-      allClients = res.clients || [];
-      renderGrid(allClients);
-    } catch(e) { console.error(e); }
-  }
-
-  function setView(v) {
-    currentView = v;
-    document.getElementById('tileBtn').classList.toggle('active', v === 'tile');
-    document.getElementById('listBtn').classList.toggle('active', v === 'list');
-    const q = (document.getElementById('searchInput').value || '').toLowerCase();
-    renderGrid(allClients.filter(c => !q ||
-      (c.domain||'').toLowerCase().includes(q) ||
-      (c.client_name||'').toLowerCase().includes(q) ||
-      (c.business_name||'').toLowerCase().includes(q) ||
-      (c.contact_email||'').toLowerCase().includes(q)
-    ));
-  }
-
-  function filterClients(q) {
-    const s = q.toLowerCase();
-    renderGrid(allClients.filter(c =>
-      (c.domain||'').toLowerCase().includes(s) ||
-      (c.client_name||'').toLowerCase().includes(s) ||
-      (c.business_name||'').toLowerCase().includes(s) ||
-      (c.contact_email||'').toLowerCase().includes(s)
-    ));
-  }
-
-  function renderGrid(clients) {
-    const grid = document.getElementById('clientGrid');
-    if (!clients.length) {
-      grid.innerHTML = '<div style="color:var(--muted);font-size:13px;grid-column:1/-1;padding:40px 0;text-align:center;">No clients found.</div>';
-      grid.style.display = 'grid';
-      return;
-    }
-    if (currentView === 'list') {
-      grid.style.cssText = 'display:flex;flex-direction:column;gap:8px;';
-      grid.innerHTML = clients.map(c => {
-        const initials = (c.client_name||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
-        const isActive = (c.status||'Active').toLowerCase() === 'active';
-        const primary  = c.domain || c.business_name || '—';
-        const secondary= c.client_name || '—';
-        return `<div class="client-list-row" onclick="openClient('${c.client_id}')">
-          <div class="client-avatar" style="flex-shrink:0;">${initials}</div>
-          <div style="flex:1;min-width:0;">
-            <div style="font-size:14px;font-weight:500;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${primary}</div>
-            <div style="font-size:12px;color:var(--muted);">${secondary}</div>
-          </div>
-          <div style="font-size:12px;color:var(--muted);width:190px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${c.contact_email||'—'}</div>
-          <div style="font-size:12px;color:#fff;width:110px;">${c.plan_name||'—'}${c.monthly_rate?' · $'+c.monthly_rate+'/mo':''}</div>
-          <span class="sbadge ${isActive?'sbadge-g':'sbadge-m'}">${c.status||'Active'}</span>
-        </div>`;
-      }).join('');
-    } else {
-      grid.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;';
-      grid.innerHTML = clients.map(c => {
-        const initials = (c.client_name||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
-        const isActive = (c.status||'Active').toLowerCase() === 'active';
-        const primary  = c.domain || c.business_name || '—';
-        const secondary= c.client_name || '—';
-        return `<div class="client-card" onclick="openClient('${c.client_id}')">
-          <div style="display:flex;align-items:center;gap:12px;margin:0 0 14px;">
-            <div class="client-avatar">${initials}</div>
-            <div style="min-width:0;">
-              <div style="font-size:14px;font-weight:500;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${primary}</div>
-              <div style="font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${secondary}</div>
-            </div>
-          </div>
-          <div style="display:flex;flex-direction:column;gap:5px;margin:0 0 14px;">
-            ${c.contact_email?`<div style="display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted);">
-              <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="4" width="14" height="9" rx="1.5"/><path d="M1 4l7 5.5L15 4"/></svg>
-              <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${c.contact_email}</span></div>`:''}
-            ${c.plan_name?`<div style="display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted);">
-              <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1l1.9 3.9 4.1.6-3 2.9.7 4.1L8 10.4l-3.7 2.1.7-4.1-3-2.9 4.1-.6z"/></svg>
-              ${c.plan_name}${c.monthly_rate?' · $'+c.monthly_rate+'/mo':''}</div>`:''}
-          </div>
-          <div style="display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid rgba(255,255,255,0.06);">
-            <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted);">
-              <span style="width:6px;height:6px;border-radius:50%;background:${isActive?'var(--green)':'var(--muted)'}"></span>
-              ${c.status||'Active'}
-            </span>
-            <span style="font-size:11px;color:var(--orange);font-weight:500;">View profile →</span>
-          </div>
-        </div>`;
-      }).join('');
-    }
-  }
-
-  // ── ADD CLIENT ──
-  function openAddModal() {
-    ['addSuccess','addError'].forEach(id => { document.getElementById(id).classList.remove('show'); document.getElementById(id).textContent=''; });
-    ['acName','acBiz','acEmail','acPhone','acDomain','acPlan','acRate','acHomeAddress','acBizAddress'].forEach(id => document.getElementById(id).value = '');
-    document.getElementById('acStatus').value = 'Active';
-    document.getElementById('acNotify').checked = true;
-    document.getElementById('addSubmitBtn').disabled = false;
-    document.getElementById('addSubmitBtn').textContent = 'Add client';
-    loadContractsForModal();
-    document.getElementById('addModal').classList.add('open');
-  }
-
-  async function loadContractsForModal() {
-    try {
-      const res = await api('adminGetContracts');
-      const contracts = (res.contracts || []).filter(c => c.status === 'Draft' || !c.client_id);
-      const sel = document.getElementById('acContract');
-      sel.innerHTML = '<option value="">No contract — send portal access directly</option>' +
-        contracts.map(c => `<option value="${c.contract_id}">${c.project_name||c.contract_type||c.contract_id}</option>`).join('');
-      sel.onchange = function() {
-        const hasContract = !!this.value;
-        document.getElementById('notifyLabel').textContent = hasContract ? 'Send contract to sign' : 'Send welcome email';
-        document.getElementById('notifySub').textContent   = hasContract
-          ? 'Client will receive the contract to sign. Portal access is sent automatically after signing.'
-          : 'Turn off to add silently. Send welcome email later from their profile.';
-        document.getElementById('addSubmitBtn').textContent = hasContract ? 'Add client and send contract' : 'Add client';
-      };
-    } catch(e) {}
-  }
-
-  function closeAddModal() { document.getElementById('addModal').classList.remove('open'); }
-
-  async function handleAddClient() {
-    const btn   = document.getElementById('addSubmitBtn');
-    const name  = document.getElementById('acName').value.trim();
-    const email = document.getElementById('acEmail').value.trim();
-    const notify= document.getElementById('acNotify').checked;
-    ['addSuccess','addError'].forEach(id => document.getElementById(id).classList.remove('show'));
-    if (!name || !email) {
-      document.getElementById('addError').textContent = 'Name and email are required.';
-      document.getElementById('addError').classList.add('show'); return;
-    }
-    btn.disabled = true; btn.textContent = 'Adding...';
-    try {
-      const contractId = document.getElementById('acContract').value;
-      const res = await api('adminSaveClient', {
-        client: {
-          client_name:   name,
-          business_name: document.getElementById('acBiz').value.trim(),
-          contact_email: email,
-          phone:         document.getElementById('acPhone').value.trim(),
-          domain:        document.getElementById('acDomain').value.trim(),
-          home_address:  document.getElementById('acHomeAddress').value.trim(),
-          biz_address:   document.getElementById('acBizAddress').value.trim(),
-          plan_name:     document.getElementById('acPlan').value.trim(),
-          monthly_rate:  document.getElementById('acRate').value,
-          status:        document.getElementById('acStatus').value,
-          notify_client: notify
-        },
-        contract_id: contractId || ''
-      });
-      if (res.ok) {
-        document.getElementById('addSuccess').textContent = name + (notify ? ' added and welcome email sent.' : ' added silently.');
-        document.getElementById('addSuccess').classList.add('show');
-        btn.textContent = 'Added ✓';
-        await loadClients();
-        setTimeout(closeAddModal, 2000);
-      } else {
-        document.getElementById('addError').textContent = res.error || 'Error adding client.';
-        document.getElementById('addError').classList.add('show');
-        btn.disabled = false; btn.textContent = 'Add client';
-      }
-    } catch(e) {
-      document.getElementById('addError').textContent = 'Connection error.';
-      document.getElementById('addError').classList.add('show');
-      btn.disabled = false; btn.textContent = 'Add client';
-    }
-  }
-
-  // ── CLIENT DETAIL ──
-  function openClient(cid) {
-    currentClient = allClients.find(c => c.client_id === cid);
-    if (!currentClient) return;
-    const c = currentClient;
-
-    // Modal header — domain primary, client name secondary
-    document.getElementById('detailName').textContent = c.domain || c.business_name || '—';
-    document.getElementById('detailSub').textContent  = c.client_name || '';
-
-    ['profileSuccess','profileError','editSuccess','editError'].forEach(id => {
-      document.getElementById(id).classList.remove('show');
-      document.getElementById(id).textContent = '';
-    });
-
-    // Profile tab
-    document.getElementById('profileInfo').innerHTML = `
-      <div class="info-row"><span class="info-label">Client name</span><span class="info-value">${c.client_name||'—'}</span></div>
-      <div class="info-row"><span class="info-label">Business</span><span class="info-value">${c.business_name||'—'}</span></div>
-      <div class="info-row"><span class="info-label">Email</span><span class="info-value">${c.contact_email||'—'}</span></div>
-      <div class="info-row"><span class="info-label">Phone</span><span class="info-value">${c.phone||'—'}</span></div>
-      <div class="info-row"><span class="info-label">Domain</span><span class="info-value">${c.domain?`<a href="https://${c.domain}" target="_blank" style="color:var(--blue);text-decoration:none;">${c.domain} ↗</a>`:'—'}</span></div>
-      <div class="info-row"><span class="info-label">Home address</span><span class="info-value">${c.home_address||'—'}</span></div>
-      <div class="info-row"><span class="info-label">Biz / billing address</span><span class="info-value">${c.biz_address||'—'}</span></div>
-      <div class="info-row"><span class="info-label">Plan</span><span class="info-value">${c.plan_name||'—'}</span></div>
-      <div class="info-row"><span class="info-label">Monthly rate</span><span class="info-value">${c.monthly_rate?'$'+c.monthly_rate+'/mo':'—'}</span></div>
-      <div class="info-row"><span class="info-label">Status</span><span class="info-value"><span class="sbadge ${(c.status||'Active').toLowerCase()==='active'?'sbadge-g':'sbadge-m'}">${c.status||'Active'}</span></span></div>
-      <div class="info-row"><span class="info-label">Client ID</span><span class="info-value" style="font-family:monospace;font-size:12px;">${c.client_id}</span></div>`;
-
-    // Site tab
-    const siteOk = (c.site_status||'Online').toLowerCase() === 'online';
-    const sslOk  = (c.ssl_status||'Active').toLowerCase()  === 'active';
-    document.getElementById('siteInfo').innerHTML = `
-      <div class="info-row"><span class="info-label">Site status</span><span class="info-value"><span class="sbadge ${siteOk?'sbadge-g':'sbadge-r'}">${siteOk?'✓ Online':'✗ Offline'}</span></span></div>
-      <div class="info-row"><span class="info-label">SSL certificate</span><span class="info-value"><span class="sbadge ${sslOk?'sbadge-g':'sbadge-y'}">${sslOk?'✓ Active':'⚠ Check needed'}</span></span></div>
-      <div class="info-row"><span class="info-label">SSL expiry</span><span class="info-value">${c.ssl_expiry||'—'}</span></div>
-      <div class="info-row"><span class="info-label">Hosting</span><span class="info-value">${c.hosting_status||'Active'}</span></div>`;
-    document.getElementById('cfInfo').innerHTML = '<div style="color:var(--muted);font-size:13px;padding:16px 0;">Loading Cloudflare data...</div>';
-
-    // Billing tab
-    document.getElementById('billingInfo').innerHTML = `
-      <div class="info-row"><span class="info-label">Plan</span><span class="info-value">${c.plan_name||'—'}</span></div>
-      <div class="info-row"><span class="info-label">Monthly rate</span><span class="info-value">${c.monthly_rate?'$'+c.monthly_rate+'/mo':'—'}</span></div>
-      <div class="info-row"><span class="info-label">Billing day</span><span class="info-value">${c.billing_day||'1'}st of month</span></div>
-      <div class="info-row"><span class="info-label">Stripe subscription</span><span class="info-value">${c.stripe_subscription_id?'<span class="sbadge sbadge-g">Active</span>':'<span class="sbadge sbadge-m">None</span>'}</span></div>`;
-
-    // Edit tab
-    document.getElementById('eName').value        = c.client_name   || '';
-    document.getElementById('eBiz').value         = c.business_name || '';
-    document.getElementById('eEmail').value       = c.contact_email || '';
-    document.getElementById('ePhone').value       = c.phone         || '';
-    document.getElementById('eDomain').value      = c.domain        || '';
-    document.getElementById('eHomeAddress').value = c.home_address  || '';
-    document.getElementById('eBizAddress').value  = c.biz_address   || '';
-    document.getElementById('ePlan').value        = c.plan_name     || '';
-    document.getElementById('eRate').value        = c.monthly_rate  || '';
-    document.getElementById('eStatus').value      = c.status        || 'Active';
-    document.getElementById('eSiteStatus').value  = c.site_status   || 'Online';
-    document.getElementById('eSslStatus').value   = c.ssl_status    || 'Active';
-    document.getElementById('eNotes').value       = c.notes         || '';
-
-    switchDetailTab('profile');
-    document.getElementById('detailModal').classList.add('open');
-    if (c.domain) loadClientCF(c.domain);
-  }
-
-  async function loadClientCF(domain) {
-    try {
-      const d   = domain.replace(/^https?:\/\//,'').replace(/^www\./,'').replace(/\/$/,'').toLowerCase().trim();
-      const res = await api('getCloudflareStats', { domain: d });
-      if (!res.ok) {
-        document.getElementById('cfInfo').innerHTML = '<div style="color:var(--muted);font-size:13px;padding:10px 0;">Cloudflare data not available for this domain.</div>';
-        return;
-      }
-      const secLabels = { off:'Off', essentially_off:'Minimal', low:'Low', medium:'Medium', high:'High', under_attack:'Under Attack Mode' };
-      const sslLabels = { off:'Off', flexible:'Flexible', full:'Full', strict:'Full (Strict)' };
-      document.getElementById('cfInfo').innerHTML = `
-        <div style="margin-top:14px;">
-          <div style="font-size:10px;color:rgba(148,163,184,0.5);text-transform:uppercase;letter-spacing:0.08em;margin:0 0 10px;">☁️ Cloudflare — live data</div>
-          <div class="cf-mini-grid">
-            <div class="cf-mini-stat"><div class="cf-mini-label">Zone status</div><div class="cf-mini-value" style="font-size:13px;"><span class="sbadge ${res.zone_status==='active'?'sbadge-g':'sbadge-y'}">${res.zone_status||'—'}</span></div></div>
-            <div class="cf-mini-stat"><div class="cf-mini-label">SSL mode</div><div class="cf-mini-value" style="font-size:13px;"><span class="sbadge sbadge-b">${sslLabels[res.ssl_mode]||res.ssl_mode||'—'}</span></div></div>
-            <div class="cf-mini-stat"><div class="cf-mini-label">Force HTTPS</div><div class="cf-mini-value" style="font-size:13px;"><span class="sbadge ${res.always_https==='on'?'sbadge-g':'sbadge-y'}">${res.always_https==='on'?'On':'Off'}</span></div></div>
-            <div class="cf-mini-stat"><div class="cf-mini-label">Security</div><div class="cf-mini-value" style="font-size:14px;">${secLabels[res.security_level]||'—'}</div></div>
-            ${res.requests_24h!==undefined?`<div class="cf-mini-stat"><div class="cf-mini-label">Requests 24h</div><div class="cf-mini-value">${(res.requests_24h||0).toLocaleString()}</div></div>`:''}
-            ${res.pageviews_24h!==undefined?`<div class="cf-mini-stat"><div class="cf-mini-label">Page views 24h</div><div class="cf-mini-value">${(res.pageviews_24h||0).toLocaleString()}</div></div>`:''}
-            ${res.threats_24h!==undefined?`<div class="cf-mini-stat"><div class="cf-mini-label">Threats blocked</div><div class="cf-mini-value" style="color:${res.threats_24h>0?'#FBBF24':'var(--green)'}">${(res.threats_24h||0).toLocaleString()}</div></div>`:''}
-            ${res.bandwidth_mb!==undefined?`<div class="cf-mini-stat"><div class="cf-mini-label">Bandwidth</div><div class="cf-mini-value">${res.bandwidth_mb||0}<span style="font-size:11px;color:var(--muted);"> MB</span></div></div>`:''}
-          </div>
-        </div>`;
-    } catch(e) {
-      document.getElementById('cfInfo').innerHTML = '<div style="color:var(--muted);font-size:13px;padding:10px 0;">Could not load Cloudflare data.</div>';
-    }
-  }
-
-  function closeDetailModal() {
-    document.getElementById('detailModal').classList.remove('open');
-    currentClient = null;
-  }
-
-  function switchDetailTab(tab) {
-    const tabs = ['profile','site','billing','edit'];
-    document.querySelectorAll('.detail-tab').forEach((t,i) => t.classList.toggle('active', tabs[i] === tab));
-    document.querySelectorAll('.detail-panel').forEach(p => p.classList.remove('active'));
-    document.getElementById('tab-' + tab).classList.add('active');
-  }
-
-  async function handleEditSave() {
-    const btn = document.getElementById('editSaveBtn');
-    if (!currentClient) return;
-    ['editSuccess','editError'].forEach(id => document.getElementById(id).classList.remove('show'));
-    btn.disabled = true; btn.textContent = 'Saving...';
-    try {
-      const res = await api('adminSaveClient', {
-        client: {
-          client_id:     currentClient.client_id,
-          client_name:   document.getElementById('eName').value.trim(),
-          business_name: document.getElementById('eBiz').value.trim(),
-          contact_email: document.getElementById('eEmail').value.trim(),
-          phone:         document.getElementById('ePhone').value.trim(),
-          domain:        document.getElementById('eDomain').value.trim(),
-          home_address:  document.getElementById('eHomeAddress').value.trim(),
-          biz_address:   document.getElementById('eBizAddress').value.trim(),
-          plan_name:     document.getElementById('ePlan').value.trim(),
-          monthly_rate:  document.getElementById('eRate').value,
-          status:        document.getElementById('eStatus').value,
-          site_status:   document.getElementById('eSiteStatus').value,
-          ssl_status:    document.getElementById('eSslStatus').value,
-          notes:         document.getElementById('eNotes').value.trim()
-        }
-      });
-      if (res.ok) {
-        document.getElementById('editSuccess').textContent = 'Saved successfully.';
-        document.getElementById('editSuccess').classList.add('show');
-        await loadClients();
-        currentClient = allClients.find(c => c.client_id === currentClient.client_id);
-        btn.textContent = 'Saved ✓';
-        setTimeout(() => { btn.disabled = false; btn.textContent = 'Save changes'; }, 2000);
-      } else {
-        document.getElementById('editError').textContent = res.error || 'Error saving.';
-        document.getElementById('editError').classList.add('show');
-        btn.disabled = false; btn.textContent = 'Save changes';
-      }
-    } catch(e) { btn.disabled = false; btn.textContent = 'Save changes'; }
-  }
-
-  async function handleSendWelcome() {
-    if (!currentClient) return;
-    const btn = document.getElementById('welcomeBtn');
-    btn.disabled = true; btn.textContent = 'Sending...';
-    try {
-      const res = await api('adminSendWelcomeEmail', { client_id: currentClient.client_id });
-      if (res.ok) {
-        document.getElementById('profileSuccess').textContent = 'Welcome email sent to ' + currentClient.contact_email;
-        document.getElementById('profileSuccess').classList.add('show');
-        btn.textContent = 'Sent ✓';
-        setTimeout(() => { btn.disabled = false; btn.textContent = 'Send welcome'; }, 3000);
-      } else {
-        document.getElementById('profileError').textContent = res.error || 'Error sending email.';
-        document.getElementById('profileError').classList.add('show');
-        btn.disabled = false; btn.textContent = 'Send welcome';
-      }
-    } catch(e) { btn.disabled = false; btn.textContent = 'Send welcome'; }
-  }
-
-  loadClients();
-</script>
-
-<script>
-  (function(){
-    const canvas = document.getElementById('aurora');
-    if(!canvas) return;
-    const ctx = canvas.getContext('2d');
-    let W,H,t=0;
-    function resize(){ W=canvas.width=window.innerWidth; H=canvas.height=window.innerHeight; }
-    resize(); window.addEventListener('resize',resize);
-    const blobs=[
-      {x:0.2,y:0.3,r:0.5,color:[79,195,247],speed:0.00005},
-      {x:0.8,y:0.2,r:0.45,color:[167,139,250],speed:0.00004},
-      {x:0.5,y:0.7,r:0.4,color:[244,114,182],speed:0.00006},
-      {x:0.1,y:0.8,r:0.35,color:[45,212,191],speed:0.000045},
-      {x:0.9,y:0.6,r:0.3,color:[249,115,22],speed:0.000055}
-    ];
-    function draw(){
-      ctx.clearRect(0,0,W,H); t++;
-      blobs.forEach((b,i)=>{
-        const ox=Math.sin(t*b.speed*1000+i*1.2)*0.15;
-        const oy=Math.cos(t*b.speed*800+i*0.9)*0.12;
-        const cx=(b.x+ox)*W,cy=(b.y+oy)*H,rad=b.r*Math.min(W,H);
-        const g=ctx.createRadialGradient(cx,cy,0,cx,cy,rad);
-        const [r,gv,bl]=b.color;
-        g.addColorStop(0,`rgba(${r},${gv},${bl},0.2)`);
-        g.addColorStop(0.4,`rgba(${r},${gv},${bl},0.08)`);
-        g.addColorStop(1,`rgba(${r},${gv},${bl},0)`);
-        ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
-      });
-      requestAnimationFrame(draw);
-    }
-    draw();
-  })();
-  document.addEventListener('touchstart',function(e){if(e.touches.length>1)e.preventDefault();},{passive:false});
-  document.body.style.overflowX='hidden';
-  document.documentElement.style.overflowX='hidden';
-</script>
+<div class="toast" id="toast"><span id="toastIcon"></span>&nbsp;<span id="toastMsg"></span></div>
 
 <script src="sidebar.js"></script>
-<script src="ai-assistant.js"></script>
+<script>
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbyxg5LlS9eUx6VSiD_VSzE0RD94STkBAK4Hc-h14T_YU5ikqXGE3dz-Fvt1kCAE-9XRLw/exec';
+let TOKEN = localStorage.getItem('sc_token') || '';
+let allClients = [];
+let currentClient = null;
+let currentView = 'tile';
+
+const PLAN_RATES = { 'Starter':79, 'Pro Care':139, 'Growth':229, 'Studio':399 };
+const PLAN_COLORS = { 'Starter':'#4FC3F7','Pro Care':'#F97316','Growth':'#A78BFA','Studio':'#2DD4BF' };
+const ADDONS = [
+  { id:'ADD-DEVHOURS', name:'Extra Dev Hours (5hrs)',          price:395 },
+  { id:'ADD-SEO',      name:'SEO Monitoring',                  price:49  },
+  { id:'ADD-BLOG',     name:'Blog / Content Mgmt',             price:69  },
+  { id:'ADD-PRIORITY', name:'Priority Support SLA',            price:29  },
+  { id:'ADD-ECOM',     name:'E-Commerce Maintenance',          price:39  },
+  { id:'ADD-CFWORKERS',name:'Cloudflare Workers / Automation', price:59  },
+];
+
+const AVATAR_COLORS = ['#F97316','#A78BFA','#4FC3F7','#2DD4BF','#FBBF24','#F472B6','#34D399'];
+
+async function api(action, data={}) {
+  const r = await fetch(GAS_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ action, token:TOKEN, ...data }) });
+  return r.json();
+}
+
+// ── INIT ──────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  if (!TOKEN) { location.href = '/login.html'; return; }
+  buildAddonGrids();
+  loadClients();
+});
+
+async function loadClients() {
+  const res = await api('adminGetClients');
+  if (!res.ok) { showToast('Failed to load clients', 'error'); return; }
+  // Double-filter: server already filters is_admin, but enforce client-side too
+  allClients = (res.clients || []).filter(c =>
+    !(c.is_admin === true || c.is_admin === 'TRUE' || c.is_admin === 'true')
+  );
+  updateStats();
+  renderClients(allClients);
+}
+
+function updateStats() {
+  const active  = allClients.filter(c => (c.status||'Active') === 'Active');
+  const revenue = active.reduce((s,c) => s + (parseFloat(c.monthly_rate)||0), 0);
+  const plans   = active.filter(c => c.plan_name).length;
+  document.getElementById('statTotal').textContent   = allClients.length;
+  document.getElementById('statActive').textContent  = active.length;
+  document.getElementById('statRevenue').textContent = '$' + revenue.toLocaleString();
+  document.getElementById('statPlans').textContent   = plans;
+}
+
+function renderClients(list) {
+  const grid = document.getElementById('clientsGrid');
+  const listBody = document.getElementById('clientsListBody');
+  document.getElementById('emptyState').style.display = list.length ? 'none' : 'block';
+  if (!list.length) { grid.innerHTML = ''; listBody.innerHTML = ''; return; }
+
+  grid.innerHTML = list.map((c,i) => {
+    const color    = AVATAR_COLORS[i % AVATAR_COLORS.length];
+    const initials = (c.client_name||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+    const plan     = c.plan_name || '';
+    const planColor = PLAN_COLORS[plan] || '#94A3B8';
+    const active   = (c.status||'Active') === 'Active';
+    return `<div class="client-card" onclick="openClientModal('${c.client_id}')">
+      <div class="cc-top">
+        <div class="cc-avatar" style="background:${color}20;color:${color}">${initials}</div>
+        <div>
+          <div class="cc-name">${c.client_name||'—'}</div>
+          <div class="cc-biz">${c.business_name||'—'}</div>
+        </div>
+      </div>
+      <div class="cc-meta">
+        <div class="cc-row"><span class="status-dot ${active?'':'inactive'}"></span>${active?'Active':'Inactive'}</div>
+        ${c.contact_email ? `<div class="cc-row">✉ ${c.contact_email}</div>` : ''}
+        ${c.domain ? `<div class="cc-row">🌐 <a href="https://${c.domain}" target="_blank">${c.domain}</a></div>` : ''}
+        ${plan ? `<span class="plan-pill" style="background:${planColor}18;color:${planColor};border:1px solid ${planColor}30">${plan} — $${c.monthly_rate||PLAN_RATES[plan]||0}/mo</span>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+
+  listBody.innerHTML = list.map(c => {
+    const plan = c.plan_name || '—';
+    const planColor = PLAN_COLORS[c.plan_name] || '#94A3B8';
+    const active = (c.status||'Active') === 'Active';
+    return `<div class="list-row" onclick="openClientModal('${c.client_id}')">
+      <span class="client-name">${c.client_name||'—'} ${c.business_name?`<span style="color:var(--muted);font-weight:400;font-size:12px;">· ${c.business_name}</span>`:''}</span>
+      <span class="client-email">${c.contact_email||'—'}</span>
+      <span><span class="plan-pill" style="background:${planColor}18;color:${planColor};border:1px solid ${planColor}30;padding:2px 8px;border-radius:5px;font-size:11px;font-weight:600;">${plan}</span></span>
+      <span style="color:var(--muted);font-size:12px;">${c.domain||'—'}</span>
+      <span><span class="status-dot ${active?'':'inactive'}" style="margin-right:5px;"></span>${active?'Active':'Inactive'}</span>
+      <span style="color:var(--orange);font-weight:600;">$${c.monthly_rate||0}/mo</span>
+    </div>`;
+  }).join('');
+}
+
+function filterClients() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const filtered = q ? allClients.filter(c =>
+    (c.client_name||'').toLowerCase().includes(q) ||
+    (c.business_name||'').toLowerCase().includes(q) ||
+    (c.contact_email||'').toLowerCase().includes(q) ||
+    (c.domain||'').toLowerCase().includes(q)
+  ) : allClients;
+  renderClients(filtered);
+}
+
+function setView(v) {
+  currentView = v;
+  document.getElementById('tileViewBtn').classList.toggle('active', v==='tile');
+  document.getElementById('listViewBtn').classList.toggle('active', v==='list');
+  document.getElementById('clientsGrid').style.display = v==='tile' ? '' : 'none';
+  document.getElementById('clientsList').style.display = v==='list' ? 'flex' : 'none';
+}
+
+// ── ADD-ONS GRID ──────────────────────────────────────────────
+function buildAddonGrids() {
+  ['add-addons-grid','edit-addons-grid'].forEach(id => {
+    document.getElementById(id).innerHTML = ADDONS.map(a =>
+      `<label class="addon-check">
+        <input type="checkbox" value="${a.id}" class="addon-cb-${id}">
+        <span class="addon-check-name">${a.name}</span>
+        <span class="addon-check-price">+$${a.price}/mo</span>
+      </label>`
+    ).join('');
+  });
+}
+
+function getCheckedAddons(gridId) {
+  return Array.from(document.querySelectorAll(`.addon-cb-${gridId}:checked`)).map(cb => cb.value);
+}
+
+function setCheckedAddons(gridId, activeIds) {
+  document.querySelectorAll(`.addon-cb-${gridId}`).forEach(cb => {
+    cb.checked = activeIds.includes(cb.value);
+  });
+}
+
+// ── PLAN AUTO-FILL ─────────────────────────────────────────────
+function onPlanChange(prefix) {
+  const plan = document.getElementById(`${prefix}-plan`).value;
+  const rateInput = document.getElementById(`${prefix}-rate`);
+  if (PLAN_RATES[plan]) rateInput.value = PLAN_RATES[plan];
+  if (prefix === 'edit' && currentClient) {
+    const changed = plan !== (currentClient.plan_name || '');
+    document.getElementById('planChangeNotice').style.display = changed && plan ? 'block' : 'none';
+  }
+}
+
+// ── ADD CLIENT ─────────────────────────────────────────────────
+function openAddModal() {
+  document.getElementById('add-name').value = '';
+  document.getElementById('add-biz').value = '';
+  document.getElementById('add-email').value = '';
+  document.getElementById('add-phone').value = '';
+  document.getElementById('add-domain').value = '';
+  document.getElementById('add-plan').value = '';
+  document.getElementById('add-rate').value = '';
+  document.getElementById('add-notes').value = '';
+  document.getElementById('add-status').value = 'Active';
+  document.getElementById('add-billing-day').value = '1';
+  setCheckedAddons('add-addons-grid', []);
+  document.getElementById('addModal').classList.add('open');
+}
+function closeAddModal() { document.getElementById('addModal').classList.remove('open'); }
+
+async function submitAddClient() {
+  const name  = document.getElementById('add-name').value.trim();
+  const email = document.getElementById('add-email').value.trim();
+  if (!name || !email) { showToast('Name and email are required.', 'error'); return; }
+  const plan   = document.getElementById('add-plan').value;
+  const rate   = parseFloat(document.getElementById('add-rate').value) || (PLAN_RATES[plan] || 0);
+  const addons = getCheckedAddons('add-addons-grid');
+  const btn = document.getElementById('btnAddClient');
+  btn.disabled = true; btn.textContent = 'Adding...';
+  const res = await api('adminSaveClient', { client: {
+    client_name:   name,
+    business_name: document.getElementById('add-biz').value.trim(),
+    contact_email: email,
+    phone:         document.getElementById('add-phone').value.trim(),
+    domain:        document.getElementById('add-domain').value.trim(),
+    plan_name:     plan,
+    monthly_rate:  rate,
+    billing_day:   parseInt(document.getElementById('add-billing-day').value),
+    status:        document.getElementById('add-status').value,
+    notes:         document.getElementById('add-notes').value.trim(),
+    active_addons: JSON.stringify(addons),
+  }});
+  btn.disabled = false; btn.textContent = 'Add Client';
+  if (res.ok) {
+    showToast('Client added ✓', 'success');
+    closeAddModal();
+    loadClients();
+  } else {
+    showToast(res.error || 'Failed to add client.', 'error');
+  }
+}
+
+// ── VIEW/EDIT CLIENT ──────────────────────────────────────────
+function openClientModal(clientId) {
+  currentClient = allClients.find(c => c.client_id === clientId);
+  if (!currentClient) return;
+  document.getElementById('modalClientName').textContent = currentClient.business_name || currentClient.client_name;
+  switchModalTab('profile');
+  document.getElementById('clientModal').classList.add('open');
+}
+function closeClientModal() { document.getElementById('clientModal').classList.remove('open'); currentClient = null; }
+
+function switchModalTab(tab) {
+  document.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.modal-tab-pane').forEach(p => p.classList.remove('active'));
+  document.querySelector(`.modal-tab[onclick*="${tab}"]`).classList.add('active');
+  document.getElementById('pane-' + tab).classList.add('active');
+  if (tab === 'profile')  renderProfile();
+  if (tab === 'billing')  renderBilling();
+  if (tab === 'edit')     renderEdit();
+}
+
+function renderProfile() {
+  const c = currentClient;
+  const plan = c.plan_name || '';
+  const planColor = PLAN_COLORS[plan] || '#94A3B8';
+  document.getElementById('profileGrid').innerHTML = [
+    ['Name',     c.client_name || '—'],
+    ['Business', c.business_name || '—'],
+    ['Email',    c.contact_email || '—'],
+    ['Phone',    c.phone || '—'],
+    ['Domain',   c.domain ? `<a href="https://${c.domain}" target="_blank" style="color:var(--blue)">${c.domain}</a>` : '—'],
+    ['Status',   c.status || 'Active'],
+    ['Plan',     plan ? `<span style="color:${planColor};font-weight:600;">${plan}</span>` : '—'],
+    ['Rate',     c.monthly_rate ? `$${c.monthly_rate}/mo` : '—'],
+    ['Billing',  c.billing_day ? `${c.billing_day}${['st','nd','rd'][c.billing_day-1]||'th'} of month` : '—'],
+    ['Created',  c.created_at ? new Date(c.created_at).toLocaleDateString() : '—'],
+  ].map(([l,v]) => `<div class="profile-item"><div class="profile-item-label">${l}</div><div class="profile-item-val">${v}</div></div>`).join('');
+}
+
+function renderBilling() {
+  const c = currentClient;
+  const plan = c.plan_name;
+  const planColor = PLAN_COLORS[plan] || '#94A3B8';
+  let addons = [];
+  try { addons = c.active_addons ? JSON.parse(c.active_addons) : []; } catch(e){}
+  const activeAddonItems = ADDONS.filter(a => addons.includes(a.id));
+  const addonTotal = activeAddonItems.reduce((s,a) => s+a.price, 0);
+  const baseRate   = parseFloat(c.monthly_rate) || 0;
+  const total      = baseRate + addonTotal;
+
+  document.getElementById('billingDetails').innerHTML = `
+    <div style="background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:14px;">
+      <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;font-weight:700;">Monthly Billing Breakdown</div>
+      ${plan ? `<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);">
+        <span style="font-size:13px;color:#e2e8f0;">${plan} Retainer Plan</span>
+        <span style="font-size:13px;font-weight:600;color:#fff;">$${baseRate}/mo</span>
+      </div>` : '<div style="color:var(--muted);font-size:13px;padding:8px 0;">No plan assigned.</div>'}
+      ${activeAddonItems.map(a => `<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);">
+        <span style="font-size:13px;color:#e2e8f0;">+ ${a.name}</span>
+        <span style="font-size:13px;font-weight:600;color:var(--orange);">+$${a.price}/mo</span>
+      </div>`).join('')}
+      <div style="display:flex;justify-content:space-between;padding:12px 0 0;">
+        <span style="font-size:14px;font-weight:700;color:#fff;">Total Monthly</span>
+        <span style="font-size:18px;font-weight:800;color:${planColor};">$${total}/mo</span>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;">
+      <button class="btn-save" style="flex:0;padding:9px 18px;font-size:12px;" onclick="switchModalTab('edit')">Edit Plan / Add-Ons</button>
+      <button class="btn-save" style="flex:0;padding:9px 18px;font-size:12px;background:var(--purple);" onclick="goToInvoice()">Create Invoice</button>
+    </div>`;
+}
+
+function renderEdit() {
+  const c = currentClient;
+  document.getElementById('edit-name').value        = c.client_name || '';
+  document.getElementById('edit-biz').value         = c.business_name || '';
+  document.getElementById('edit-email').value       = c.contact_email || '';
+  document.getElementById('edit-phone').value       = c.phone || '';
+  document.getElementById('edit-domain').value      = c.domain || '';
+  document.getElementById('edit-status').value      = c.status || 'Active';
+  document.getElementById('edit-plan').value        = c.plan_name || '';
+  document.getElementById('edit-rate').value        = c.monthly_rate || '';
+  document.getElementById('edit-site-status').value = c.site_status || 'Online';
+  document.getElementById('edit-ssl-status').value  = c.ssl_status || 'Active';
+  document.getElementById('edit-notes').value       = c.notes || '';
+  document.getElementById('planChangeNotice').style.display = 'none';
+  let addons = [];
+  try { addons = c.active_addons ? JSON.parse(c.active_addons) : []; } catch(e){}
+  setCheckedAddons('edit-addons-grid', addons);
+}
+
+async function submitEditClient() {
+  if (!currentClient) return;
+  const newPlan   = document.getElementById('edit-plan').value;
+  const oldPlan   = currentClient.plan_name || '';
+  const planChanged = newPlan !== oldPlan && newPlan;
+  const newRate   = parseFloat(document.getElementById('edit-rate').value) || (PLAN_RATES[newPlan] || 0);
+  const addons    = getCheckedAddons('edit-addons-grid');
+  const btn = document.getElementById('btnSaveClient');
+  btn.disabled = true; btn.textContent = 'Saving...';
+
+  // If plan changed, use adminChangePlan for proration
+  if (planChanged) {
+    const oldRate = parseFloat(currentClient.monthly_rate) || 0;
+    const proRes = await api('adminChangePlan', {
+      client_id: currentClient.client_id,
+      new_plan:  newPlan,
+      new_rate:  newRate,
+      prorate:   true,
+    });
+    if (!proRes.ok) { showToast(proRes.error || 'Plan change failed.', 'error'); btn.disabled=false; btn.textContent='Save Changes'; return; }
+  }
+
+  const res = await api('adminSaveClient', { client: {
+    client_id:    currentClient.client_id,
+    client_name:  document.getElementById('edit-name').value.trim(),
+    business_name:document.getElementById('edit-biz').value.trim(),
+    contact_email:document.getElementById('edit-email').value.trim(),
+    phone:        document.getElementById('edit-phone').value.trim(),
+    domain:       document.getElementById('edit-domain').value.trim(),
+    status:       document.getElementById('edit-status').value,
+    plan_name:    newPlan,
+    monthly_rate: newRate,
+    site_status:  document.getElementById('edit-site-status').value,
+    ssl_status:   document.getElementById('edit-ssl-status').value,
+    notes:        document.getElementById('edit-notes').value.trim(),
+    active_addons:JSON.stringify(addons),
+  }});
+  btn.disabled = false; btn.textContent = 'Save Changes';
+  if (res.ok) {
+    showToast(planChanged ? 'Client updated — proration invoice created ✓' : 'Client updated ✓', 'success');
+    await loadClients();
+    closeClientModal();
+  } else {
+    showToast(res.error || 'Failed to save.', 'error');
+  }
+}
+
+async function sendWelcomeEmail() {
+  if (!currentClient) return;
+  const res = await api('sendWelcomeEmail', { client_id: currentClient.client_id });
+  showToast(res.ok ? 'Welcome email sent ✓' : (res.error || 'Failed to send email.'), res.ok ? 'success' : 'error');
+}
+
+function goToInvoice() {
+  if (!currentClient) return;
+  localStorage.setItem('sc_invoice_client', currentClient.client_id);
+  location.href = '/invoices.html';
+}
+
+function showToast(msg, type='success') {
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  document.getElementById('toastIcon').textContent = type === 'success' ? '✓' : '✕';
+  t.className = 'toast show ' + type;
+  setTimeout(() => t.classList.remove('show'), 4000);
+}
+</script>
 </body>
 </html>
