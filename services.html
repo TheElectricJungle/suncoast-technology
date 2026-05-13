@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Suncoast Technology | services.html | v2.4 -->
+<!-- Suncoast Technology | services.html | v2.6 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -26,9 +26,9 @@
 body { font-family: 'Inter', sans-serif; background: var(--navy); color: #e2e8f0; min-height: 100vh; }
 
 /* ── SIDEBAR SHELL ── */
-.portal-shell { display: block; min-height: 100vh; }
-.main-content { padding: 32px 40px; max-width: 1200px; overflow-x: hidden; }
-@media (max-width: 900px) { .main-content { padding: 20px; } }
+.shell{position:relative;z-index:10;display:grid;grid-template-columns:220px 1fr;min-height:100%;overflow-x:clip;}
+.main{padding:28px 36px;display:flex;flex-direction:column;gap:20px;overflow-x:hidden;}
+@media (max-width: 900px) { .main{padding:28px 36px;display:flex;flex-direction:column;gap:20px;overflow-x:hidden;} }
 
 /* ── PAGE HEADER ── */
 .page-header { margin-bottom: 32px; }
@@ -136,9 +136,9 @@ body { font-family: 'Inter', sans-serif; background: var(--navy); color: #e2e8f0
 </style>
 </head>
 <body>
-<div class="portal-shell">
-  <div id="sidebarMount"></div>
-  <div class="main-content">
+<div class="shell">
+<aside class="sidebar" id="sc-sidebar"></aside>
+  <main class="main">
 
     <div class="page-header">
       <h1>Services &amp; Pricing</h1>
@@ -208,8 +208,8 @@ body { font-family: 'Inter', sans-serif; background: var(--navy); color: #e2e8f0
       </table>
     </div>
 
-  </div><!-- /main-content -->
-</div><!-- /portal-shell -->
+  </main>
+</div>
 
 <!-- ── INVOICE MODAL ── -->
 <div class="modal-overlay" id="invoiceModal">
@@ -280,8 +280,6 @@ body { font-family: 'Inter', sans-serif; background: var(--navy); color: #e2e8f0
 </div>
 
 <div class="toast" id="toast"><span class="toast-icon" id="toastIcon"></span><span id="toastMsg"></span></div>
-
-<script src="sidebar.js"></script>
 <script>
 // ── CANONICAL SERVICE CATALOG (mirrors Code.gs SERVICE_CATALOG) ──
 const SERVICE_CATALOG = {
