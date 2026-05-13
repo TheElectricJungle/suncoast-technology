@@ -1,11 +1,11 @@
-// Suncoast Technology | sidebar.js | v1.3
+// Suncoast Technology | sidebar.js | v1.4
 // Shared sidebar component
 // Works with BOTH old pattern (<aside id="sc-sidebar">) AND new pattern (<div id="sidebarMount">)
 // Automatically fixes layout offsets — no HTML changes needed on existing pages
 
 (function () {
 
-  const VERSION = 'v1.3';
+  const VERSION = 'v1.4';
 
   // ── GLOBAL FETCH CORS FIX ─────────────────────────────────
   // Patches fetch() on every page so GAS calls never trigger CORS preflight
@@ -308,23 +308,24 @@
   // Sidebar is fixed position — main content needs left offset on desktop
   // Works on ALL page layouts: .shell grid, .portal-shell flex, .main direct
   function applyOffset() {
-    const offset = window.innerWidth > 900 ? '240px' : '0';
-    // Fix .shell grid (old pages)
+    const isDesktop = window.innerWidth > 900;
+    const sidebarW  = '240px';
+    const pad       = isDesktop ? sidebarW : '0';
+    const padPx     = isDesktop ? '240px'  : '20px';
+
+    // Old pages — .shell grid, .main
     const shell = document.querySelector('.shell');
-    if (shell) {
-      shell.style.display = 'block';
-      shell.style.gridTemplateColumns = 'unset';
-    }
-    // Fix .main padding (old pages)
+    if (shell) { shell.style.display = 'block'; shell.style.gridTemplateColumns = 'unset'; }
     const main = document.querySelector('.main');
-    if (main) main.style.paddingLeft = window.innerWidth > 900 ? '240px' : '20px';
-    // Fix .portal-shell (new pages — clients.html, services.html)
+    if (main) main.style.paddingLeft = padPx;
+
+    // New pages — .portal-shell, .main-content
     const portalShell = document.querySelector('.portal-shell');
-    if (portalShell) portalShell.style.paddingLeft = offset;
-    // Fix .main-content (new pages)
+    if (portalShell) { portalShell.style.display = 'block'; portalShell.style.paddingLeft = '0'; }
     const mainContent = document.querySelector('.main-content');
-    if (mainContent) mainContent.style.paddingLeft = window.innerWidth > 900 ? '280px' : '20px';
-    // Hide any old hardcoded sidebar elements that may still be in DOM
+    if (mainContent) mainContent.style.paddingLeft = isDesktop ? sidebarW : '20px';
+
+    // Hide any old hardcoded sidebar still in DOM
     document.querySelectorAll('.sidebar:not(.sc-sidebar)').forEach(el => el.style.display = 'none');
   }
 
