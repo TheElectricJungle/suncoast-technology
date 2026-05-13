@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Suncoast Technology | clients.html | v3.7 -->
+<!-- Suncoast Technology | clients.html | v3.9 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -15,9 +15,9 @@
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Inter',sans-serif;background:var(--navy);color:#e2e8f0;min-height:100vh;}
-.portal-shell{display:block;min-height:100vh;}
-.main-content{padding:32px 40px;overflow-x:hidden;}
-@media(max-width:900px){.main-content{padding:20px;}}
+.shell{position:relative;z-index:10;display:grid;grid-template-columns:220px 1fr;min-height:100%;overflow-x:clip;}
+.main{padding:28px 36px;display:flex;flex-direction:column;gap:20px;overflow-x:hidden;}
+@media(max-width:900px){.main{padding:28px 36px;display:flex;flex-direction:column;gap:20px;overflow-x:hidden;}}
 
 /* HEADER */
 .page-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;gap:16px;flex-wrap:wrap;}
@@ -128,9 +128,9 @@ body{font-family:'Inter',sans-serif;background:var(--navy);color:#e2e8f0;min-hei
 </style>
 </head>
 <body>
-<div class="portal-shell">
-  <div id="sidebarMount"></div>
-  <div class="main-content">
+<div class="shell">
+<aside class="sidebar" id="sc-sidebar"></aside>
+  <main class="main">
 
     <div class="page-top">
       <h1>Clients</h1>
@@ -301,8 +301,6 @@ body{font-family:'Inter',sans-serif;background:var(--navy);color:#e2e8f0;min-hei
 </div>
 
 <div class="toast" id="toast"><span id="toastIcon"></span>&nbsp;<span id="toastMsg"></span></div>
-
-<script src="sidebar.js"></script>
 <script>
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbyxg5LlS9eUx6VSiD_VSzE0RD94STkBAK4Hc-h14T_YU5ikqXGE3dz-Fvt1kCAE-9XRLw/exec';
 let TOKEN = localStorage.getItem('sc_token') || '';
