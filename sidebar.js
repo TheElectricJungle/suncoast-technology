@@ -1,11 +1,21 @@
-// Suncoast Technology | sidebar.js | v1.2
-// Shared sidebar component — inject into <div id="sidebarMount"></div>
-// Add <script src="sidebar.js"></script> at bottom of every portal page
-// Active item auto-detected from current URL
+// Suncoast Technology | sidebar.js | v1.3
+// Shared sidebar component
+// Works with BOTH old pattern (<aside id="sc-sidebar">) AND new pattern (<div id="sidebarMount">)
+// Automatically fixes layout offsets — no HTML changes needed on existing pages
 
 (function () {
 
-  const VERSION = 'v1.2';
+  const VERSION = 'v1.3';
+
+  // ── GLOBAL FETCH CORS FIX ─────────────────────────────────
+  // Patches fetch() on every page so GAS calls never trigger CORS preflight
+  const _origFetch = window.fetch;
+  window.fetch = function(url, opts) {
+    if (typeof url === 'string' && url.includes('script.google.com') && opts && opts.method === 'POST') {
+      opts.headers = Object.assign({ 'Content-Type': 'text/plain' }, opts.headers || {});
+    }
+    return _origFetch.apply(this, arguments);
+  };
 
   const ADMIN_NAV = [
     { href: 'admin.html',         label: 'Dashboard',   icon: '<rect x="1" y="1" width="6" height="6" rx="1.5"/><rect x="9" y="1" width="6" height="6" rx="1.5"/><rect x="1" y="9" width="6" height="6" rx="1.5"/><rect x="9" y="9" width="6" height="6" rx="1.5"/>' },
@@ -256,46 +266,70 @@
   styleTag.textContent = css;
   document.head.appendChild(styleTag);
 
-  const mount = document.getElementById('sidebarMount');
+  // Support BOTH old pattern (id="sc-sidebar") AND new pattern (id="sidebarMount")
+  const oldMount = document.getElementById('sc-sidebar');
+  const newMount = document.getElementById('sidebarMount');
+  const mount    = newMount || oldMount;
+
+  const sidebarHTML = `
+    <button class="sc-hamburger" id="scHamburger" onclick="toggleSidebar()">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="sc-backdrop" id="scBackdrop" onclick="closeSidebar()"></div>
+    <aside class="sc-sidebar" id="scSidebar">
+      <div class="sc-sidebar-brand">
+        <a href="admin.html">Suncoast <em>Technology</em></a>
+        <div class="sc-portal-label">Admin Portal</div>
+      </div>
+      <nav class="sc-nav">
+        <div class="sc-nav-section">Navigation</div>
+        ${navItemsHtml}
+      </nav>
+      <div class="sc-sidebar-footer">
+        <button class="sc-logout-btn" onclick="scLogout()">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
+            <path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3M10.5 11l3-3-3-3M13.5 8H6"/>
+          </svg>
+          Log out
+        </button>
+        <div class="sc-version">sidebar.js ${VERSION}</div>
+      </div>
+    </aside>`;
+
   if (mount) {
-    // Remove the width placeholder div — sidebar is now fixed position
     mount.style.display = 'none';
-    mount.insertAdjacentHTML('afterend', `
-      <button class="sc-hamburger" id="scHamburger" onclick="toggleSidebar()">
-        <span></span><span></span><span></span>
-      </button>
-      <div class="sc-backdrop" id="scBackdrop" onclick="closeSidebar()"></div>
-      <aside class="sc-sidebar" id="scSidebar">
-        <div class="sc-sidebar-brand">
-          <a href="admin.html">Suncoast <em>Technology</em></a>
-          <div class="sc-portal-label">Admin Portal</div>
-        </div>
-        <nav class="sc-nav">
-          <div class="sc-nav-section">Navigation</div>
-          ${navItemsHtml}
-        </nav>
-        <div class="sc-sidebar-footer">
-          <button class="sc-logout-btn" onclick="scLogout()">
-            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
-              <path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3M10.5 11l3-3-3-3M13.5 8H6"/>
-            </svg>
-            Log out
-          </button>
-          <div class="sc-version">sidebar.js ${VERSION}</div>
-        </div>
-      </aside>
-    `);
+    mount.insertAdjacentHTML('afterend', sidebarHTML);
+  } else {
+    // No mount point found — inject right after <body>
+    document.body.insertAdjacentHTML('afterbegin', sidebarHTML);
   }
 
-  // ── FIX MAIN CONTENT OFFSET ───────────────────────────────
-  // Since sidebar is fixed, main content needs left padding on desktop
-  const shell = document.querySelector('.portal-shell');
-  if (shell) {
-    shell.style.paddingLeft = window.innerWidth > 900 ? '240px' : '0';
-    window.addEventListener('resize', () => {
-      shell.style.paddingLeft = window.innerWidth > 900 ? '240px' : '0';
-    });
+  // ── FIX LAYOUT AUTOMATICALLY ──────────────────────────────
+  // Sidebar is fixed position — main content needs left offset on desktop
+  // Works on ALL page layouts: .shell grid, .portal-shell flex, .main direct
+  function applyOffset() {
+    const offset = window.innerWidth > 900 ? '240px' : '0';
+    // Fix .shell grid (old pages)
+    const shell = document.querySelector('.shell');
+    if (shell) {
+      shell.style.display = 'block';
+      shell.style.gridTemplateColumns = 'unset';
+    }
+    // Fix .main padding (old pages)
+    const main = document.querySelector('.main');
+    if (main) main.style.paddingLeft = window.innerWidth > 900 ? '240px' : '20px';
+    // Fix .portal-shell (new pages — clients.html, services.html)
+    const portalShell = document.querySelector('.portal-shell');
+    if (portalShell) portalShell.style.paddingLeft = offset;
+    // Fix .main-content (new pages)
+    const mainContent = document.querySelector('.main-content');
+    if (mainContent) mainContent.style.paddingLeft = window.innerWidth > 900 ? '280px' : '20px';
+    // Hide any old hardcoded sidebar elements that may still be in DOM
+    document.querySelectorAll('.sidebar:not(.sc-sidebar)').forEach(el => el.style.display = 'none');
   }
+
+  applyOffset();
+  window.addEventListener('resize', applyOffset);
 
   // ── MOBILE TOGGLE ─────────────────────────────────────────
   window.toggleSidebar = function () {
