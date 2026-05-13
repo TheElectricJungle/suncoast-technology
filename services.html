@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Suncoast Technology | services.html | v2.0 -->
+<!-- Suncoast Technology | services.html | v2.1 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -336,7 +336,7 @@ let pendingInvoiceLines = [];
 let pendingSubPlan = null;
 
 async function api(action, data={}) {
-  const r = await fetch(GAS_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ action, token: TOKEN, ...data }) });
+  const r = await fetch(GAS_URL, { method:'POST', headers:{'Content-Type':'text/plain'}, body: JSON.stringify({ action, token: TOKEN, ...data }) });
   return r.json();
 }
 
