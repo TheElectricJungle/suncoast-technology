@@ -250,9 +250,7 @@ body{font-family:'Inter',sans-serif;background:var(--navy);color:#e2e8f0;min-hei
         </div>
         <div class="form-row"><label class="form-label">Monthly Rate ($)</label><input class="form-input" id="add-rate" type="number" placeholder="Auto-fills from plan" min="0"></div>
         <div class="form-row"><label class="form-label">Billing Day</label>
-          <select class="form-select" id="add-billing-day">
-            ${Array.from({length:28},(_,i)=>`<option value="${i+1}">${i+1}${['st','nd','rd'][i]||'th'} of month</option>`).join('')}
-          </select>
+          <select class="form-select" id="add-billing-day"></select>
         </div>
         <div class="form-row full"><label class="form-label">Notes</label><textarea class="form-textarea" id="add-notes" placeholder="Any notes about this client..."></textarea></div>
       </div>
