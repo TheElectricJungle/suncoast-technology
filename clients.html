@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Suncoast Technology | clients.html | v3.3 -->
+<!-- Suncoast Technology | clients.html | v3.4 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -324,7 +324,7 @@ const ADDONS = [
 const AVATAR_COLORS = ['#F97316','#A78BFA','#4FC3F7','#2DD4BF','#FBBF24','#F472B6','#34D399'];
 
 async function api(action, data={}) {
-  const r = await fetch(GAS_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ action, token:TOKEN, ...data }) });
+  const r = await fetch(GAS_URL, { method:'POST', headers:{'Content-Type':'text/plain'}, body: JSON.stringify({ action, token:TOKEN, ...data }) });
   return r.json();
 }
 
