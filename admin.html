@@ -154,11 +154,15 @@
         if (clientsRes.error==='Unauthorized.'||clientsRes.error==='Invalid or expired session.') { window.location.href='login.html'; return; }
         return;
       }
-      const clients = clientsRes.clients || [];
-      const active  = clients.filter(c=>(c.status||'Active').toLowerCase()==='active');
+      
+      // v — defensive client-side admin filter (mirrors backend adminGetClients guard)
+const clients = (clientsRes.clients || []).filter(
+  c => !(c.is_admin === true || c.is_admin === 'TRUE' || c.is_admin === 'true')
+);
+const active  = clients.filter(c=>(c.status||'Active').toLowerCase()==='active');
 
-      document.getElementById('totalClients').textContent  = clients.length;
-      document.getElementById('activeClients').textContent = active.length;
+document.getElementById('totalClients').textContent  = clients.length;
+document.getElementById('activeClients').textContent = active.length;
 
       // Financial stats
       const allInvoices = [];
